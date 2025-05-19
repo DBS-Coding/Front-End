@@ -148,7 +148,7 @@ const RegisterView = () => {
             Already have an account?{" "}
             <button
               onClick={() => navigate("/login")}
-              className="text-blue-500 hover:underline focus:outline-none"
+              className="text-blue-500 hover:underline hover:cursor-pointer focus:outline-none"
             >
               Login
             </button>

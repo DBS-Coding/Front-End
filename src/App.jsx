@@ -2,13 +2,14 @@ import React from "react";
 import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
 import RegisterView from "./views/auth/RegisterView";
 import useAuthStore from "./store/authStore";
+import LoginView from "./views/auth/LoginView";
 
-// Protected route component
+
 const ProtectedRoute = ({ children }) => {
   const { isAuthenticated, isTokenValid } = useAuthStore();
   
   if (!isAuthenticated || !isTokenValid()) {
-    return <Navigate to="/login" replace />;
+    return <Navigate to="/login" replace/>;
   }
   
   return children;
@@ -19,7 +20,7 @@ function App() {
     <Router>
       <Routes>
         <Route path="/register" element={<RegisterView />} />
-        <Route path="/login" element={<div>Login Page (Not Implemented)</div>} />
+        <Route path="/login" element={<LoginView/>} />
         
         <Route 
           path="/dashboard" 
