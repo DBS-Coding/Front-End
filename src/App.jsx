@@ -3,6 +3,8 @@ import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-d
 import RegisterView from "./views/auth/RegisterView";
 import useAuthStore from "./store/authStore";
 import LoginView from "./views/auth/LoginView";
+import LandingPage from "./views/LandingPage";
+import NotFoundPage from "./views/NotFoundPage";
 
 
 const ProtectedRoute = ({ children }) => {
@@ -21,7 +23,8 @@ function App() {
       <Routes>
         <Route path="/register" element={<RegisterView />} />
         <Route path="/login" element={<LoginView/>} />
-        
+        <Route path="/" element={<LandingPage/>}/>
+
         <Route 
           path="/dashboard" 
           element={
@@ -31,8 +34,7 @@ function App() {
           } 
         />
         
-        <Route path="/" element={<Navigate to="/login" replace />} />
-        <Route path="*" element={<div>404 Not Found</div>} />
+        <Route path="*" element={<NotFoundPage/>} />
       </Routes>
     </Router>
   );

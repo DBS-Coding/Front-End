@@ -26,15 +26,15 @@ const RegisterView = () => {
   }, [registerSuccess, navigate]);
 
   return (
-    <div className="flex h-screen bg-gray-900 text-white">
-      <div className="hidden md:flex md:w-1/3 lg:w-1/2 flex-col justify-center items-center bg-gray-900 border-r border-gray-800">
+    <div className="flex h-screen bg-[#212529] text-white">
+      <div className="hidden md:flex md:w-1/3 lg:w-5/10 flex-col justify-center items-center border-r border-[#ffffff34]">
         <motion.h1 
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
           className="text-6xl font-bold tracking-wider text-white"
         >
-          HISTO<span className="text-blue-500">TALK</span>
+          HISTO<span className="text-[#9495a5]">TALK</span>
         </motion.h1>
         <motion.p 
           initial={{ opacity: 0 }}
@@ -46,7 +46,7 @@ const RegisterView = () => {
         </motion.p>
       </div>
 
-      <div className="w-full md:w-2/3 lg:w-1/2 flex items-center justify-center p-8">
+      <div className="w-full flex items-center justify-center p-8">
         <motion.div 
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -72,9 +72,9 @@ const RegisterView = () => {
                 name="name"
                 value={formState.name}
                 onChange={handleChange}
-                className={`w-full px-4 py-3 bg-gray-800 rounded-md border ${
-                  errors.name ? "border-red-500" : "border-gray-700"
-                } focus:outline-none focus:ring-2 focus:ring-blue-500`}
+                className={`w-full px-4 py-3 rounded-md border border-neutral-700 ${
+                  errors.name ? "border-red-500" : "border-neutral-500"
+                } focus:outline-none focus:ring-2 focus:ring-neutral-600`}
                 placeholder="Enter your name"
               />
               {errors.name && (
@@ -92,9 +92,9 @@ const RegisterView = () => {
                 name="email"
                 value={formState.email}
                 onChange={handleChange}
-                className={`w-full px-4 py-3 bg-gray-800 rounded-md border ${
-                  errors.email ? "border-red-500" : "border-gray-700"
-                } focus:outline-none focus:ring-2 focus:ring-blue-500`}
+                className={`w-full px-4 py-3 rounded-md border border-neutral-700 ${
+                  errors.email ? "border-red-500" : "border-neutral-500"
+                } focus:outline-none focus:ring-2 focus:ring-neutral-600`}
                 placeholder="Enter your email"
               />
               {errors.email && (
@@ -113,15 +113,15 @@ const RegisterView = () => {
                   name="password"
                   value={formState.password}
                   onChange={handleChange}
-                  className={`w-full px-4 py-3 bg-gray-800 rounded-md border ${
-                    errors.password ? "border-red-500" : "border-gray-700"
-                  } focus:outline-none focus:ring-2 focus:ring-blue-500`}
+                  className={`w-full px-4 py-3 rounded-md border border-neutral-700 ${
+                    errors.password ? "border-red-500" : "border-neutral-500"
+                  } focus:outline-none focus:ring-2 focus:ring-neutral-600`}
                   placeholder="Create a password"
                 />
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-300"
+                  className="absolute right-3 top-1/2 transform -translate-y-1/2 text-neutral-500 hover:text-neutral-400 hover:cursor-pointer"
                 >
                   {showPassword ? (
                     <EyeOff size={20} />
@@ -138,9 +138,9 @@ const RegisterView = () => {
             <button
               type="submit"
               disabled={isLoading}
-              className="w-full py-3 bg-blue-600 hover:bg-blue-700 rounded-md font-medium transition-colors duration-200 disabled:bg-blue-800 disabled:cursor-not-allowed"
+              className="w-full py-3 bg-[#5e5e5e1c] hover:bg-[#5e5e5e3d] hover:cursor-pointer rounded-lg font-medium transition-colors duration-200 disabled:bg-neutral-500 disabled:cursor-not-allowed"
             >
-              {isLoading ? "Registering..." : "Masuk"}
+              {isLoading ? "Registering..." : "Register"}
             </button>
           </form>
           
@@ -148,7 +148,7 @@ const RegisterView = () => {
             Already have an account?{" "}
             <button
               onClick={() => navigate("/login")}
-              className="text-blue-500 hover:underline hover:cursor-pointer focus:outline-none"
+              className="text-white hover:underline hover:cursor-pointer focus:outline-none"
             >
               Login
             </button>
