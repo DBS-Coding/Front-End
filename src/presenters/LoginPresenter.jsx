@@ -1,5 +1,7 @@
-import { useState } from "react";
 import { z } from "zod";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useState } from "react";
 import { loginUser } from "../api/authApi";
 import useAuthStore from "../store/authStore";
 
@@ -15,60 +17,34 @@ const loginSchema = z.object({
 });
 
 export const useLoginPresenter = () => {
-  const [formState, setFormState] = useState({
-    email: "",
-    password: "",
-  });
-  const [errors, setErrors] = useState({});
   const [isLoading, setIsLoading] = useState(false);
   const [loginSuccess, setLoginSuccess] = useState(false);
   const [loginError, setLoginError] = useState("");
   const setAuth = useAuthStore((state) => state.setAuth);
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormState((prev) => ({ ...prev, [name]: value }));
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    reset
+  } = useForm({
+    resolver: zodResolver(loginSchema),
+    defaultValues: {
+      email: "",
+      password: ""
+    }
+  });
 
-    if (errors[name]) {
-      setErrors((prev) => ({ ...prev, [name]: "" }));
-    }
-    
-    if (loginError) {
-      setLoginError("");
-    }
-  };
-
-  const validateForm = () => {
-    try {
-      loginSchema.parse(formState);
-      setErrors({});
-      return true;
-    } catch (error) {
-      const formattedErrors = {};
-      error.errors.forEach((err) => {
-        formattedErrors[err.path[0]] = err.message;
-      });
-      setErrors(formattedErrors);
-      return false;
-    }
-  };
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    
-    if (!validateForm()) {
-      return;
-    }
-    
+  const onSubmit = async (data) => {
     setIsLoading(true);
     setLoginError("");
     
     try {
-      console.log("Attempting login with:", { email: formState.email, password: "****" });
+      console.log("Attempting login with:", { email: data.email, password: "****" });
       
       const response = await loginUser({
-        email: formState.email,
-        password: formState.password,
+        email: data.email,
+        password: data.password,
       });
       
       console.log("Login API response:", response);
@@ -82,7 +58,7 @@ export const useLoginPresenter = () => {
         setLoginError("Login failed. Please try again.");
       }
     } catch (error) {
-      console.error("Login error:", error);
+      console.error("Email & Password tidak ditemukan:", error);
       console.log("Full error response:", error.response);
       
       if (error.response && error.response.status === 401) {
@@ -98,12 +74,12 @@ export const useLoginPresenter = () => {
   };
 
   return {
-    formState,
-    handleChange,
-    handleSubmit,
+    register,
+    handleSubmit: handleSubmit(onSubmit),
     errors,
     isLoading,
     loginSuccess,
     loginError,
+    reset
   };
 };

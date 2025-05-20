@@ -9,8 +9,7 @@ const LoginView = () => {
   const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
   const {
-    formState,
-    handleChange,
+    register,
     handleSubmit,
     errors,
     isLoading,
@@ -66,18 +65,16 @@ const LoginView = () => {
                 Email
               </label>
               <input
-                type="email"
+                {...register("email")}
                 id="email"
-                name="email"
-                value={formState.email}
-                onChange={handleChange}
+                type="email"
                 className={`w-full px-4 py-3 rounded-md border border-neutral-700 ${
                   errors.email ? "border-red-500" : "border-neutral-500"
                 } focus:outline-none focus:ring-2 focus:ring-neutral-600`}
                 placeholder="Enter your email"
               />
               {errors.email && (
-                <p className="mt-1 text-sm text-red-500">{errors.email}</p>
+                <p className="mt-1 text-sm text-red-500">{errors.email.message}</p>
               )}
             </div>
             
@@ -87,11 +84,9 @@ const LoginView = () => {
               </label>
               <div className="relative">
                 <input
-                  type={showPassword ? "text" : "password"}
+                  {...register("password")}
                   id="password"
-                  name="password"
-                  value={formState.password}
-                  onChange={handleChange}
+                  type={showPassword ? "text" : "password"}
                   className={`w-full px-4 py-3 rounded-md border border-neutral-700 ${
                     errors.password ? "border-red-500" : "border-neutral-500"
                   } focus:outline-none focus:ring-2 focus:ring-neutral-600`}
@@ -110,7 +105,7 @@ const LoginView = () => {
                 </button>
               </div>
               {errors.password && (
-                <p className="mt-1 text-sm text-red-500">{errors.password}</p>
+                <p className="mt-1 text-sm text-red-500">{errors.password.message}</p>
               )}
             </div>
             

@@ -1,4 +1,6 @@
 import { useState } from "react";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { registerUser } from "../api/authApi";
 
@@ -19,67 +21,34 @@ const registerSchema = z.object({
 });
 
 export const useRegisterPresenter = () => {
-  const [formState, setFormState] = useState({
-    name: "",
-    email: "",
-    password: ""
-  });
-
-  const [errors, setErrors] = useState({});
-  
   const [isLoading, setIsLoading] = useState(false);
   const [registerSuccess, setRegisterSuccess] = useState(false);
   const [apiError, setApiError] = useState(null);
-
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormState((prev) => ({
-      ...prev,
-      [name]: value
-    }));
-    
-    if (errors[name]) {
-      setErrors((prev) => ({
-        ...prev,
-        [name]: undefined
-      }));
+  
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    setError,
+    reset
+  } = useForm({
+    resolver: zodResolver(registerSchema),
+    defaultValues: {
+      name: "",
+      email: "",
+      password: ""
     }
-  };
+  });
 
-  const validateForm = () => {
-    try {
-      registerSchema.parse(formState);
-      setErrors({});
-      return true;
-    } catch (error) {
-      const newErrors = {};
-      error.errors.forEach((err) => {
-        const path = err.path[0];
-        newErrors[path] = err.message;
-      });
-      setErrors(newErrors);
-      return false;
-    }
-  };
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+  const onSubmit = async (data) => {
     setApiError(null);
-    
-    const isValid = validateForm();
-    if (!isValid) return;
-    
     setIsLoading(true);
+    
     try {
-      const response = await registerUser(formState);
+      const response = await registerUser(data);
       if (response && response.data) {
         setRegisterSuccess(true);
-
-        setFormState({
-          name: "",
-          email: "",
-          password: ""
-        });
+        reset();
       }
     } catch (error) {
       console.error("Registration failed:", error);
@@ -89,9 +58,15 @@ export const useRegisterPresenter = () => {
       
       if (error.response?.status === 409) {
         if (error.response.data.message.includes("email")) {
-          setErrors(prev => ({ ...prev, email: "Email already registered" }));
+          setError("email", { 
+            type: "manual", 
+            message: "Email already registered" 
+          });
         } else if (error.response.data.message.includes("name")) {
-          setErrors(prev => ({ ...prev, name: "Name already taken" }));
+          setError("name", { 
+            type: "manual", 
+            message: "Name already taken" 
+          });
         }
       }
     } finally {
@@ -100,9 +75,8 @@ export const useRegisterPresenter = () => {
   };
 
   return {
-    formState,
-    handleChange,
-    handleSubmit,
+    register,
+    handleSubmit: handleSubmit(onSubmit),
     errors,
     isLoading,
     registerSuccess,

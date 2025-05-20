@@ -9,12 +9,12 @@ const RegisterView = () => {
   const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
   const {
-    formState,
-    handleChange,
+    register,
     handleSubmit,
     errors,
     isLoading,
-    registerSuccess
+    registerSuccess,
+    apiError
   } = useRegisterPresenter();
 
   useEffect(() => {
@@ -60,6 +60,12 @@ const RegisterView = () => {
               Registration successful! Redirecting to login...
             </div>
           )}
+          
+          {apiError && (
+            <div className="mb-6 p-4 bg-red-600/20 border border-red-600 rounded-md text-red-200">
+              {apiError}
+            </div>
+          )}
 
           <form onSubmit={handleSubmit} className="space-y-6">
             <div>
@@ -67,18 +73,16 @@ const RegisterView = () => {
                 Name
               </label>
               <input
+                {...register("name")}
                 type="text"
                 id="name"
-                name="name"
-                value={formState.name}
-                onChange={handleChange}
                 className={`w-full px-4 py-3 rounded-md border border-neutral-700 ${
                   errors.name ? "border-red-500" : "border-neutral-500"
                 } focus:outline-none focus:ring-2 focus:ring-neutral-600`}
                 placeholder="Enter your name"
               />
               {errors.name && (
-                <p className="mt-1 text-sm text-red-500">{errors.name}</p>
+                <p className="mt-1 text-sm text-red-500">{errors.name.message}</p>
               )}
             </div>
             
@@ -87,18 +91,16 @@ const RegisterView = () => {
                 Email
               </label>
               <input
+                {...register("email")}
                 type="email"
                 id="email"
-                name="email"
-                value={formState.email}
-                onChange={handleChange}
                 className={`w-full px-4 py-3 rounded-md border border-neutral-700 ${
                   errors.email ? "border-red-500" : "border-neutral-500"
                 } focus:outline-none focus:ring-2 focus:ring-neutral-600`}
                 placeholder="Enter your email"
               />
               {errors.email && (
-                <p className="mt-1 text-sm text-red-500">{errors.email}</p>
+                <p className="mt-1 text-sm text-red-500">{errors.email.message}</p>
               )}
             </div>
             
@@ -108,11 +110,9 @@ const RegisterView = () => {
               </label>
               <div className="relative">
                 <input
+                  {...register("password")}
                   type={showPassword ? "text" : "password"}
                   id="password"
-                  name="password"
-                  value={formState.password}
-                  onChange={handleChange}
                   className={`w-full px-4 py-3 rounded-md border border-neutral-700 ${
                     errors.password ? "border-red-500" : "border-neutral-500"
                   } focus:outline-none focus:ring-2 focus:ring-neutral-600`}
@@ -131,7 +131,7 @@ const RegisterView = () => {
                 </button>
               </div>
               {errors.password && (
-                <p className="mt-1 text-sm text-red-500">{errors.password}</p>
+                <p className="mt-1 text-sm text-red-500">{errors.password.message}</p>
               )}
             </div>
             
