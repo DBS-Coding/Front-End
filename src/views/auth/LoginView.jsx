@@ -19,7 +19,7 @@ const LoginView = () => {
 
   useEffect(() => {
     if (loginSuccess) {
-      navigate("/dashboard");
+      navigate("/home");
     }
   }, [loginSuccess, navigate]);
 

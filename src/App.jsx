@@ -1,10 +1,14 @@
-import React from "react";
-import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import RegisterView from "./views/auth/RegisterView";
 import useAuthStore from "./store/authStore";
 import LoginView from "./views/auth/LoginView";
 import LandingPage from "./views/LandingPage";
 import NotFoundPage from "./views/NotFoundPage";
+import ChatHattaView from "./views/ChatHattaView";
+import ChatSoekarnoView from "./views/ChatSoekarnoView";
+import CrudHattaView from "./views/CrudHattaView";
+import CrudSoekarnoView from "./views/CrudSoekarnoView";
+import HomeView from "./views/HomeView";
 
 
 const ProtectedRoute = ({ children }) => {
@@ -26,16 +30,21 @@ function App() {
         <Route path="/" element={<LandingPage/>}/>
 
         <Route 
-          path="/dashboard" 
+          path="/home" 
           element={
             <ProtectedRoute>
-              <div>Dashboard (Not Implemented)</div>
+              <HomeView />
             </ProtectedRoute>
           } 
         />
-        
+
+        <Route path="/chatsoekarno" element={<ChatSoekarnoView/>} />
+        <Route path="/crudsoekarno" element={<CrudSoekarnoView/>} />
+        <Route path="/chathatta" element={<ChatHattaView/>} />
+        <Route path="/crudhatta" element={<CrudHattaView/>} />
+
         <Route path="*" element={<NotFoundPage/>} />
-      </Routes>
+    </Routes>
     </Router>
   );
 }

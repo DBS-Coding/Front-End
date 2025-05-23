@@ -1,4 +1,3 @@
-import React from "react";
 import { useNavigate } from "react-router-dom";
 // eslint-disable-next-line no-unused-vars
 import { motion } from "framer-motion";
@@ -10,16 +9,14 @@ const LandingPage = () => {
   const { isAuthenticated, isTokenValid } = useAuthStore();
 
   const handleNext = () => {
-    // Check if user is authenticated and token is valid
     if (isAuthenticated && isTokenValid()) {
-      navigate("/dashboard");
+      navigate("/home");
     } else {
       navigate("/login");
     }
   };
 
   
-  // Variants for staggered animations
   const containerVariants = {
     hidden: { opacity: 0 },
     visible: {
