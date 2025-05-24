@@ -5,7 +5,6 @@ import { ChevronLeft, ChevronRight, Linkedin, Github } from 'lucide-react';
 import { motion } from 'framer-motion';
 import Layout from '../components/common/Layout';
 import { useNavigationPresenter } from '../presenters/NavigationPresenter';
-import 'keen-slider/keen-slider.min.css';
 import pakHatta from "../assets/pakhatta.png";
 import pakKarno from "../assets/pakkarno.png";
 import Leo from "../assets/Leo_Prangs_Tobing.png";
@@ -97,6 +96,24 @@ const HomeView = () => {
       },
     },
     loop: true,
+    created(s) {
+      s.container.style.transitionDuration = "800ms";
+      s.container.style.transitionTimingFunction = "cubic-bezier(0.25, 0.46, 0.45, 0.94)";
+    },
+    updated(s) {
+      s.container.style.transitionDuration = "800ms";
+      s.container.style.transitionTimingFunction = "cubic-bezier(0.25, 0.46, 0.45, 0.94)";
+    },
+    animationEnded(s) {
+      s.container.style.transitionDuration = "800ms";
+      s.container.style.transitionTimingFunction = "cubic-bezier(0.25, 0.46, 0.45, 0.94)";
+    },
+    rubberband: false,
+    dragSpeed: 0.5,
+    defaultAnimation: {
+      duration: 1200,
+      easing: (t) => 1 - Math.pow(1 - t, 3),
+    },
   });
 
 useEffect(() => {
@@ -104,7 +121,7 @@ useEffect(() => {
     if (!isHovered) {
       instanceRef.current?.next();
     }
-  }, 3000);
+  }, 4000);
 
   return () => clearInterval(interval);
 }, [isHovered]);
