@@ -4,14 +4,16 @@ import { motion } from 'framer-motion';
 import { Menu } from 'lucide-react';
 import useAuthStore from '../../store/authStore';
 import useUIStore from '../../store/uiStore';
+import { useNavigate } from 'react-router-dom';
 
 const Header = () => {
   const { user, clearAuth } = useAuthStore();
   const { toggleSidebar } = useUIStore();
+  const navigate = useNavigate();
 
   const handleLogout = () => {
     clearAuth();
-    window.location.href = '/login';
+    navigate('/login');
   };
 
   return (
