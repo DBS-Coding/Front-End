@@ -8,15 +8,14 @@ const LandingPage = () => {
   const navigate = useNavigate();
   const { isAuthenticated, isTokenValid } = useAuthStore();
 
-  const handleNext = () => {
-    if (isAuthenticated && isTokenValid()) {
-      navigate("/home");
-    } else {
-      navigate("/login");
+  const handleNext = async () => {
+    if (isAuthenticated && isTokenValid) {
+        navigate('/home');
+     } else {
+      navigate('/login');
     }
-  };
+  }
 
-  
   const containerVariants = {
     hidden: { opacity: 0 },
     visible: {
@@ -66,10 +65,10 @@ const LandingPage = () => {
         >
           <motion.button
             onClick={handleNext}
-            className=
-              "flex items-center gap-2 px-6 py-2.5 hover:cursor-pointer text-xl rounded-lg bg-transparent text-white border border-white hover:ring-white hover:ring-1  transition-all duration-300 transform hover:scale-101 focus:outline-none focus:ring-2 focus:ring-white focus:ring-opacity-50"
+            className='flex items-center gap-2 px-6 py-2.5 text-xl hover:cursor-pointer rounded-lg bg-transparent text-white border border-white hover:ring-white hover:ring-1 transition-all duration-300 transform hover:scale-101 focus:outline-none focus:ring-2 focus:ring-white focus:ring-opacity-50'
           >
-            Next <span><ArrowRight/></span>
+            Next 
+            <span><ArrowRight/></span>
           </motion.button>
         </motion.div>
       </motion.div>

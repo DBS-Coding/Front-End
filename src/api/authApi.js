@@ -31,6 +31,35 @@ export const loginUser = async (credentials) => {
   }
 };
 
+export const getUserProfile = async (token) => {
+  // eslint-disable-next-line no-useless-catch
+  try {
+    const response = await apiClient.get("/auth/me", {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    console.log(`Get - authuser: ${response}`);
+    return response;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const deleteUserAccount = async (token) => {
+  // eslint-disable-next-line no-useless-catch
+  try {
+    const response = await apiClient.delete("/auth/me", {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    return response;
+  } catch (error) {
+    throw error;
+  }
+};
+
 export const setAuthToken = (token) => {
   if (token) {
     apiClient.defaults.headers.common["Authorization"] = `Bearer ${token}`;

@@ -51,8 +51,14 @@ export const useLoginPresenter = () => {
       
       if (response.data && response.data.data && response.data.data.token) {
         console.log("Token found, setting auth");
-        setAuth(response.data.data.token);
-        setLoginSuccess(true);
+
+        const user = await setAuth(response.data.data.token);
+        
+        if (user) {
+          setLoginSuccess(true);
+        } else {
+          setLoginError("Failed to retrieve user information. Please try again.");
+        }
       } else {
         console.log("No token found in response:", response.data);
         setLoginError("Login failed. Please try again.");

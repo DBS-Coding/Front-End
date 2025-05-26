@@ -1,4 +1,4 @@
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
 import RegisterView from "./views/auth/RegisterView";
 import useAuthStore from "./store/authStore";
 import LoginView from "./views/auth/LoginView";
@@ -10,12 +10,11 @@ import CrudHattaView from "./views/CrudHattaView";
 import CrudSoekarnoView from "./views/CrudSoekarnoView";
 import HomeView from "./views/HomeView";
 
-
 const ProtectedRoute = ({ children }) => {
-  const { isAuthenticated, isTokenValid } = useAuthStore();
+  const { isAuthenticated, token } = useAuthStore();
   
-  if (!isAuthenticated || !isTokenValid()) {
-    return <Navigate to="/login" replace/>;
+  if (!isAuthenticated || !token) {
+    return <Navigate to="/login" replace />;
   }
   
   return children;
@@ -38,13 +37,44 @@ function App() {
           } 
         />
 
-        <Route path="/chatsoekarno" element={<ChatSoekarnoView/>} />
-        <Route path="/crudsoekarno" element={<CrudSoekarnoView/>} />
-        <Route path="/chathatta" element={<ChatHattaView/>} />
-        <Route path="/crudhatta" element={<CrudHattaView/>} />
+        <Route 
+          path="/chatsoekarno" 
+          element={
+            <ProtectedRoute>
+              <ChatSoekarnoView/>
+            </ProtectedRoute>
+          } 
+        />
+        
+        <Route 
+          path="/crudsoekarno" 
+          element={
+            <ProtectedRoute>
+              <CrudSoekarnoView/>
+            </ProtectedRoute>
+          } 
+        />
+        
+        <Route 
+          path="/chathatta" 
+          element={
+            <ProtectedRoute>
+              <ChatHattaView/>
+            </ProtectedRoute>
+          } 
+        />
+        
+        <Route 
+          path="/crudhatta" 
+          element={
+            <ProtectedRoute>
+              <CrudHattaView/>
+            </ProtectedRoute>
+          } 
+        />
 
         <Route path="*" element={<NotFoundPage/>} />
-    </Routes>
+      </Routes>
     </Router>
   );
 }
