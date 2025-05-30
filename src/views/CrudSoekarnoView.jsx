@@ -134,153 +134,153 @@ const CrudSoekarnoView = () => {
         transition={{ duration: 0.6 }}
         className="h-full"
       >
-        <div className="bg-transparent border border-[#ffffff34] rounded-lg p-6 h-full">
-          <div className="flex justify-between items-center mb-6">
-            <h2 className="text-2xl font-bold">Kelola Data CRUD Soekarno</h2>
-            <button
-              onClick={() => openModal('create')}
-              className="flex items-center gap-2 px-4 py-2 bg-transparent border border-[#ffffff34] hover:ring-1 hover:ring-neutral-400 rounded-lg transition-all duration-200"
+<div className="bg-transparent border border-[#ffffff34] rounded-lg p-4 md:p-6 h-full">
+  <div className="flex flex-col md:flex-row md:justify-between md:items-center gap-4 mb-6">
+    <h2 className="text-xl md:text-2xl font-bold">Kelola Data CRUD Soekarno</h2>
+    <button
+      onClick={() => openModal('create')}
+      className="w-full md:w-auto flex items-center justify-center gap-2 px-4 py-2 bg-transparent border border-[#ffffff34] hover:ring-1 hover:ring-neutral-400 rounded-lg transition-all duration-200"
+    >
+      <Plus size={16} />
+      Tambah Tag
+    </button>
+  </div>
+
+  <AnimatePresence>
+    {notification && (
+      <motion.div
+        initial={{ opacity: 0, y: -20 }}
+        animate={{ opacity: 1, y: 0 }}
+        exit={{ opacity: 0, y: -20 }}
+        className={clsx(
+          "mb-4 p-3 rounded-lg border flex items-center gap-2 text-sm",
+          {
+            'bg-green-900/40 border-green-600/40 text-green-300': notification.type === 'success',
+            'bg-red-900/40 border-red-600/40 text-red-300': notification.type === 'error'
+          }
+        )}
+      >
+        <AlertCircle size={16} />
+        {notification.message}
+      </motion.div>
+    )}
+  </AnimatePresence>
+
+  {error && (
+    <motion.div
+      initial={{ opacity: 0, y: -10 }}
+      animate={{ opacity: 1, y: 0 }}
+      className="mb-4 p-3 bg-red-900/40 border border-red-600/40 rounded-lg text-red-300 flex items-center gap-2 text-sm"
+    >
+      <AlertCircle size={16} />
+      {error}
+      <button onClick={clearError} className="ml-auto">
+        <X size={16} />
+      </button>
+    </motion.div>
+  )}
+
+  <div className="w-full overflow-x-auto">
+    <table className="w-full min-w-[600px] border-collapse text-sm">
+      <thead>
+        <tr className="border-b border-[#ffffff34]">
+          <th className="text-left py-3 px-4 font-semibold whitespace-nowrap">Tag</th>
+          <th className="text-left py-3 px-4 font-semibold whitespace-nowrap">Input</th>
+          <th className="text-left py-3 px-4 font-semibold whitespace-nowrap">Response</th>
+          <th className="text-left py-3 px-4 font-semibold whitespace-nowrap">Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        {isLoading ? (
+          <tr>
+            <td colSpan="4" className="text-center py-8">
+              <div className="flex items-center justify-center">
+                <motion.div
+                  animate={{ rotate: 360 }}
+                  transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
+                  className="w-6 h-6 border-2 border-gray-600 border-t-white rounded-full"
+                />
+                <span className="ml-2">Loading...</span>
+              </div>
+            </td>
+          </tr>
+        ) : !Array.isArray(tags) || tags.length === 0 ? (
+          <tr>
+            <td colSpan="4" className="text-center py-8 text-gray-400">
+              {!Array.isArray(tags) ? 'Error: Data tidak valid' : 'Belum ada data tag'}
+            </td>
+          </tr>
+        ) : (
+          tags.map((tag, index) => (
+            <motion.tr
+              key={tag?.tag || `tag-${index}`}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: index * 0.1 }}
+              className="border-b border-[#ffffff34] hover:bg-gray-800/20"
             >
-              <Plus size={16} />
-              Tambah Tag
-            </button>
-          </div>
-
-          <AnimatePresence>
-            {notification && (
-              <motion.div
-                initial={{ opacity: 0, y: -20 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -20 }}
-                className={clsx(
-                  "mb-4 p-3 rounded-lg border flex items-center gap-2",
-                  {
-                    'bg-green-900/40 border-green-600/40 text-green-300': notification.type === 'success',
-                    'bg-red-900/40 border-red-600/40 text-red-300': notification.type === 'error'
-                  }
-                )}
-              >
-                <AlertCircle size={16} />
-                {notification.message}
-              </motion.div>
-            )}
-          </AnimatePresence>
-
-          {error && (
-            <motion.div
-              initial={{ opacity: 0, y: -10 }}
-              animate={{ opacity: 1, y: 0 }}
-              className="mb-4 p-3 bg-red-900/40 border border-red-600/40 rounded-lg text-red-300 flex items-center gap-2"
-            >
-              <AlertCircle size={16} />
-              {error}
-              <button onClick={clearError} className="ml-auto">
-                <X size={16} />
-              </button>
-            </motion.div>
-          )}
-
-          <div className="overflow-x-auto">
-            <table className="w-full border-collapse">
-              <thead>
-                <tr className="border-b border-[#ffffff34]">
-                  <th className="text-left py-3 px-4 font-semibold">Tag</th>
-                  <th className="text-left py-3 px-4 font-semibold">Input</th>
-                  <th className="text-left py-3 px-4 font-semibold">Response</th>
-                  <th className="text-left py-3 px-4 font-semibold">Actions</th>
-                </tr>
-              </thead>
-              <tbody>
-                {isLoading ? (
-                  <tr>
-                    <td colSpan="4" className="text-center py-8">
-                      <div className="flex items-center justify-center">
-                        <motion.div
-                          animate={{ rotate: 360 }}
-                          transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
-                          className="w-6 h-6 border-2 border-gray-600 border-t-white rounded-full"
-                        />
-                        <span className="ml-2">Loading...</span>
-                      </div>
-                    </td>
-                  </tr>
-                ) : !Array.isArray(tags) || tags.length === 0 ? (
-                  <tr>
-                    <td colSpan="4" className="text-center py-8 text-gray-400">
-                      {!Array.isArray(tags) ? 'Error: Data tidak valid' : 'Belum ada data tag'}
-                    </td>
-                  </tr>
-                ) : (
-                  tags.map((tag, index) => (
-                    <motion.tr
-                      key={tag?.tag || `tag-${index}`}
-                      initial={{ opacity: 0 }}
-                      animate={{ opacity: 1 }}
-                      transition={{ delay: index * 0.1 }}
-                      className="border-b border-[#ffffff34] hover:bg-gray-800/20"
-                    >
-                      <td className="py-3 px-4 font-medium">{tag?.tag || 'N/A'}</td>
-                      <td className="py-3 px-4">
-                        <div className="flex flex-wrap gap-1">
-                          {Array.isArray(tag?.input) ? tag.input.slice(0, 2).map((inp, i) => (
-                            <span key={i} className="text-xs bg-blue-900/40 px-2 py-1 rounded">
-                              {inp && inp.length > 20 ? inp.substring(0, 20) + '...' : inp || 'N/A'}
-                            </span>
-                          )) : (
-                            <span className="text-xs text-gray-400">No inputs</span>
-                          )}
-                          {Array.isArray(tag?.input) && tag.input.length > 2 && (
-                            <span className="text-xs text-gray-400">+{tag.input.length - 2} more</span>
-                          )}
-                        </div>
-                      </td>
-                      <td className="py-3 px-4">
-                        <div className="flex flex-wrap gap-1">
-                          {Array.isArray(tag?.responses) ? tag.responses.slice(0, 2).map((resp, i) => (
-                            <span key={i} className="text-xs bg-green-900/40 px-2 py-1 rounded">
-                              {resp && resp.length > 20 ? resp.substring(0, 20) + '...' : resp || 'N/A'}
-                            </span>
-                          )) : (
-                            <span className="text-xs text-gray-400">No responses</span>
-                          )}
-                          {Array.isArray(tag?.responses) && tag.responses.length > 2 && (
-                            <span className="text-xs text-gray-400">+{tag.responses.length - 2} more</span>
-                          )}
-                        </div>
-                      </td>
-                      <td className="py-3 px-4">
-                        <div className="flex gap-2">
-                          <button
-                            onClick={() => openModal('view', tag)}
-                            className="p-1 hover:bg-gray-700 rounded transition-colors"
-                            title="View"
-                          >
-                            <Eye size={16} />
-                          </button>
-                          <button
-                            onClick={() => openModal('edit', tag)}
-                            className="p-1 hover:bg-gray-700 rounded transition-colors"
-                            title="Edit"
-                          >
-                            <Edit size={16} />
-                          </button>
-                          <button
-                            onClick={() => handleDelete(tag?.tag)}
-                            className="p-1 hover:bg-red-700 rounded transition-colors text-red-400"
-                            title="Delete"
-                            disabled={!tag?.tag}
-                          >
-                            <Trash2 size={16} />
-                          </button>
-                        </div>
-                      </td>
-                    </motion.tr>
-                  ))
-                )}
-              </tbody>
-            </table>
-          </div>
-        </div>
+              <td className="py-3 px-4 font-medium whitespace-nowrap">{tag?.tag || 'N/A'}</td>
+              <td className="py-3 px-4">
+                <div className="flex flex-wrap gap-1">
+                  {Array.isArray(tag?.input) ? tag.input.slice(0, 2).map((inp, i) => (
+                    <span key={i} className="text-xs bg-blue-900/40 px-2 py-1 rounded max-w-[150px] truncate">
+                      {inp || 'N/A'}
+                    </span>
+                  )) : (
+                    <span className="text-xs text-gray-400">No inputs</span>
+                  )}
+                  {Array.isArray(tag?.input) && tag.input.length > 2 && (
+                    <span className="text-xs text-gray-400">+{tag.input.length - 2} more</span>
+                  )}
+                </div>
+              </td>
+              <td className="py-3 px-4">
+                <div className="flex flex-wrap gap-1">
+                  {Array.isArray(tag?.responses) ? tag.responses.slice(0, 2).map((resp, i) => (
+                    <span key={i} className="text-xs bg-green-900/40 px-2 py-1 rounded max-w-[150px] truncate">
+                      {resp || 'N/A'}
+                    </span>
+                  )) : (
+                    <span className="text-xs text-gray-400">No responses</span>
+                  )}
+                  {Array.isArray(tag?.responses) && tag.responses.length > 2 && (
+                    <span className="text-xs text-gray-400">+{tag.responses.length - 2} more</span>
+                  )}
+                </div>
+              </td>
+              <td className="py-3 px-4 whitespace-nowrap">
+                <div className="flex gap-2">
+                  <button
+                    onClick={() => openModal('view', tag)}
+                    className="p-1 hover:bg-gray-700 rounded"
+                    title="View"
+                  >
+                    <Eye size={16} />
+                  </button>
+                  <button
+                    onClick={() => openModal('edit', tag)}
+                    className="p-1 hover:bg-gray-700 rounded"
+                    title="Edit"
+                  >
+                    <Edit size={16} />
+                  </button>
+                  <button
+                    onClick={() => handleDelete(tag?.tag)}
+                    className="p-1 hover:bg-red-700 rounded text-red-400"
+                    title="Delete"
+                    disabled={!tag?.tag}
+                  >
+                    <Trash2 size={16} />
+                  </button>
+                </div>
+              </td>
+            </motion.tr>
+          ))
+        )}
+      </tbody>
+    </table>
+  </div>
+</div>
 
         <AnimatePresence>
           {isModalOpen && (

@@ -105,7 +105,11 @@ const ChatSoekarnoView = () => {
                   onChange={(e) => setInputMessage(e.target.value)}
                   onKeyDown={handleKeyPress}
                   placeholder="Tanyakan sesuatu kepada Ir. Soekarno..."
-                  className="w-full px-4 py-3 bg-transparent border border-[#ffffff34] rounded-lg text-white placeholder-gray-400 resize-none focus:outline-none focus:ring-2 focus:ring-neutral-600 focus:border-transparent backdrop-blur-sm transition-colors duration-200"
+                  className="w-full sm:py-3 sm:px-4 px-2 py-2 text-sm sm:text-base 
+             bg-transparent border border-[#ffffff34] rounded-lg text-white 
+             placeholder-gray-400 resize-none focus:outline-none focus:ring-2 
+             focus:ring-neutral-600 focus:border-transparent backdrop-blur-sm 
+             transition-colors duration-200"
                   rows="1"
                   style={{ minHeight: '50px', maxHeight: '120px', height: 'auto' }}
                   onInput={(e) => {
