@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { createOrUpdateTag, getAllTags,getSoekarnoTags, getSpecificTag, deleteTag } from '../api/npcApi';
+import { createOrUpdateTag, getAllTags, getHattaTags, getSpecificTag, deleteTag } from '../api/npcApi';
 
 export const useCrudSoekarnoPresenter = () => {
   const [tags, setTags] = useState([]);
@@ -17,7 +17,7 @@ export const useCrudSoekarnoPresenter = () => {
     setIsLoading(true);
     setError(null);
     try {
-      const response = await getSoekarnoTags();
+      const response = await getHattaTags();
       console.log('Full response:', response);
       
       const apiResponse = response?.data;

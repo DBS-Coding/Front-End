@@ -24,6 +24,7 @@ export const sendChatMessage = async (input) => {
 export const createOrUpdateTag = async (tagData) => {
   try {
     const response = await apiClient.post("/chatbot/tags", {
+      nama: tagData.nama,
       tag: tagData.tag,
       input: tagData.input,
       responses: tagData.responses,
@@ -44,6 +45,27 @@ export const getAllTags = async () => {
     throw error;
   }
 };
+
+export const getSoekarnoTags = async () => {
+  try {
+    const response = await apiClient.get("/chatbot/tags/nama/Soekarno");
+    return response;
+  } catch (error) {
+    console.error("Get soekarno Tags API Error:", error);
+    throw error;
+  }
+};
+
+export const getHattaTags = async () => {
+  try {
+    const response = await apiClient.get("/chatbot/tags/nama/Hatta");
+    return response;
+  } catch (error) {
+    console.error("Get Hatta Tags API Error:", error);
+    throw error;
+  }
+};
+
 
 export const getSpecificTag = async (tagName) => {
   try {
