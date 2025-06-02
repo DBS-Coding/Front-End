@@ -26,7 +26,7 @@ const HomeView = () => {
       id: 2,
       name: "Rafi Alisba GS",
       role: "UI UX & Front End Developer", 
-      image: Leo,
+      image: "https://avatars.githubusercontent.com/u/189972723?s=96&v=4",
       linkedin: "#",
       github: "#"
     },
@@ -34,7 +34,7 @@ const HomeView = () => {
       id: 3,
       name: "Nanda Safiq",
       role: "Back-End Developer",
-      image: Leo, 
+      image: "https://ndav.my.id/_next/image?url=%2F_next%2Fstatic%2Fmedia%2Fndav.f8a2254e.png&w=384&q=75", 
       linkedin: "#",
       github: "#"
     },
@@ -42,7 +42,7 @@ const HomeView = () => {
       id: 4,
       name: "Sincan",
       role: "Front-End Developer",
-      image: Leo,
+      image: "https://avatars.githubusercontent.com/u/67074459?v=4",
       linkedin: "#", 
       github: "#"
     },
@@ -50,7 +50,7 @@ const HomeView = () => {
       id: 5,
       name: "Khoirunnisa",
       role: "Machine Learning",
-      image: Leo,
+      image: "https://avatars.githubusercontent.com/u/173612032?s=96&v=4",
       linkedin: "#",
       github: "#"
     },
@@ -58,7 +58,7 @@ const HomeView = () => {
       id: 6,
       name: "Ricchie",
       role: "Machine Learning",
-      image: Leo,
+      image: "https://avatars.githubusercontent.com/u/94582518?s=96&v=4",
       linkedin: "#",
       github: "#"
     }
