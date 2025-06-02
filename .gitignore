@@ -6,7 +6,10 @@
 .env.*.local
 
 # build
-/dist
+dist/
+
+#dev-helper
+dev-dist/
 
 # logs
 npm-debug.log*

@@ -4,7 +4,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Menu, ChevronDown, User, LogOut, Trash2 } from 'lucide-react';
 import useAuthStore from '../../store/authStore';
 import useUIStore from '../../store/uiStore';
-import { useNavigationPresenter } from '../../utils/navigationutils';
+import { useNavigationPresenter } from '../../hooks/navigationutils';
 
 const Header = () => {
   const { user } = useAuthStore();
