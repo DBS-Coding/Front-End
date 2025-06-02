@@ -4,7 +4,7 @@ import { useKeenSlider } from 'keen-slider/react';
 import { ChevronLeft, ChevronRight, Linkedin, Github } from 'lucide-react';
 import { motion } from 'framer-motion';
 import Layout from '../components/common/Layout';
-import { useNavigationPresenter } from '../utils/navigationutils';
+import { useNavigationPresenter } from '../hooks/navigationutils';
 import pakHatta from "../assets/pakhatta.png";
 import pakKarno from "../assets/pakkarno.png";
 import Leo from "../assets/Leo_Prangs_Tobing.png";

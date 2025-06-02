@@ -1,4 +1,5 @@
 import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
+import { AnimatePresence } from "framer-motion";
 import RegisterView from "./views/auth/RegisterView";
 import useAuthStore from "./store/authStore";
 import LoginView from "./views/auth/LoginView";
@@ -9,6 +10,8 @@ import ChatSoekarnoView from "./views/ChatSoekarnoView";
 import CrudHattaView from "./views/CrudHattaView";
 import CrudSoekarnoView from "./views/CrudSoekarnoView";
 import HomeView from "./views/HomeView";
+import useOnlineStatus from "./hooks/statusInternetUtils";
+import OfflineFeedbackCard from "./components/fallback/OfflineFeedbackCard";
 
 const ProtectedRoute = ({ children }) => {
   const { isAuthenticated, token } = useAuthStore();
@@ -21,8 +24,14 @@ const ProtectedRoute = ({ children }) => {
 };
 
 function App() {
+  const isOnline = useOnlineStatus();
+
   return (
     <Router>
+      <AnimatePresence>
+        {!isOnline && <OfflineFeedbackCard key="global-offline-card" />}
+      </AnimatePresence>
+
       <Routes>
         <Route path="/register" element={<RegisterView />} />
         <Route path="/login" element={<LoginView/>} />
