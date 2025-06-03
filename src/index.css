@@ -1,2 +1,11 @@
 @import "tailwindcss";
 @import 'keen-slider/keen-slider.min.css';
+
+/* Hides scrollbar for all browsers */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;     /* Firefox */
+}
