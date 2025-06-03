@@ -1,27 +1,82 @@
-import React from 'react';
 import Header from './Header';
 import Sidebar from './Sidebar';
 import useUIStore from '../../store/uiStore';
+import { Crown, Scroll, Sparkles } from 'lucide-react';
+import { motion } from 'framer-motion';
 
 const Layout = ({ children }) => {
   const { sidebarOpen } = useUIStore();
 
+  const floatingVariants = {
+    animate: {
+      y: [-8, 8, -8],
+      rotate: [0, 3, -3, 0],
+      transition: {
+        duration: 5,
+        repeat: Number.POSITIVE_INFINITY,
+        ease: 'easeInOut',
+      },
+    },
+  };
+
   return (
-    <div className="min-h-screen bg-[#212529] text-white">
-      <Header />
-      
-      <div className="w-full px-4 sm:px-6">
-        <div className="flex flex-col lg:flex-row gap-4 lg:gap-5">
-          <Sidebar />
-          
-          <main className={`
-            flex-1 min-h-[85vh] transition-all duration-300 overflow-x-hidden
-            ${sidebarOpen ? 'lg:w-5/6' : 'lg:w-full'}
-          `}>
-            <div className="w-full max-w-full">
-              {children}
-            </div>
-          </main>
+    <div className='min-h-screen bg-gradient-to-br from-amber-900 via-amber-800 to-red-900 text-white relative'>
+      {/* Background Pattern */}
+      <div className='absolute inset-0 opacity-5 pointer-events-none'>
+        <div
+          className='absolute inset-0'
+          style={{
+            backgroundImage: `url("data:image/svg+xml,%3Csvg width='80' height='80' viewBox='0 0 80 80' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fillRule='evenodd'%3E%3Cg fill='%23ffffff' fillOpacity='0.1'%3E%3Cpath d='M40 40c0-11.046-8.954-20-20-20s-20 8.954-20 20 8.954 20 20 20 20-8.954 20-20zm0 0c0 11.046 8.954 20 20 20s20-8.954 20-20-8.954-20-20-20-20 8.954-20 20z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`,
+          }}
+        />
+      </div>
+
+      {/* Decorative Elements */}
+      <motion.div
+        className='absolute top-20 left-10 text-amber-300 opacity-20 pointer-events-none'
+        variants={floatingVariants}
+        animate='animate'
+      >
+        <Crown size={32} />
+      </motion.div>
+
+      <motion.div
+        className='absolute top-40 right-16 text-amber-300 opacity-20 pointer-events-none'
+        variants={floatingVariants}
+        animate='animate'
+        transition={{ delay: 1 }}
+      >
+        <Scroll size={28} />
+      </motion.div>
+
+      <motion.div
+        className='absolute bottom-32 left-20 text-amber-300 opacity-20 pointer-events-none'
+        variants={floatingVariants}
+        animate='animate'
+        transition={{ delay: 2 }}
+      >
+        <Sparkles size={30} />
+      </motion.div>
+
+      {/* Ambient Light Effect */}
+      <div className='absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-amber-500/5 rounded-full blur-3xl pointer-events-none'></div>
+
+      <div className='relative z-10'>
+        <Header />
+
+        <div className='w-full px-4 sm:px-6 lg:px-8'>
+          <div className='flex flex-col lg:flex-row gap-4 lg:gap-6'>
+            <Sidebar />
+
+            <main
+              className={`
+                flex-1 min-h-[85vh] transition-all duration-300 overflow-x-hidden
+                ${sidebarOpen ? 'lg:w-5/6' : 'lg:w-full'}
+              `}
+            >
+              <div className='w-full max-w-full'>{children}</div>
+            </main>
+          </div>
         </div>
       </div>
     </div>
