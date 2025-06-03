@@ -1,5 +1,6 @@
 import { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { createPortal } from 'react-dom';
 import {
   Menu,
   ChevronDown,
@@ -21,10 +22,15 @@ const Header = () => {
 
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const dropdownRef = useRef(null);
+  const buttonRef = useRef(null);
 
   useEffect(() => {
     const handleClickOutside = (event) => {
-      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+      if (
+        buttonRef.current &&
+        !buttonRef.current.contains(event.target) &&
+        !document.getElementById('user-dropdown')?.contains(event.target)
+      ) {
         setIsDropdownOpen(false);
       }
     };
@@ -35,6 +41,16 @@ const Header = () => {
     };
   }, []);
 
+  const getDropdownPosition = () => {
+    if (!buttonRef.current) return { top: 0, right: 0 };
+
+    const rect = buttonRef.current.getBoundingClientRect();
+    return {
+      top: rect.bottom + window.scrollY + 8,
+      right: window.innerWidth - rect.right,
+    };
+  };
+
   const toggleDropdown = () => {
     setIsDropdownOpen(!isDropdownOpen);
   };
@@ -42,6 +58,61 @@ const Header = () => {
   const handleDropdownAction = (action) => {
     setIsDropdownOpen(false);
     action();
+  };
+
+  // Dropdown component to be rendered via Portal
+  const DropdownMenu = () => {
+    const position = getDropdownPosition();
+
+    return createPortal(
+      <motion.div
+        id='user-dropdown'
+        initial={{ opacity: 0, y: -10, scale: 0.95 }}
+        animate={{ opacity: 1, y: 0, scale: 1 }}
+        exit={{ opacity: 0, y: -10, scale: 0.95 }}
+        transition={{ duration: 0.15, ease: 'easeOut' }}
+        className='fixed w-56 bg-black/90 backdrop-blur-md border-2 border-amber-400/30 rounded-xl shadow-2xl z-[99999]'
+        style={{
+          top: position.top + 'px',
+          right: position.right + 'px',
+        }}
+      >
+        <div className='py-2'>
+          <div className='px-4 py-3 border-b border-amber-400/30'>
+            <div className='flex items-center gap-2 mb-1'>
+              <Crown className='w-3 h-3 text-amber-400' />
+              <p className='text-xs text-amber-300'>Masuk sebagai</p>
+            </div>
+            <p className='text-sm font-medium text-amber-100 truncate'>
+              {user?.data?.name || 'User'}
+            </p>
+          </div>
+
+          <div className='py-2'>
+            <motion.button
+              onClick={() => handleDropdownAction(handleDeleteAccount)}
+              disabled={isLoading}
+              className='w-full flex items-center space-x-3 px-4 py-2 text-sm text-amber-200 hover:bg-amber-900/40 transition-colors duration-150 disabled:opacity-50 disabled:cursor-not-allowed'
+              whileHover={{ x: 3 }}
+            >
+              <Trash2 className='w-4 h-4' />
+              <span>{isLoading ? 'Menghapus...' : 'Hapus Akun'}</span>
+            </motion.button>
+
+            <motion.button
+              onClick={() => handleDropdownAction(handleLogout)}
+              disabled={isLoading}
+              className='w-full flex items-center space-x-3 px-4 py-2 text-sm text-red-300 hover:bg-red-900/40 transition-colors duration-150 disabled:opacity-50 disabled:cursor-not-allowed'
+              whileHover={{ x: 3 }}
+            >
+              <LogOut className='w-4 h-4' />
+              <span>{isLoading ? 'Keluar...' : 'Keluar'}</span>
+            </motion.button>
+          </div>
+        </div>
+      </motion.div>,
+      document.body
+    );
   };
 
   return (
@@ -80,6 +151,7 @@ const Header = () => {
         <div className='flex items-center space-x-2 sm:space-x-4'>
           <div className='relative' ref={dropdownRef}>
             <motion.button
+              ref={buttonRef}
               onClick={toggleDropdown}
               className='flex items-center space-x-2 px-3 py-2 bg-black/30 border-2 border-amber-400/30 hover:border-amber-400/50 rounded-lg transition-all duration-300'
               whileHover={{ scale: 1.02 }}
@@ -106,51 +178,7 @@ const Header = () => {
             </motion.button>
 
             <AnimatePresence>
-              {isDropdownOpen && (
-                <motion.div
-                  initial={{ opacity: 0, y: -10, scale: 0.95 }}
-                  animate={{ opacity: 1, y: 0, scale: 1 }}
-                  exit={{ opacity: 0, y: -10, scale: 0.95 }}
-                  transition={{ duration: 0.15, ease: 'easeOut' }}
-                  className='absolute right-0 top-full mt-2 w-56 bg-black/60 backdrop-blur-md border-2 border-amber-400/30 rounded-xl shadow-xl z-50'
-                >
-                  <div className='py-2'>
-                    <div className='px-4 py-3 border-b border-amber-400/30'>
-                      <div className='flex items-center gap-2 mb-1'>
-                        <Crown className='w-3 h-3 text-amber-400' />
-                        <p className='text-xs text-amber-300'>Masuk sebagai</p>
-                      </div>
-                      <p className='text-sm font-medium text-amber-100 truncate'>
-                        {user?.data?.name || 'User'}
-                      </p>
-                    </div>
-
-                    <div className='py-2'>
-                      <motion.button
-                        onClick={() =>
-                          handleDropdownAction(handleDeleteAccount)
-                        }
-                        disabled={isLoading}
-                        className='w-full flex items-center space-x-3 px-4 py-2 text-sm text-amber-200 hover:bg-amber-900/40 transition-colors duration-150 disabled:opacity-50 disabled:cursor-not-allowed'
-                        whileHover={{ x: 3 }}
-                      >
-                        <Trash2 className='w-4 h-4' />
-                        <span>{isLoading ? 'Menghapus...' : 'Hapus Akun'}</span>
-                      </motion.button>
-
-                      <motion.button
-                        onClick={() => handleDropdownAction(handleLogout)}
-                        disabled={isLoading}
-                        className='w-full flex items-center space-x-3 px-4 py-2 text-sm text-red-300 hover:bg-red-900/40 transition-colors duration-150 disabled:opacity-50 disabled:cursor-not-allowed'
-                        whileHover={{ x: 3 }}
-                      >
-                        <LogOut className='w-4 h-4' />
-                        <span>{isLoading ? 'Keluar...' : 'Keluar'}</span>
-                      </motion.button>
-                    </div>
-                  </div>
-                </motion.div>
-              )}
+              {isDropdownOpen && <DropdownMenu />}
             </AnimatePresence>
           </div>
         </div>
