@@ -150,11 +150,11 @@ const HomeView = () => {
           transition={{ duration: 0.6 }}
         >
           <div className='flex justify-center mb-6'>
-            <div className='relative'>
+            <div className='relative -z-10'>
               <div className='w-16 h-16 bg-gradient-to-br from-amber-400 to-amber-600 rounded-full flex items-center justify-center shadow-2xl border-4 border-amber-300'>
                 <Scroll className='w-8 h-8 text-amber-900' />
               </div>
-              <div className='absolute -inset-2 bg-gradient-to-r from-amber-400 to-red-400 rounded-full blur opacity-30 animate-pulse'></div>
+              <div className='absolute  -inset-2 bg-gradient-to-r from-amber-400 to-red-400 rounded-full blur opacity-30 animate-pulse'></div>
             </div>
           </div>
 
