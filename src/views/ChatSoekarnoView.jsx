@@ -370,7 +370,7 @@ const ChatSoekarnoView = () => {
                     </motion.div>
                   ))
                 ) : (
-                  <div className='text-center py-8'>
+                  <div className='text-center py-8 col-span-2'>
                     <Scroll className='w-8 h-8 text-amber-400/50 mx-auto mb-2' />
                     <p className='text-amber-200/50 text-sm'>
                       Mulai percakapan untuk mendapatkan achievement
