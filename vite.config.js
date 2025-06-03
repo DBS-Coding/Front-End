@@ -42,4 +42,24 @@ export default defineConfig({
   server: {
     port: 3001,
   },
+  optimizeDeps: {
+    include: ["@tensorflow/tfjs"],
+    esbuildOptions: {
+      target: "esnext",
+    },
+  },
+  build: {
+    target: "esnext",
+    rollupOptions: {
+      external: [],
+      output: {
+        manualChunks: {
+          tensorflow: ["@tensorflow/tfjs"],
+        },
+      },
+    },
+  },
+  define: {
+    global: "globalThis",
+  },
 });
