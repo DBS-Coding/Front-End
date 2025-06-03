@@ -83,6 +83,18 @@ const MessageBubble = ({ message }) => {
             whileHover={{ scale: 1.01 }}
             transition={{ duration: 0.2 }}
           >
+            {/* Message tail */}
+            <div
+              className={clsx('absolute top-3 w-3 h-3 rotate-45 border-2', {
+                'right-[-7px] bg-gradient-to-br from-blue-500/20 to-blue-600/20 border-r-blue-400/50 border-b-blue-400/50 border-l-transparent border-t-transparent':
+                  isUser,
+                'left-[-7px] bg-gradient-to-br from-red-500/20 to-red-600/20 border-l-red-400/50 border-t-red-400/50 border-r-transparent border-b-transparent':
+                  !isUser && isError,
+                'left-[-7px] bg-gradient-to-br from-amber-500/20 to-amber-600/20 border-l-amber-400/50 border-t-amber-400/50 border-r-transparent border-b-transparent':
+                  !isUser && !isError,
+              })}
+            />
+
             <p className='text-sm leading-relaxed'>{message.text}</p>
 
             {/* Timestamp */}
