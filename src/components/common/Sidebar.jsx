@@ -52,14 +52,12 @@ const Sidebar = () => {
 
       <motion.aside
         className={`
-          fixed lg:static inset-y-0 left-0 z-50 
-          lg:w-1/6 w-64 sm:w-72 h-full space-y-4 pt-4 lg:pt-0
-          transform transition-transform duration-300 ease-in-out
-          ${
-            sidebarOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'
-          }
-          ${!sidebarOpen ? 'lg:w-0 lg:overflow-hidden' : ''}
-        `}
+    fixed lg:sticky inset-y-0 left-0 z-50 
+    lg:top-0 lg:h-screen lg:w-1/6 w-64 sm:w-72 h-full space-y-4 pt-4 lg:pt-4
+    transform transition-transform duration-300 ease-in-out
+    ${sidebarOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'}
+    ${!sidebarOpen ? 'lg:w-0 lg:overflow-hidden' : ''}
+  `}
         initial={{ opacity: 0, x: -50 }}
         animate={{ opacity: 1, x: 0 }}
         transition={{ duration: 0.6, delay: 0.2 }}

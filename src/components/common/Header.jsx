@@ -90,7 +90,12 @@ const Header = () => {
                   <User className='w-4 h-4 text-amber-900' />
                 </div>
                 <span className='text-amber-100 text-sm sm:text-base max-w-[100px] sm:max-w-[150px] truncate'>
-                  {user?.data?.name || 'User'}
+                  <span className='sm:hidden'>
+                    {user?.data?.name ? user.data.name.split(' ')[0] : 'User'}
+                  </span>
+                  <span className='hidden sm:inline'>
+                    {user?.data?.name || 'User'}
+                  </span>
                 </span>
               </div>
               <ChevronDown
