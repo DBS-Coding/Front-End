@@ -14,6 +14,9 @@ export default defineConfig({
       devOptions: {
         enabled: true,
       },
+      workbox: {
+        maximumFileSizeToCacheInBytes: 5 * 1024 * 1024, // Naikkan limit jadi 5MB
+      },
       manifest: {
         name: "Histotalk",
         short_name: "Histotalk",
