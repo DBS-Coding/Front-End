@@ -1,7 +1,15 @@
-import React, { useState, useRef, useEffect } from 'react';
-// eslint-disable-next-line no-unused-vars
+import { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Menu, ChevronDown, User, LogOut, Trash2 } from 'lucide-react';
+import { createPortal } from 'react-dom';
+import {
+  Menu,
+  ChevronDown,
+  User,
+  LogOut,
+  Trash2,
+  Scroll,
+  Crown,
+} from 'lucide-react';
 import useAuthStore from '../../store/authStore';
 import useUIStore from '../../store/uiStore';
 import { useNavigationPresenter } from '../../hooks/navigationutils';
@@ -9,14 +17,20 @@ import { useNavigationPresenter } from '../../hooks/navigationutils';
 const Header = () => {
   const { user } = useAuthStore();
   const { toggleSidebar } = useUIStore();
-  const { handleLogout, handleDeleteAccount, isLoading } = useNavigationPresenter();
-  
+  const { handleLogout, handleDeleteAccount, isLoading } =
+    useNavigationPresenter();
+
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const dropdownRef = useRef(null);
+  const buttonRef = useRef(null);
 
   useEffect(() => {
     const handleClickOutside = (event) => {
-      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+      if (
+        buttonRef.current &&
+        !buttonRef.current.contains(event.target) &&
+        !document.getElementById('user-dropdown')?.contains(event.target)
+      ) {
         setIsDropdownOpen(false);
       }
     };
@@ -27,6 +41,16 @@ const Header = () => {
     };
   }, []);
 
+  const getDropdownPosition = () => {
+    if (!buttonRef.current) return { top: 0, right: 0 };
+
+    const rect = buttonRef.current.getBoundingClientRect();
+    return {
+      top: rect.bottom + window.scrollY + 8,
+      right: window.innerWidth - rect.right,
+    };
+  };
+
   const toggleDropdown = () => {
     setIsDropdownOpen(!isDropdownOpen);
   };
@@ -36,84 +60,127 @@ const Header = () => {
     action();
   };
 
-  return (
-    <header className="flex justify-between items-center p-4 sm:p-6 border-b border-[#ffffff34] mb-4 sm:mb-8">
-      <div className="flex items-center space-x-2 sm:space-x-4">
-        <button
-          onClick={toggleSidebar}
-          className="lg:hidden p-2 hover:bg-gray-700 rounded-lg transition-colors"
-        >
-          <Menu className="w-5 h-5 sm:w-6 sm:h-6" />
-        </button>
-        <motion.h1 
-          className="text-xl sm:text-2xl lg:text-3xl font-bold truncate"
-          initial={{ opacity: 0, x: -20 }}
-          animate={{ opacity: 1, x: 0 }}
-          transition={{ duration: 0.5 }}
-        >
-          HISTOTALK
-        </motion.h1>
-      </div>
-      
-      <div className="flex items-center space-x-2 sm:space-x-4">
-        <div className="relative" ref={dropdownRef}>
-          <button
-            onClick={toggleDropdown}
-            className="flex items-center space-x-2 px-3 py-2 border border-[#ffffff34] hover:ring-1 hover:ring-neutral-600 hover:cursor-pointer rounded-lg transition-all duration-200 focus:outline-none focus:ring-1 focus:ring-neutral-600"
-          >
-            <div className="flex items-center space-x-2">
-              <User className="w-4 h-4 text-white" />
-              <span className="text-white text-sm sm:text-base max-w-[100px] sm:max-w-[150px] truncate">
-                {user?.data?.name || 'User'}
-              </span>
-            </div>
-            <ChevronDown 
-              className={`w-4 h-4 text-gray-400 transition-transform duration-200 ${
-                isDropdownOpen ? 'rotate-180' : ''
-              }`} 
-            />
-          </button>
+  // Dropdown component to be rendered via Portal
+  const DropdownMenu = () => {
+    const position = getDropdownPosition();
 
-          <AnimatePresence>
-            {isDropdownOpen && (
-              <motion.div
-                initial={{ opacity: 0, y: -10, scale: 0.95 }}
-                animate={{ opacity: 1, y: 0, scale: 1 }}
-                exit={{ opacity: 0, y: -10, scale: 0.95 }}
-                transition={{ duration: 0.15, ease: "easeOut" }}
-                className="absolute right-0 top-full mt-2 w-48 bg-[#212529] border border-neutral-600 rounded-lg shadow-xl z-50"
-              >
-                <div className="py-2">
-                  <div className="px-4 py-2 border-b border-neutral-600">
-                    <p className="text-sm text-neutral-400">Signed in as</p>
-                    <p className="text-sm font-medium text-white truncate">
-                      {user?.data?.name || 'User'}
-                    </p>
-                  </div>
-                  
-                  <div className="py-1">
-                    <button
-                      onClick={() => handleDropdownAction(handleDeleteAccount)}
-                      disabled={isLoading}
-                      className="w-full flex items-center space-x-3 px-4 py-2 hover:cursor-pointer text-sm text-neutral-300 hover:bg-neutral-700 hover:text-white transition-colors duration-150 disabled:opacity-50 disabled:cursor-not-allowed"
-                    >
-                      <Trash2 className="w-4 h-4" />
-                      <span>{isLoading ? 'Deleting...' : 'Delete Account'}</span>
-                    </button>
-                    
-                    <button
-                      onClick={() => handleDropdownAction(handleLogout)}
-                      disabled={isLoading}
-                      className="w-full flex items-center space-x-3 px-4 py-2 hover:cursor-pointer text-sm text-red-400 hover:bg-red-600 hover:text-white transition-colors duration-150 disabled:opacity-50 disabled:cursor-not-allowed"
-                    >
-                      <LogOut className="w-4 h-4" />
-                      <span>{isLoading ? 'Logging out...' : 'Logout'}</span>
-                    </button>
-                  </div>
+    return createPortal(
+      <motion.div
+        id='user-dropdown'
+        initial={{ opacity: 0, y: -10, scale: 0.95 }}
+        animate={{ opacity: 1, y: 0, scale: 1 }}
+        exit={{ opacity: 0, y: -10, scale: 0.95 }}
+        transition={{ duration: 0.15, ease: 'easeOut' }}
+        className='fixed w-56 bg-black/90 backdrop-blur-md border-2 border-amber-400/30 rounded-xl shadow-2xl z-[99999]'
+        style={{
+          top: position.top + 'px',
+          right: position.right + 'px',
+        }}
+      >
+        <div className='py-2'>
+          <div className='px-4 py-3 border-b border-amber-400/30'>
+            <div className='flex items-center gap-2 mb-1'>
+              <Crown className='w-3 h-3 text-amber-400' />
+              <p className='text-xs text-amber-300'>Masuk sebagai</p>
+            </div>
+            <p className='text-sm font-medium text-amber-100 truncate'>
+              {user?.data?.name || 'User'}
+            </p>
+          </div>
+
+          <div className='py-2'>
+            <motion.button
+              onClick={() => handleDropdownAction(handleDeleteAccount)}
+              disabled={isLoading}
+              className='w-full flex items-center space-x-3 px-4 py-2 text-sm text-amber-200 hover:bg-amber-900/40 transition-colors duration-150 disabled:opacity-50 disabled:cursor-not-allowed'
+              whileHover={{ x: 3 }}
+            >
+              <Trash2 className='w-4 h-4' />
+              <span>{isLoading ? 'Menghapus...' : 'Hapus Akun'}</span>
+            </motion.button>
+
+            <motion.button
+              onClick={() => handleDropdownAction(handleLogout)}
+              disabled={isLoading}
+              className='w-full flex items-center space-x-3 px-4 py-2 text-sm text-red-300 hover:bg-red-900/40 transition-colors duration-150 disabled:opacity-50 disabled:cursor-not-allowed'
+              whileHover={{ x: 3 }}
+            >
+              <LogOut className='w-4 h-4' />
+              <span>{isLoading ? 'Keluar...' : 'Keluar'}</span>
+            </motion.button>
+          </div>
+        </div>
+      </motion.div>,
+      document.body
+    );
+  };
+
+  return (
+    <header className='p-4 sm:p-6 mb-4 sm:mb-8 border-b border-amber-400/30 backdrop-blur-sm bg-black/10'>
+      <div className='max-w-7xl mx-auto flex justify-between items-center'>
+        <div className='flex items-center space-x-3 sm:space-x-4'>
+          <motion.button
+            onClick={toggleSidebar}
+            className='lg:hidden p-2 bg-black/30 border border-amber-400/30 rounded-lg hover:bg-black/40 hover:border-amber-400/50 transition-all duration-300'
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+          >
+            <Menu className='w-5 h-5 sm:w-6 sm:h-6 text-amber-300' />
+          </motion.button>
+
+          <div className='flex items-center gap-3'>
+            <div className='relative'>
+              <div className='w-8 h-8 sm:w-10 sm:h-10 bg-gradient-to-br from-amber-400 to-amber-600 rounded-full flex items-center justify-center border-2 border-amber-300'>
+                <Scroll className='w-4 h-4 sm:w-5 sm:h-5 text-amber-900' />
+              </div>
+              <div className='absolute -inset-1 bg-gradient-to-r from-amber-400 to-red-400 rounded-full blur opacity-30 animate-pulse'></div>
+            </div>
+
+            <motion.h1
+              className='text-xl sm:text-2xl lg:text-3xl font-bold truncate bg-gradient-to-r from-amber-200 via-yellow-200 to-amber-300 bg-clip-text text-transparent'
+              initial={{ opacity: 0, x: -20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.5 }}
+              style={{ fontFamily: "'Playfair Display', serif" }}
+            >
+              HISTOTALK
+            </motion.h1>
+          </div>
+        </div>
+
+        <div className='flex items-center space-x-2 sm:space-x-4'>
+          <div className='relative' ref={dropdownRef}>
+            <motion.button
+              ref={buttonRef}
+              onClick={toggleDropdown}
+              className='flex items-center space-x-2 px-3 py-2 bg-black/30 border-2 border-amber-400/30 hover:border-amber-400/50 rounded-lg transition-all duration-300'
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
+            >
+              <div className='flex items-center space-x-2'>
+                <div className='w-7 h-7 bg-gradient-to-br from-amber-400 to-amber-600 rounded-full flex items-center justify-center'>
+                  <User className='w-4 h-4 text-amber-900' />
                 </div>
-              </motion.div>
-            )}
-          </AnimatePresence>
+                <span className='text-amber-100 text-sm sm:text-base max-w-[100px] sm:max-w-[150px] truncate'>
+                  <span className='sm:hidden'>
+                    {user?.data?.name ? user.data.name.split(' ')[0] : 'User'}
+                  </span>
+                  <span className='hidden sm:inline'>
+                    {user?.data?.name || 'User'}
+                  </span>
+                </span>
+              </div>
+              <ChevronDown
+                className={`w-4 h-4 text-amber-300 transition-transform duration-200 ${
+                  isDropdownOpen ? 'rotate-180' : ''
+                }`}
+              />
+            </motion.button>
+
+            <AnimatePresence>
+              {isDropdownOpen && <DropdownMenu />}
+            </AnimatePresence>
+          </div>
         </div>
       </div>
     </header>
