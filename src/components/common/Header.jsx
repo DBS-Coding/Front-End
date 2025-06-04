@@ -13,6 +13,9 @@ import {
 import useAuthStore from '../../store/authStore';
 import useUIStore from '../../store/uiStore';
 import { useNavigationPresenter } from '../../hooks/navigationutils';
+import { useLocation } from "react-router-dom";
+import pakKarno from "../../assets/pakkarno.png";
+import pakHatta from "../../assets/pakhatta.png";
 
 const Header = () => {
   const { user } = useAuthStore();
@@ -23,6 +26,7 @@ const Header = () => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const dropdownRef = useRef(null);
   const buttonRef = useRef(null);
+  const location = useLocation();
 
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -60,6 +64,107 @@ const Header = () => {
     action();
   };
 
+const renderConditionalInfo = () => {
+  const path = location.pathname;
+
+  const label1 = "Label Model 1";
+  const label2 = "Label Model 2";
+
+  const achievementsSoekarno = [
+    "Achievement Soekarno 1",
+    "Achievement Soekarno 2",
+    "Achievement Soekarno 3",
+  ];
+
+  const achievementsHatta = [
+    "Achievement Hatta 1",
+    "Achievement Hatta 2",
+    "Achievement Hatta 3",
+  ];
+
+  if (path === "/chatsoekarno") {
+    return (
+      <div className="border-b border-amber-400/30">
+        <div className='flex justify-center mt-4 rounded-md'>
+        <img src={pakKarno} alt='pakkarno' className='w-48 h-48'/>
+        </div>
+        <div className='flex flex-col my-3 gap-1'>
+        <p className='text-amber-300 text-center'>Model</p>
+        <div className='flex gap-3 justify-center items-center'>
+          <p className="text-xs text-amber-300 border border-amber-200 rounded-md py-1.5 px-3
+          hover:cursor-default">{label1}</p>
+          <p className="text-xs text-amber-300 border border-amber-200 rounded-md py-1.5 px-3 hover:cursor-default">{label2}</p>
+        </div>
+        </div>
+        <div>
+        <p className='text-amber-300 text-center'>Achievement Soekarno</p>
+        <div className='my-2 flex flex-wrap gap-2 items-center text-center mx-5'>
+        {achievementsSoekarno.map((item, i) => (
+          <p key={`s-${i}`} className="text-xs text-amber-200 w-[48%] border border-amber-200 rounded-md py-1.5 px-3 hover:cursor-default">{item}</p>
+        ))}
+        </div>
+        </div>
+      </div>
+    );
+  }
+
+  if (path === "/chathatta") {
+    return (
+<div className="border-b border-amber-400/30">
+        <div className='flex justify-center mt-4 rounded-md'>
+        <img src={pakHatta} alt='pakHatta' className='w-48 h-48'/>
+        </div>
+        <div className='flex flex-col my-3 gap-1'>
+        <p className='text-amber-300 text-center'>Model</p>
+        <div className='flex gap-3 justify-center items-center'>
+          <p className="text-xs text-amber-300 border border-amber-200 rounded-md py-1.5 px-3
+          hover:cursor-default">{label1}</p>
+          <p className="text-xs text-amber-300 border border-amber-200 rounded-md py-1.5 px-3 hover:cursor-default">{label2}</p>
+        </div>
+        </div>
+        <div>
+        <p className='text-amber-300 text-center'>Achievement Soekarno</p>
+        <div className='my-2 flex flex-wrap gap-2 items-center text-center mx-5'>
+        {achievementsHatta.map((item, i) => (
+          <p key={`s-${i}`} className="text-xs text-amber-200 w-[48%] border border-amber-200 rounded-md py-1.5 px-3 hover:cursor-default">{item}</p>
+        ))}
+        </div>
+        </div>
+      </div>
+    );
+  }
+
+    return (
+      <div className="border-b border-amber-400/30">
+        <div className='flex flex-col my-3 gap-1'>
+        <p className='text-amber-300 text-center'>Model</p>
+        <div className='flex gap-3 justify-center items-center'>
+          <p className="text-xs text-amber-300 border border-amber-200 rounded-md py-1.5 px-3
+          hover:cursor-default">{label1}</p>
+          <p className="text-xs text-amber-300 border border-amber-200 rounded-md py-1.5 px-3 hover:cursor-default">{label2}</p>
+        </div>
+        </div>
+        <div>
+        <p className='text-amber-300 text-center'>Achievement Soekarno</p>
+        <div className='my-2 flex flex-wrap gap-2 items-center text-center mx-5'>
+        {achievementsSoekarno.map((item, i) => (
+          <p key={`s-${i}`} className="text-xs text-amber-200 w-[48%] border border-amber-200 rounded-md py-1.5 px-3 hover:cursor-default">{item}</p>
+        ))}
+        </div>
+        </div>
+
+        <div>
+        <p className='text-amber-300 text-center'>Achievement Soekarno</p>
+        <div className='my-2 flex flex-wrap gap-2 items-center text-center mx-5'>
+        {achievementsHatta.map((item, i) => (
+          <p key={`s-${i}`} className="text-xs text-amber-200 w-[48%] border border-amber-200 rounded-md py-1.5 px-3 hover:cursor-default">{item}</p>
+        ))}
+        </div>
+        </div>
+      </div>
+    );
+};
+
   // Dropdown component to be rendered via Portal
   const DropdownMenu = () => {
     const position = getDropdownPosition();
@@ -71,7 +176,7 @@ const Header = () => {
         animate={{ opacity: 1, y: 0, scale: 1 }}
         exit={{ opacity: 0, y: -10, scale: 0.95 }}
         transition={{ duration: 0.15, ease: 'easeOut' }}
-        className='fixed w-56 bg-black/90 backdrop-blur-md border-2 border-amber-400/30 rounded-xl shadow-2xl z-[99999]'
+        className='fixed w-64 bg-black/90 backdrop-blur-md border-2 border-amber-400/30 rounded-xl shadow-2xl z-[99999]'
         style={{
           top: position.top + 'px',
           right: position.right + 'px',
@@ -86,7 +191,10 @@ const Header = () => {
             <p className='text-sm font-medium text-amber-100 truncate'>
               {user?.data?.name || 'User'}
             </p>
+             <p className="text-xs text-amber-300">Email: {user?.data?.email}</p>
           </div>
+
+          {renderConditionalInfo()}
 
           <div className='py-2'>
             <motion.button
