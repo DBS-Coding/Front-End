@@ -9,25 +9,25 @@ const Sidebar = () => {
   const { sidebarOpen } = useUIStore();
 
   const menuItems = [
-    { path: '/home', label: 'Home', icon: <Home className='w-4 h-4' /> },
+    { path: '/home', label: 'Beranda', icon: <Home className='w-4 h-4' /> },
     {
       path: '/chatsoekarno',
-      label: 'Chat Soekarno',
+      label: 'Tanya Bung Karno',
       icon: <MessageCircle className='w-4 h-4' />,
     },
     {
       path: '/chathatta',
-      label: 'Chat Hatta',
+      label: 'Tanya Bung Hatta',
       icon: <MessageCircle className='w-4 h-4' />,
     },
     {
       path: '/crudsoekarno',
-      label: 'CRUD Soekarno',
+      label: 'Arsip Soekarno',
       icon: <Settings className='w-4 h-4' />,
     },
     {
       path: '/crudhatta',
-      label: 'CRUD Hatta',
+      label: 'Arsip Hatta',
       icon: <Settings className='w-4 h-4' />,
     },
   ];
@@ -100,9 +100,6 @@ const Sidebar = () => {
                   {item.icon}
                 </div>
                 <span>{item.label}</span>
-                {isActive(item.path) && (
-                  <Crown className='w-3 h-3 text-amber-400 ml-auto' />
-                )}
               </motion.button>
             ))}
           </nav>
