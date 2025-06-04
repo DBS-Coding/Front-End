@@ -24,9 +24,58 @@ const Header = () => {
     useNavigationPresenter();
 
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const [modelData, setModelData] = useState({
+    classLabels: [],
+    responsesSoekarno: {},
+    responsesHatta: {}
+  });
+  const [isModelLoading, setIsModelLoading] = useState(true);
+  
   const dropdownRef = useRef(null);
   const buttonRef = useRef(null);
   const location = useLocation();
+
+  useEffect(() => {
+    const loadModelData = async () => {
+      try {
+        setIsModelLoading(true);
+        
+        const [contentSoekarnoResponse, contentHattaResponse] = await Promise.all([
+          fetch("/tfjs_saved_model/content_soekarno.json"),
+          fetch("/tfjs_saved_model/content_hatta.json")
+        ]);
+
+        const dataSoekarno = await contentSoekarnoResponse.json();
+        const dataHatta = await contentHattaResponse.json();
+
+        const responsesSoekarno = {};
+        const labelSet = new Set();
+        dataSoekarno.intents.forEach((intent) => {
+          responsesSoekarno[intent.tag] = intent.responses;
+          labelSet.add(intent.tag);
+        });
+
+        const responsesHatta = {};
+        dataHatta.intents.forEach((intent) => {
+          responsesHatta[intent.tag] = intent.responses;
+        });
+
+        const classLabels = Array.from(labelSet);
+
+        setModelData({
+          classLabels,
+          responsesSoekarno,
+          responsesHatta
+        });
+      } catch (error) {
+        console.error("Error loading model data:", error);
+      } finally {
+        setIsModelLoading(false);
+      }
+    };
+
+    loadModelData();
+  }, []);
 
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -64,106 +113,135 @@ const Header = () => {
     action();
   };
 
-const renderConditionalInfo = () => {
-  const path = location.pathname;
+  const getAchievementsFromModel = (character) => {
+    if (isModelLoading) return [];
+    
+    const responses = character === 'soekarno' ? modelData.responsesSoekarno : modelData.responsesHatta;
+    
+    return Object.keys(responses).slice(0, 6);
+  };
 
-  const label1 = "Label Model 1";
-  const label2 = "Label Model 2";
+  const renderConditionalInfo = () => {
+    const path = location.pathname;
 
-  const achievementsSoekarno = [
-    "Achievement Soekarno 1",
-    "Achievement Soekarno 2",
-    "Achievement Soekarno 3",
-  ];
+    const label1 = "IR Soekarno";
+    const label2 = "Moh Hatta";
 
-  const achievementsHatta = [
-    "Achievement Hatta 1",
-    "Achievement Hatta 2",
-    "Achievement Hatta 3",
-  ];
+    const achievementsSoekarno = getAchievementsFromModel('soekarno');
+    const achievementsHatta = getAchievementsFromModel('hatta');
 
-  if (path === "/chatsoekarno") {
+    if (path === "/chatsoekarno") {
+      return (
+        <div className="border-b border-amber-400/30">
+          <div className='flex justify-center mt-4 rounded-md'>
+            <img src={pakKarno} alt='pakkarno' className='w-48 h-48'/>
+          </div>
+          <div className='flex flex-col my-3 gap-1'>
+            <p className='text-amber-300 text-center'>Model</p>
+            <div className='flex gap-3 justify-center items-center'>
+              <p className="text-xs text-amber-300 border border-amber-200 rounded-md py-1.5 px-3 hover:cursor-default">{label1}</p>
+              <p className="text-xs text-amber-300 border border-amber-200 rounded-md py-1.5 px-3 hover:cursor-default">{label2}</p>
+            </div>
+          </div>
+          <div>
+            <p className='text-amber-300 text-center'>Achievement Soekarno</p>
+            <div className='my-2 flex flex-wrap gap-2 items-center text-center mx-5'>
+              {isModelLoading ? (
+                <p className="text-xs text-amber-200 w-full text-center py-2">Loading achievement...</p>
+              ) : achievementsSoekarno.length > 0 ? (
+                achievementsSoekarno.map((tag, i) => (
+                  <p key={`s-${i}`} className="text-xs text-amber-200 w-[48%] border border-amber-200 rounded-md py-1.5 px-3 hover:cursor-default capitalize">
+                    {tag.replace(/_/g, ' ')}
+                  </p>
+                ))
+              ) : (
+                <p className="text-xs text-amber-200 w-full text-center py-2">No achievement loaded</p>
+              )}
+            </div>
+          </div>
+        </div>
+      );
+    }
+
+    if (path === "/chathatta") {
+      return (
+        <div className="border-b border-amber-400/30">
+          <div className='flex justify-center mt-4 rounded-md'>
+            <img src={pakHatta} alt='pakHatta' className='w-48 h-48'/>
+          </div>
+          <div className='flex flex-col my-3 gap-1'>
+            <p className='text-amber-300 text-center'>Model</p>
+            <div className='flex gap-3 justify-center items-center'>
+              <p className="text-xs text-amber-300 border border-amber-200 rounded-md py-1.5 px-3 hover:cursor-default">{label1}</p>
+              <p className="text-xs text-amber-300 border border-amber-200 rounded-md py-1.5 px-3 hover:cursor-default">{label2}</p>
+            </div>
+          </div>
+          <div>
+            <p className='text-amber-300 text-center'>Achievement Hatta</p>
+            <div className='my-2 flex flex-wrap gap-2 items-center text-center mx-5'>
+              {isModelLoading ? (
+                <p className="text-xs text-amber-200 w-full text-center py-2">Loading achievement...</p>
+              ) : achievementsHatta.length > 0 ? (
+                achievementsHatta.map((tag, i) => (
+                  <p key={`h-${i}`} className="text-xs text-amber-200 w-[48%] border border-amber-200 rounded-md py-1.5 px-3 hover:cursor-default capitalize">
+                    {tag.replace(/_/g, ' ')}
+                  </p>
+                ))
+              ) : (
+                <p className="text-xs text-amber-200 w-full text-center py-2">No achievement loaded</p>
+              )}
+            </div>
+          </div>
+        </div>
+      );
+    }
+
     return (
       <div className="border-b border-amber-400/30">
-        <div className='flex justify-center mt-4 rounded-md'>
-        <img src={pakKarno} alt='pakkarno' className='w-48 h-48'/>
-        </div>
         <div className='flex flex-col my-3 gap-1'>
-        <p className='text-amber-300 text-center'>Model</p>
-        <div className='flex gap-3 justify-center items-center'>
-          <p className="text-xs text-amber-300 border border-amber-200 rounded-md py-1.5 px-3
-          hover:cursor-default">{label1}</p>
-          <p className="text-xs text-amber-300 border border-amber-200 rounded-md py-1.5 px-3 hover:cursor-default">{label2}</p>
+          <p className='text-amber-300 text-center'>Model</p>
+          <div className='flex gap-3 justify-center items-center'>
+            <p className="text-xs text-amber-300 border border-amber-200 rounded-md py-1.5 px-3 hover:cursor-default">{label1}</p>
+            <p className="text-xs text-amber-300 border border-amber-200 rounded-md py-1.5 px-3 hover:cursor-default">{label2}</p>
+          </div>
         </div>
-        </div>
+        
         <div>
-        <p className='text-amber-300 text-center'>Achievement Soekarno</p>
-        <div className='my-2 flex flex-wrap gap-2 items-center text-center mx-5'>
-        {achievementsSoekarno.map((item, i) => (
-          <p key={`s-${i}`} className="text-xs text-amber-200 w-[48%] border border-amber-200 rounded-md py-1.5 px-3 hover:cursor-default">{item}</p>
-        ))}
-        </div>
-        </div>
-      </div>
-    );
-  }
-
-  if (path === "/chathatta") {
-    return (
-<div className="border-b border-amber-400/30">
-        <div className='flex justify-center mt-4 rounded-md'>
-        <img src={pakHatta} alt='pakHatta' className='w-48 h-48'/>
-        </div>
-        <div className='flex flex-col my-3 gap-1'>
-        <p className='text-amber-300 text-center'>Model</p>
-        <div className='flex gap-3 justify-center items-center'>
-          <p className="text-xs text-amber-300 border border-amber-200 rounded-md py-1.5 px-3
-          hover:cursor-default">{label1}</p>
-          <p className="text-xs text-amber-300 border border-amber-200 rounded-md py-1.5 px-3 hover:cursor-default">{label2}</p>
-        </div>
-        </div>
-        <div>
-        <p className='text-amber-300 text-center'>Achievement Soekarno</p>
-        <div className='my-2 flex flex-wrap gap-2 items-center text-center mx-5'>
-        {achievementsHatta.map((item, i) => (
-          <p key={`s-${i}`} className="text-xs text-amber-200 w-[48%] border border-amber-200 rounded-md py-1.5 px-3 hover:cursor-default">{item}</p>
-        ))}
-        </div>
-        </div>
-      </div>
-    );
-  }
-
-    return (
-      <div className="border-b border-amber-400/30">
-        <div className='flex flex-col my-3 gap-1'>
-        <p className='text-amber-300 text-center'>Model</p>
-        <div className='flex gap-3 justify-center items-center'>
-          <p className="text-xs text-amber-300 border border-amber-200 rounded-md py-1.5 px-3
-          hover:cursor-default">{label1}</p>
-          <p className="text-xs text-amber-300 border border-amber-200 rounded-md py-1.5 px-3 hover:cursor-default">{label2}</p>
-        </div>
-        </div>
-        <div>
-        <p className='text-amber-300 text-center'>Achievement Soekarno</p>
-        <div className='my-2 flex flex-wrap gap-2 items-center text-center mx-5'>
-        {achievementsSoekarno.map((item, i) => (
-          <p key={`s-${i}`} className="text-xs text-amber-200 w-[48%] border border-amber-200 rounded-md py-1.5 px-3 hover:cursor-default">{item}</p>
-        ))}
-        </div>
+          <p className='text-amber-300 text-center'>Achievement Soekarno</p>
+          <div className='my-2 flex flex-wrap gap-2 items-center text-center mx-5'>
+            {isModelLoading ? (
+              <p className="text-xs text-amber-200 w-full text-center py-1">Loading...</p>
+            ) : achievementsSoekarno.length > 0 ? (
+              achievementsSoekarno.slice(0, 3).map((tag, i) => (
+                <p key={`s-${i}`} className="text-xs text-amber-200 w-[48%] border border-amber-200 rounded-md py-1.5 px-3 hover:cursor-default capitalize">
+                  {tag.replace(/_/g, ' ')}
+                </p>
+              ))
+            ) : (
+              <p className="text-xs text-amber-200 w-full text-center py-1">No data</p>
+            )}
+          </div>
         </div>
 
         <div>
-        <p className='text-amber-300 text-center'>Achievement Soekarno</p>
-        <div className='my-2 flex flex-wrap gap-2 items-center text-center mx-5'>
-        {achievementsHatta.map((item, i) => (
-          <p key={`s-${i}`} className="text-xs text-amber-200 w-[48%] border border-amber-200 rounded-md py-1.5 px-3 hover:cursor-default">{item}</p>
-        ))}
-        </div>
+          <p className='text-amber-300 text-center'>Achievement Hatta</p>
+          <div className='my-2 flex flex-wrap gap-2 items-center text-center mx-5'>
+            {isModelLoading ? (
+              <p className="text-xs text-amber-200 w-full text-center py-1">Loading...</p>
+            ) : achievementsHatta.length > 0 ? (
+              achievementsHatta.slice(0, 3).map((tag, i) => (
+                <p key={`h-${i}`} className="text-xs text-amber-200 w-[48%] border border-amber-200 rounded-md py-1.5 px-3 hover:cursor-default capitalize">
+                  {tag.replace(/_/g, ' ')}
+                </p>
+              ))
+            ) : (
+              <p className="text-xs text-amber-200 w-full text-center py-1">No data</p>
+            )}
+          </div>
         </div>
       </div>
     );
-};
+  };
 
   // Dropdown component to be rendered via Portal
   const DropdownMenu = () => {
