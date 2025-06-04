@@ -9,6 +9,7 @@ import {
   Sparkles,
   Award,
   Settings,
+  X,
 } from 'lucide-react';
 import { useChatSoekarnoPresenter } from '../presenters/ChatSoekarnoPresenter';
 import Layout from '../components/common/Layout';
@@ -28,6 +29,7 @@ const ChatSoekarnoView = () => {
   const [selectedModel, setSelectedModel] = useState(() => {
     return localStorage.getItem('selectedModelSoekarno') || 'tfjs';
   });
+  const [isMobileSidebarOpen, setIsMobileSidebarOpen] = useState(false);
 
   const { messages, predictedTag, isLoading, error, sendMessage } =
     useChatSoekarnoPresenter();
@@ -94,7 +96,7 @@ const ChatSoekarnoView = () => {
                 <div className='w-12 h-12 bg-gradient-to-br from-amber-400 to-amber-600 rounded-full flex items-center justify-center border-2 border-amber-300'>
                   <Crown className='w-6 h-6 text-amber-900' />
                 </div>
-                <div className='absolute -bottom-1 -right-1 w-4 h-4 bg-green-500 rounded-full border-2 border-amber-300'></div>
+                <div className='absolute bottom-1 -right-1 w-4 h-4 bg-green-500 rounded-full border-2 border-amber-300'></div>
               </div>
               <div>
                 <h2 className='text-xl font-bold text-amber-100'>
@@ -104,8 +106,17 @@ const ChatSoekarnoView = () => {
                   Proklamator Kemerdekaan Indonesia
                 </p>
               </div>
-              <div className='ml-auto'>
+              <div className='ml-auto flex items-center gap-3'>
                 <Star className='w-5 h-5 text-amber-400 fill-amber-400' />
+                {/* Mobile Sidebar Toggle */}
+                <motion.button
+                  onClick={() => setIsMobileSidebarOpen(true)}
+                  className='lg:hidden p-2 bg-black/30 border border-amber-400/30 hover:border-amber-400/60 hover:bg-amber-500/10 rounded-lg transition-all duration-300'
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                >
+                  <Settings className='w-5 h-5 text-amber-300' />
+                </motion.button>
               </div>
             </div>
           </div>
@@ -188,7 +199,7 @@ const ChatSoekarnoView = () => {
                   onChange={(e) => setInputMessage(e.target.value)}
                   onKeyDown={handleKeyPress}
                   placeholder='Tanyakan sesuatu kepada IR. Soekarno...'
-                  className='w-full py-3 pb-8 md:pb-3 px-4 text-sm sm:text-base bg-black/30 backdrop-blur-sm border-2 border-amber-400/30 rounded-xl text-amber-100 placeholder-amber-200/50 resize-none focus:outline-none focus:ring-2 focus:ring-amber-400/50 focus:border-amber-400/60 transition-all duration-300'
+                  className='w-full py-3 px-4 text-sm sm:text-base bg-black/30 backdrop-blur-sm border-2 border-amber-400/30 rounded-xl text-amber-100 placeholder-amber-200/50 resize-none focus:outline-none focus:ring-2 focus:ring-amber-400/50 focus:border-amber-400/60 transition-all duration-300'
                   rows='1'
                   style={{
                     minHeight: '50px',
@@ -241,7 +252,187 @@ const ChatSoekarnoView = () => {
           </div>
         </div>
 
-        {/* Sidebar */}
+        {/* Mobile Sidebar Overlay */}
+        <AnimatePresence>
+          {isMobileSidebarOpen && (
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              className='fixed inset-0 bg-black/60 backdrop-blur-sm z-50 lg:hidden'
+              onClick={() => setIsMobileSidebarOpen(false)}
+            >
+              <motion.div
+                initial={{ x: '100%' }}
+                animate={{ x: 0 }}
+                exit={{ x: '100%' }}
+                transition={{ type: 'spring', damping: 25, stiffness: 200 }}
+                className='absolute right-0 top-0 h-full w-80 bg-black/40 backdrop-blur-md border-l-2 border-amber-400/30 shadow-2xl overflow-auto'
+                onClick={(e) => e.stopPropagation()}
+              >
+                {/* Mobile Sidebar Header */}
+                <div className='p-4 border-b border-amber-400/30 bg-gradient-to-r from-amber-500/10 to-amber-600/10'>
+                  <div className='flex items-center justify-between'>
+                    <div className='flex items-center gap-2'>
+                      <Crown className='w-5 h-5 text-amber-400' />
+                      <h3 className='text-lg font-bold text-amber-100'>
+                        Profile & Settings
+                      </h3>
+                    </div>
+                    <motion.button
+                      onClick={() => setIsMobileSidebarOpen(false)}
+                      className='p-2 hover:bg-amber-500/20 rounded-lg transition-colors'
+                      whileHover={{ scale: 1.1 }}
+                      whileTap={{ scale: 0.9 }}
+                    >
+                      <X className='w-5 h-5 text-amber-300' />
+                    </motion.button>
+                  </div>
+                </div>
+
+                {/* Mobile Sidebar Content - Same as desktop */}
+                <div className='p-6 text-center border-b border-amber-400/30 bg-gradient-to-b from-amber-500/10 to-transparent'>
+                  <div className='relative inline-block mb-4'>
+                    <img
+                      src={pakKarno || '/placeholder.svg'}
+                      alt='IR. Soekarno'
+                      className='w-24 h-24 object-cover rounded-2xl border-4 border-amber-300 shadow-xl'
+                    />
+                    <div className='absolute -top-2 -right-2 w-6 h-6 bg-gradient-to-r from-amber-400 to-amber-600 rounded-full flex items-center justify-center border-2 border-amber-300'>
+                      <Crown className='w-3 h-3 text-amber-900' />
+                    </div>
+                  </div>
+
+                  <h2 className='text-xl font-bold text-amber-100 mb-1'>
+                    IR. Soekarno
+                  </h2>
+                  <p className='text-amber-200 text-sm mb-2'>
+                    Proklamator Kemerdekaan
+                  </p>
+                  <p className='text-amber-300 text-xs'>1901 - 1970</p>
+
+                  <div className='flex items-center justify-center gap-2 mt-4'>
+                    <div className='w-8 h-0.5 bg-gradient-to-r from-transparent to-amber-400'></div>
+                    <Star className='w-4 h-4 text-amber-400 fill-amber-400' />
+                    <div className='w-8 h-0.5 bg-gradient-to-l from-transparent to-amber-400'></div>
+                  </div>
+                </div>
+
+                {/* Model Selection */}
+                <div className='p-6 border-b border-amber-400/30'>
+                  <div className='flex items-center gap-2 mb-4'>
+                    <Settings className='w-5 h-5 text-amber-400' />
+                    <h3 className='text-lg font-semibold text-amber-100'>
+                      Pilih Model AI
+                    </h3>
+                  </div>
+
+                  <div className='space-y-3'>
+                    <motion.button
+                      onClick={() => setSelectedModel('tfjs')}
+                      className={`w-full p-3 rounded-xl transition-all duration-300 text-sm font-medium border-2 ${
+                        selectedModel === 'tfjs'
+                          ? 'bg-gradient-to-r from-blue-500/20 to-blue-600/20 border-blue-400 text-blue-200'
+                          : 'bg-black/30 border-amber-400/30 text-amber-200 hover:border-amber-400/50'
+                      }`}
+                      whileHover={{ scale: 1.02 }}
+                      whileTap={{ scale: 0.98 }}
+                    >
+                      <div className='flex items-center justify-center gap-2'>
+                        <span>⚙️</span>
+                        <span>Model TFJS</span>
+                        {selectedModel === 'tfjs' && (
+                          <Star className='w-4 h-4 fill-current' />
+                        )}
+                      </div>
+                    </motion.button>
+
+                    <motion.button
+                      onClick={() => setSelectedModel('rag')}
+                      className={`w-full p-3 rounded-xl transition-all duration-300 text-sm font-medium border-2 ${
+                        selectedModel === 'rag'
+                          ? 'bg-gradient-to-r from-teal-500/20 to-teal-600/20 border-teal-400 text-teal-200'
+                          : 'bg-black/30 border-amber-400/30 text-amber-200 hover:border-amber-400/50'
+                      }`}
+                      whileHover={{ scale: 1.02 }}
+                      whileTap={{ scale: 0.98 }}
+                    >
+                      <div className='flex items-center justify-center gap-2'>
+                        <span>🧠</span>
+                        <span>Model RAG</span>
+                        {selectedModel === 'rag' && (
+                          <Star className='w-4 h-4 fill-current' />
+                        )}
+                      </div>
+                    </motion.button>
+                  </div>
+                </div>
+
+                {/* Achievements Section */}
+                <div className='p-6'>
+                  <div className='mb-4'>
+                    <div className='bg-gradient-to-r from-amber-500 to-amber-600 rounded-xl p-1 shadow-lg'>
+                      <div className='bg-black/60 backdrop-blur-sm rounded-lg px-4 py-3 text-center'>
+                        <div className='flex items-center justify-center gap-2 mb-1'>
+                          <Award className='w-5 h-5 text-amber-300' />
+                          <span className='text-amber-100 font-semibold'>
+                            Dialog Achievements
+                          </span>
+                        </div>
+                        <div className='flex items-center justify-center gap-2'>
+                          <div className='flex-1 bg-black/40 rounded-full h-2'>
+                            <motion.div
+                              className='bg-gradient-to-r from-amber-400 to-amber-500 h-2 rounded-full'
+                              initial={{ width: 0 }}
+                              animate={{ width: `${percentageAchived}%` }}
+                              transition={{ duration: 0.5 }}
+                            />
+                          </div>
+                          <span className='text-amber-300 text-sm font-medium'>
+                            {percentageAchived}%
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className='max-h-48 overflow-y-auto no-scrollbar'>
+                    <div className='grid grid-cols-1 gap-3'>
+                      {tags.length > 0 ? (
+                        tags.map((tag, idx) => (
+                          <motion.div
+                            key={idx}
+                            className='flex items-center gap-3 px-3 py-2 bg-black/30 backdrop-blur-sm border border-amber-400/30 rounded-lg'
+                            initial={{ opacity: 0, x: -20 }}
+                            animate={{ opacity: 1, x: 0 }}
+                            transition={{ delay: idx * 0.1 }}
+                            whileHover={{ scale: 1.02 }}
+                          >
+                            <div className='w-6 h-6 bg-gradient-to-r from-amber-400 to-amber-600 rounded-full flex items-center justify-center'>
+                              <Crown className='w-3 h-3 text-amber-900' />
+                            </div>
+                            <span className='text-amber-200 text-sm font-medium flex-1'>
+                              {tag}
+                            </span>
+                          </motion.div>
+                        ))
+                      ) : (
+                        <div className='text-center py-8'>
+                          <Scroll className='w-8 h-8 text-amber-400/50 mx-auto mb-2' />
+                          <p className='text-amber-200/50 text-sm'>
+                            Mulai percakapan untuk mendapatkan achievement
+                          </p>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                </div>
+              </motion.div>
+            </motion.div>
+          )}
+        </AnimatePresence>
+
+        {/* Desktop Sidebar - Keep existing */}
         <div className='w-full lg:w-2/7 bg-black/20 backdrop-blur-sm border-2 border-amber-400/30 rounded-2xl shadow-2xl hidden lg:block overflow-auto'>
           {/* Profile Section */}
           <div className='p-6 text-center border-b border-amber-400/30 bg-gradient-to-b from-amber-500/10 to-transparent'>
@@ -350,7 +541,7 @@ const ChatSoekarnoView = () => {
             </div>
 
             <div className='max-h-64 overflow-y-auto no-scrollbar'>
-              <div className='grid grid-cols-2 gap-3'>
+              <div className='grid grid-cols-1 gap-3'>
                 {tags.length > 0 ? (
                   tags.map((tag, idx) => (
                     <motion.div
@@ -370,7 +561,7 @@ const ChatSoekarnoView = () => {
                     </motion.div>
                   ))
                 ) : (
-                  <div className='text-center py-8 col-span-2'>
+                  <div className='text-center py-8'>
                     <Scroll className='w-8 h-8 text-amber-400/50 mx-auto mb-2' />
                     <p className='text-amber-200/50 text-sm'>
                       Mulai percakapan untuk mendapatkan achievement
