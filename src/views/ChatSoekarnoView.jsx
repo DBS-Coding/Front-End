@@ -541,7 +541,7 @@ const ChatSoekarnoView = () => {
             </div>
 
             <div className='max-h-64 overflow-y-auto no-scrollbar'>
-              <div className='grid grid-cols-1 gap-3'>
+              <div className='grid grid-cols-2 gap-3'>
                 {tags.length > 0 ? (
                   tags.map((tag, idx) => (
                     <motion.div
