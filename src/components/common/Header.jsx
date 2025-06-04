@@ -34,6 +34,16 @@ const Header = () => {
   const dropdownRef = useRef(null);
   const buttonRef = useRef(null);
   const location = useLocation();
+  const [achievements, setAchievements] = useState([]);
+
+  useEffect(() => {
+    const loadInitialAchievements = () => {
+      const storedAchievements = JSON.parse(localStorage.getItem("achievements")) || [];
+      setAchievements(storedAchievements);
+    };
+
+    loadInitialAchievements();
+  }, []);
 
   useEffect(() => {
     const loadModelData = async () => {
@@ -78,6 +88,19 @@ const Header = () => {
   }, []);
 
   useEffect(() => {
+    const handleAchievementUpdate = () => {
+      const updated = JSON.parse(localStorage.getItem("achievements")) || [];
+      setAchievements(updated);
+    };
+
+    window.addEventListener("achievementUpdated", handleAchievementUpdate);
+
+    return () => {
+      window.removeEventListener("achievementUpdated", handleAchievementUpdate);
+    };
+  }, []);
+
+  useEffect(() => {
     const handleClickOutside = (event) => {
       if (
         buttonRef.current &&
@@ -114,11 +137,11 @@ const Header = () => {
   };
 
   const getAchievementsFromModel = (character) => {
-    if (isModelLoading) return [];
+    if (isModelLoading || achievements.length === 0) return [];
     
     const responses = character === 'soekarno' ? modelData.responsesSoekarno : modelData.responsesHatta;
     
-    return Object.keys(responses).slice(0, 6);
+    return Object.keys(responses).filter((tag) => achievements.includes(tag));
   };
 
   const renderConditionalInfo = () => {
@@ -155,7 +178,7 @@ const Header = () => {
                   </p>
                 ))
               ) : (
-                <p className="text-xs text-amber-200 w-full text-center py-2">No achievement loaded</p>
+                <p className="text-xs text-amber-200 w-full text-center py-2">No Achievements Unlocked</p>
               )}
             </div>
           </div>
@@ -188,7 +211,7 @@ const Header = () => {
                   </p>
                 ))
               ) : (
-                <p className="text-xs text-amber-200 w-full text-center py-2">No achievement loaded</p>
+                <p className="text-xs text-amber-200 w-full text-center py-2">No Achievements Unlocked</p>
               )}
             </div>
           </div>
@@ -218,7 +241,7 @@ const Header = () => {
                 </p>
               ))
             ) : (
-              <p className="text-xs text-amber-200 w-full text-center py-1">No data</p>
+              <p className="text-xs text-amber-200 w-full text-center py-1">No Achievements Unlocked</p>
             )}
           </div>
         </div>
@@ -235,7 +258,7 @@ const Header = () => {
                 </p>
               ))
             ) : (
-              <p className="text-xs text-amber-200 w-full text-center py-1">No data</p>
+              <p className="text-xs text-amber-200 w-full text-center py-1">No Achievements Unlocked</p>
             )}
           </div>
         </div>

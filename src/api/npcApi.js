@@ -11,7 +11,8 @@ let maxLen = 10; // sesuai model kamu
 let possibleResponses = [];
 
 const API_BASE_URL = "https://capstone-five-dusky.vercel.app";
-const API_MODEL_URL = "https://chatbot-character-1091601261833.asia-southeast2.run.app/chat";
+const API_MODEL_URL =
+  "https://chatbot-character-1091601261833.asia-southeast2.run.app/chat";
 
 const apiClient = axios.create({
   baseURL: API_BASE_URL,
@@ -29,7 +30,9 @@ const initModel = async () => {
   const wordIndexResponse = await fetch("/tfjs_saved_model/word_index.json");
   word_index = await wordIndexResponse.json();
 
-  const contentSoekarnoResponse = await fetch("/tfjs_saved_model/content_soekarno.json");
+  const contentSoekarnoResponse = await fetch(
+    "/tfjs_saved_model/content_soekarno.json"
+  );
   const dataSoekarno = await contentSoekarnoResponse.json();
 
   const labelSetSoekarno = new Set();
@@ -39,7 +42,9 @@ const initModel = async () => {
   });
   classLabels = Array.from(labelSetSoekarno); // pakai punya soekarno
 
-  const contentHattaResponse = await fetch("/tfjs_saved_model/content_hatta.json");
+  const contentHattaResponse = await fetch(
+    "/tfjs_saved_model/content_hatta.json"
+  );
   const dataHatta = await contentHattaResponse.json();
 
   dataHatta.intents.forEach((intent) => {
@@ -85,17 +90,29 @@ export const sendChatMessageTfjs = async (inputText, npc = "") => {
     const outputData = await probabilities.data();
     const outputArray = Array.from(outputData);
 
+    const storeAchievement = (tag) => {
+      const stored = JSON.parse(localStorage.getItem("achievements")) || [];
+      if (!stored.includes(tag)) {
+        stored.push(tag);
+        localStorage.setItem("achievements", JSON.stringify(stored));
+
+        window.dispatchEvent(new Event("achievementUpdated"));
+      }
+    };
+
     const predictionIndex = outputArray.indexOf(Math.max(...outputArray));
     const predictionValue = outputArray[predictionIndex];
     const predictedTag = classLabels[predictionIndex];
+    storeAchievement(predictedTag);
 
-    if (npc  === "soekarno") {
+    if (npc === "soekarno") {
       possibleResponses = responsesSoekarno[predictedTag] || [];
     } else {
       possibleResponses = responsesHatta[predictedTag] || [];
     }
-    
-    const randomResponse = possibleResponses[Math.floor(Math.random() * possibleResponses.length)];
+
+    const randomResponse =
+      possibleResponses[Math.floor(Math.random() * possibleResponses.length)];
 
     return {
       predictedTag,
@@ -124,11 +141,12 @@ export const sendChatMessageRag = async (inputText, npc = "") => {
     // eslint-disable-next-line no-unused-vars
     const payload = {
       karakter: npc || "soekarno", // default ke soekarno jika npc kosong
-      prompt: inputText
+      prompt: inputText,
     };
-    let responseDummy = "SAUDARA-SAUDARA! DENGARKANLAH GEMURUH SUARA BUNG KARNO!\n\nKemerdekaan yang kita raih bukanlah hadiah dari Tenno Heika!\n Bukan belas kasihan dari penjajah! Kemerdekaan ini adalah tetesan darah, cucuran keringat, dan kobaran semangat juang seluruh rakyat Indonesia dari Sabang \nsampai Merauke!";
+    let responseDummy =
+      "SAUDARA-SAUDARA! DENGARKANLAH GEMURUH SUARA BUNG KARNO!\n\nKemerdekaan yang kita raih bukanlah hadiah dari Tenno Heika!\n Bukan belas kasihan dari penjajah! Kemerdekaan ini adalah tetesan darah, cucuran keringat, dan kobaran semangat juang seluruh rakyat Indonesia dari Sabang \nsampai Merauke!";
     responseDummy = truncate(responseDummy, 100);
-    return {response: responseDummy};
+    return { response: responseDummy };
     // const response = await fetch(API_MODEL_URL, {
     //   method: "POST",
     //   headers: {
