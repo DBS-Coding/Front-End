@@ -7,6 +7,14 @@ export const useChatSoekarnoPresenter = () => {
   const [error, setError] = useState(null);
   const [predictedTag, setPredictedTag] = useState(null);
 
+  const saveToChatHistory = (userMsg, botMsg) => {
+  const existing = JSON.parse(localStorage.getItem("chat-soekarno")) || [];
+
+  const updated = [...existing, userMsg, botMsg];
+
+  localStorage.setItem("chat-soekarno", JSON.stringify(updated));
+  };
+
   const sendMessage = async (message, selectedModel) => {
     if (!message.trim()) return;
 
@@ -41,6 +49,7 @@ export const useChatSoekarnoPresenter = () => {
       console.log(response);
       setPredictedTag(response.predictedTag);
       setMessages((prev) => [...prev, botMessage]);
+      saveToChatHistory(userMessage, botMessage);
     } catch (err) {
       setError('Terjadi kesalahan saat mengirim pesan. Silakan coba lagi.');
       console.error('Error sending message:', err);
@@ -61,6 +70,7 @@ export const useChatSoekarnoPresenter = () => {
 
   return {
     messages,
+    setMessages,
     predictedTag,
     isLoading,
     error,

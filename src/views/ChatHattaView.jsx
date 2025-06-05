@@ -31,7 +31,7 @@ const ChatHattaView = () => {
   });
   const [isMobileSidebarOpen, setIsMobileSidebarOpen] = useState(false);
 
-  const { messages, predictedTag, isLoading, error, sendMessage } =
+  const { messages, predictedTag, isLoading, error, sendMessage, setMessages } =
     useChatHattaPresenter();
 
   const scrollToBottom = () => {
@@ -70,6 +70,18 @@ const updateTags = (predictedTag) => {
     const parsed = JSON.parse(savedTags);
     setTags(parsed);
     setPercentageAchieved(Math.floor((parsed.length / TOTAL_TAGS) * 100));
+  }
+}, []);
+
+  useEffect(() => {
+  const stored = localStorage.getItem('chat-hatta');
+  if (stored) {
+    try {
+      const parsed = JSON.parse(stored);
+      setMessages(parsed);
+    } catch (e) {
+      console.error("Failed to parse chat-hatta from localStorage", e);
+    }
   }
 }, []);
 
