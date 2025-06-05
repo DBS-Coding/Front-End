@@ -34,16 +34,6 @@ const Header = () => {
   const dropdownRef = useRef(null);
   const buttonRef = useRef(null);
   const location = useLocation();
-  const [achievements, setAchievements] = useState([]);
-
-  useEffect(() => {
-    const loadInitialAchievements = () => {
-      const storedAchievements = JSON.parse(localStorage.getItem("achievements")) || [];
-      setAchievements(storedAchievements);
-    };
-
-    loadInitialAchievements();
-  }, []);
 
   useEffect(() => {
     const loadModelData = async () => {
@@ -88,19 +78,6 @@ const Header = () => {
   }, []);
 
   useEffect(() => {
-    const handleAchievementUpdate = () => {
-      const updated = JSON.parse(localStorage.getItem("achievements")) || [];
-      setAchievements(updated);
-    };
-
-    window.addEventListener("achievementUpdated", handleAchievementUpdate);
-
-    return () => {
-      window.removeEventListener("achievementUpdated", handleAchievementUpdate);
-    };
-  }, []);
-
-  useEffect(() => {
     const handleClickOutside = (event) => {
       if (
         buttonRef.current &&
@@ -136,13 +113,11 @@ const Header = () => {
     action();
   };
 
-  const getAchievementsFromModel = (character) => {
-    if (isModelLoading || achievements.length === 0) return [];
-    
-    const responses = character === 'soekarno' ? modelData.responsesSoekarno : modelData.responsesHatta;
-    
-    return Object.keys(responses).filter((tag) => achievements.includes(tag));
+  const getAchievementsFromLocalStorage = (character) => {
+   const key = character === 'soekarno' ? 'achievement-soekarno' : 'achievement-hatta';
+    return JSON.parse(localStorage.getItem(key)) || [];
   };
+
 
   const renderConditionalInfo = () => {
     const path = location.pathname;
@@ -150,8 +125,8 @@ const Header = () => {
     const label1 = "⚙️ Model TFJS";
     const label2 = "🧠 Model RAG";
 
-    const achievementsSoekarno = getAchievementsFromModel('soekarno');
-    const achievementsHatta = getAchievementsFromModel('hatta');
+    const achievementsSoekarno = getAchievementsFromLocalStorage('soekarno');
+    const achievementsHatta = getAchievementsFromLocalStorage('hatta');
 
     if (path === "/chatsoekarno") {
       return (
