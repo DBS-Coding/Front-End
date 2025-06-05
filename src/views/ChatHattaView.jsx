@@ -38,17 +38,20 @@ const ChatHattaView = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   };
 
-  const updateTags = (predictedTag) => {
-    setTags((prevTags) => {
-      if (!prevTags.includes(predictedTag)) {
-        const newTags = [...prevTags, predictedTag];
-        const percentage = Math.floor((newTags.length / TOTAL_TAGS) * 100);
-        setPercentageAchieved(percentage);
-        return newTags;
-      }
-      return prevTags;
-    });
-  };
+const updateTags = (predictedTag) => {
+  setTags((prevTags) => {
+    if (!prevTags.includes(predictedTag)) {
+      const newTags = [...prevTags, predictedTag];
+      const percentage = Math.floor((newTags.length / TOTAL_TAGS) * 100);
+      setPercentageAchieved(percentage);
+
+      localStorage.setItem('achievement-hatta', JSON.stringify(newTags));
+
+      return newTags;
+    }
+    return prevTags;
+  });
+};
 
   useEffect(() => {
     localStorage.setItem('selectedModelHatta', selectedModel);
@@ -60,6 +63,15 @@ const ChatHattaView = () => {
       updateTags(predictedTag);
     }
   }, [messages]);
+
+  useEffect(() => {
+  const savedTags = localStorage.getItem('achievement-hatta');
+  if (savedTags) {
+    const parsed = JSON.parse(savedTags);
+    setTags(parsed);
+    setPercentageAchieved(Math.floor((parsed.length / TOTAL_TAGS) * 100));
+  }
+}, []);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
