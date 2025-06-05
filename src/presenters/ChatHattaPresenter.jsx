@@ -7,6 +7,14 @@ export const useChatHattaPresenter = () => {
   const [error, setError] = useState(null);
   const [predictedTag, setPredictedTag] = useState(null);
 
+  const saveToChatHistory = (userMsg, botMsg) => {
+  const existing = JSON.parse(localStorage.getItem("chat-hatta")) || [];
+
+  const updated = [...existing, userMsg, botMsg];
+
+  localStorage.setItem("chat-hatta", JSON.stringify(updated));
+};
+
   const sendMessage = async (message, selectedModel) => {
     if (!message.trim()) return;
 
@@ -55,6 +63,7 @@ export const useChatHattaPresenter = () => {
       }
 
       setMessages(prev => [...prev, botMessage]);
+      saveToChatHistory(userMessage, botMessage);
     } catch (err) {
       setError("Terjadi kesalahan saat mengirim pesan. Silakan coba lagi.");
       console.error("Error sending message:", err);
@@ -75,6 +84,7 @@ export const useChatHattaPresenter = () => {
 
   return {
     messages,
+    setMessages,
     predictedTag,
     isLoading,
     error,
