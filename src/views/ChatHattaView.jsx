@@ -14,9 +14,9 @@ import {
 import { useChatHattaPresenter } from '../presenters/ChatHattaPresenter';
 import Layout from '../components/common/Layout';
 import MessageBubbleHatta from '../components/chat/MessageBubbleHatta';
-import TypingIndicator from '../components/chat/TypingIndicator';
 import { clsx } from 'clsx';
 import pakHatta from '../assets/pakhatta.png';
+import TypingIndicatorHatta from '../components/chat/TypingIndicatorHatta';
 
 const TOTAL_TAGS = 10;
 
@@ -171,7 +171,7 @@ const ChatHattaView = () => {
                     <MessageBubbleHatta key={message.id} message={message} />
                   ))}
                 </AnimatePresence>
-                {isLoading && <TypingIndicator />}
+                {isLoading && <TypingIndicatorHatta />}
               </>
             )}
             <div ref={messagesEndRef} />
