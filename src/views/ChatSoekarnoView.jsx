@@ -44,6 +44,9 @@ const ChatSoekarnoView = () => {
         const newTags = [...prevTags, predictedTag];
         const percentage = Math.floor((newTags.length / TOTAL_TAGS) * 100);
         setPercentageAchieved(percentage);
+
+        localStorage.setItem('achievement-soekarno', JSON.stringify(newTags));
+
         return newTags;
       }
       return prevTags;
@@ -60,6 +63,15 @@ const ChatSoekarnoView = () => {
       updateTags(predictedTag);
     }
   }, [messages]);
+
+  useEffect(() => {
+  const savedTags = localStorage.getItem('achievement-soekarno');
+  if (savedTags) {
+    const parsed = JSON.parse(savedTags);
+    setTags(parsed);
+    setPercentageAchieved(Math.floor((parsed.length / TOTAL_TAGS) * 100));
+  }
+  }, []);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
