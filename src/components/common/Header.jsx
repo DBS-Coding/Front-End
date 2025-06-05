@@ -147,8 +147,8 @@ const Header = () => {
   const renderConditionalInfo = () => {
     const path = location.pathname;
 
-    const label1 = "IR Soekarno";
-    const label2 = "Moh Hatta";
+    const label1 = "⚙️ Model TFJS";
+    const label2 = "🧠 Model RAG";
 
     const achievementsSoekarno = getAchievementsFromModel('soekarno');
     const achievementsHatta = getAchievementsFromModel('hatta');
@@ -160,7 +160,7 @@ const Header = () => {
             <img src={pakKarno} alt='pakkarno' className='w-48 h-48'/>
           </div>
           <div className='flex flex-col my-3 gap-1'>
-            <p className='text-amber-300 text-center'>Model</p>
+            <p className='text-amber-300 text-center'>Pilih Model</p>
             <div className='flex gap-3 justify-center items-center'>
               <p className="text-xs text-amber-300 border border-amber-200 rounded-md py-1.5 px-3 hover:cursor-default">{label1}</p>
               <p className="text-xs text-amber-300 border border-amber-200 rounded-md py-1.5 px-3 hover:cursor-default">{label2}</p>

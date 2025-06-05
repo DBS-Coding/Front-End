@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { sendChatMessageRag, sendChatMessageTfjs } from '../api/npcApi';
+import { sendChatMessageRag, sendChatTfjsSoekarno } from '../api/npcApi';
 
 export const useChatSoekarnoPresenter = () => {
   const [messages, setMessages] = useState([]);
@@ -32,7 +32,7 @@ export const useChatSoekarnoPresenter = () => {
         botMessage.text = response.response;
         botMessage.timestamp = new Date().toLocaleTimeString();
       } else {
-        response = await sendChatMessageTfjs(message);
+        response = await sendChatTfjsSoekarno(message);
         botMessage.text = response.randomResponse;
         botMessage.timestamp =
           new Date().toLocaleTimeString() +
