@@ -13,16 +13,70 @@ import {
 import useAuthStore from '../../store/authStore';
 import useUIStore from '../../store/uiStore';
 import { useNavigationPresenter } from '../../hooks/navigationutils';
+import { useLocation } from "react-router-dom";
+import pakKarno from "../../assets/pakkarno.png";
+import pakHatta from "../../assets/pakhatta.png";
 
 const Header = () => {
   const { user } = useAuthStore();
   const { toggleSidebar } = useUIStore();
+  const [selectedModelType, setSelectedModelType] = useState('tfjs');
   const { handleLogout, handleDeleteAccount, isLoading } =
     useNavigationPresenter();
 
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const [modelData, setModelData] = useState({
+    classLabels: [],
+    responsesSoekarno: {},
+    responsesHatta: {}
+  });
+  const [isModelLoading, setIsModelLoading] = useState(true);
+  
   const dropdownRef = useRef(null);
   const buttonRef = useRef(null);
+  const location = useLocation();
+
+  useEffect(() => {
+    const loadModelData = async () => {
+      try {
+        setIsModelLoading(true);
+        
+        const [contentSoekarnoResponse, contentHattaResponse] = await Promise.all([
+          fetch("/tfjs_saved_model/content_soekarno.json"),
+          fetch("/tfjs_saved_model/content_hatta.json")
+        ]);
+
+        const dataSoekarno = await contentSoekarnoResponse.json();
+        const dataHatta = await contentHattaResponse.json();
+
+        const responsesSoekarno = {};
+        const labelSet = new Set();
+        dataSoekarno.intents.forEach((intent) => {
+          responsesSoekarno[intent.tag] = intent.responses;
+          labelSet.add(intent.tag);
+        });
+
+        const responsesHatta = {};
+        dataHatta.intents.forEach((intent) => {
+          responsesHatta[intent.tag] = intent.responses;
+        });
+
+        const classLabels = Array.from(labelSet);
+
+        setModelData({
+          classLabels,
+          responsesSoekarno,
+          responsesHatta
+        });
+      } catch (error) {
+        console.error("Error loading model data:", error);
+      } finally {
+        setIsModelLoading(false);
+      }
+    };
+
+    loadModelData();
+  }, []);
 
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -60,6 +114,104 @@ const Header = () => {
     action();
   };
 
+  const getAchievementsFromLocalStorage = (character) => {
+   const key = character === 'soekarno' ? 'achievement-soekarno' : 'achievement-hatta';
+    return JSON.parse(localStorage.getItem(key)) || [];
+  };
+
+
+const renderConditionalInfo = () => {
+  const path = location.pathname;
+
+  const achievementsSoekarno = getAchievementsFromLocalStorage('soekarno');
+  const achievementsHatta = getAchievementsFromLocalStorage('hatta');
+
+  const renderAchievementSection = (character, data) => (
+    <div>
+      <p className='text-amber-300 text-center'>Achievement {character}</p>
+      <div className='my-2 flex flex-wrap gap-2 items-center text-center mx-5'>
+        {isModelLoading ? (
+          <p className="text-xs text-amber-200 w-full text-center py-2">
+            Loading achievement...
+          </p>
+        ) : data.length > 0 ? (
+          data.map((tag, i) => (
+            <p key={`${character}-${i}`} className="text-xs text-amber-200 w-[48%] border border-amber-200 rounded-md py-1.5 px-3 hover:cursor-default capitalize">
+              {tag.replace(/_/g, ' ')}
+            </p>
+          ))
+        ) : (
+          <p className="text-xs text-amber-200 w-full text-center py-2">
+            No Achievements Unlocked
+          </p>
+        )}
+      </div>
+    </div>
+  );
+
+  const renderNoAchievementMessage = () => (
+    <div className='my-2 flex flex-wrap gap-2 items-center text-center mx-5'>
+      <p className="text-xs text-amber-200 w-full text-center py-2">
+        No Achievement for RAG Model
+      </p>
+    </div>
+  );
+
+  return (
+    <div className="border-b border-amber-400/30">
+      <div className='flex justify-center mt-4 rounded-md'>
+        <img
+          src={path === '/chatsoekarno' ? pakKarno : path === '/chathatta' ? pakHatta : pakKarno}
+          alt='avatar'
+          className='w-48 h-48'
+        />
+      </div>
+
+      <div className='flex flex-col my-3 gap-1'>
+        <p className='text-amber-300 text-center'>Pilih Model</p>
+        <div className='flex gap-3 justify-center items-center'>
+          <button
+            onClick={() => setSelectedModelType('tfjs')}
+            className={`text-xs text-amber-300 border rounded-md py-1.5 px-3 hover:cursor-pointer ${
+              selectedModelType === 'tfjs'
+                ? 'border-amber-400 bg-amber-400/10'
+                : 'border-amber-200'
+            }`}
+          >
+            ⚙️ Model TFJS
+          </button>
+          <button
+            onClick={() => setSelectedModelType('rag')}
+            className={`text-xs text-amber-300 border rounded-md py-1.5 px-3 hover:cursor-pointer ${
+              selectedModelType === 'rag'
+                ? 'border-amber-400 bg-amber-400/10'
+                : 'border-amber-200'
+            }`}
+          >
+            🧠 Model RAG
+          </button>
+        </div>
+      </div>
+
+      {selectedModelType === 'tfjs' ? (
+        path === '/chatsoekarno' ? (
+          renderAchievementSection('Soekarno', achievementsSoekarno)
+        ) : path === '/chathatta' ? (
+          renderAchievementSection('Hatta', achievementsHatta)
+        ) : (
+          <>
+            {renderAchievementSection('Soekarno', achievementsSoekarno)}
+            {renderAchievementSection('Hatta', achievementsHatta)}
+          </>
+        )
+      ) : (
+        renderNoAchievementMessage()
+      )}
+    </div>
+  );
+};
+
+
   // Dropdown component to be rendered via Portal
   const DropdownMenu = () => {
     const position = getDropdownPosition();
@@ -71,7 +223,7 @@ const Header = () => {
         animate={{ opacity: 1, y: 0, scale: 1 }}
         exit={{ opacity: 0, y: -10, scale: 0.95 }}
         transition={{ duration: 0.15, ease: 'easeOut' }}
-        className='fixed w-56 bg-black/90 backdrop-blur-md border-2 border-amber-400/30 rounded-xl shadow-2xl z-[99999]'
+        className='fixed w-64 bg-black/90 backdrop-blur-md border-2 border-amber-400/30 rounded-xl shadow-2xl z-[99999]'
         style={{
           top: position.top + 'px',
           right: position.right + 'px',
@@ -86,7 +238,10 @@ const Header = () => {
             <p className='text-sm font-medium text-amber-100 truncate'>
               {user?.data?.name || 'User'}
             </p>
+             <p className="text-xs text-amber-300">Email: {user?.data?.email}</p>
           </div>
+
+          {renderConditionalInfo()}
 
           <div className='py-2'>
             <motion.button
