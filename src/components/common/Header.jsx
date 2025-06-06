@@ -116,7 +116,7 @@ const Header = () => {
   };
 
   return (
-    <header className='p-4 sm:p-6 mb-4 sm:mb-8 border-b border-amber-400/30 backdrop-blur-sm bg-black/10'>
+    <header className='p-4 sm:p-3 mb-4 sm:mb-8 border-b border-amber-400/30 backdrop-blur-sm bg-black/10'>
       <div className='max-w-7xl mx-auto flex justify-between items-center'>
         <div className='flex items-center space-x-3 sm:space-x-4'>
           <motion.button
@@ -137,7 +137,7 @@ const Header = () => {
             </div>
 
             <motion.h1
-              className='text-xl sm:text-2xl lg:text-3xl font-bold truncate bg-gradient-to-r from-amber-200 via-yellow-200 to-amber-300 bg-clip-text text-transparent'
+              className='text-xl sm:text-2xl lg:text-2xl font-bold truncate bg-gradient-to-r from-amber-200 via-yellow-200 to-amber-300 bg-clip-text text-transparent'
               initial={{ opacity: 0, x: -20 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.5 }}

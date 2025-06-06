@@ -10,14 +10,14 @@ export const useChatSoekarnoPresenter = () => {
   const sendMessage = async (message, selectedModel) => {
     if (!message.trim()) return;
 
-    // const userMessage = {
-    //   id: Date.now(),
-    //   text: message,
-    //   sender: 'user',
-    //   timestamp: new Date().toLocaleTimeString()
-    // };
+    const userMessage = {
+      id: Date.now(),
+      text: message,
+      sender: 'user',
+      timestamp: new Date().toLocaleTimeString(),
+    };
 
-    // setMessages(prev => [...prev, userMessage]);
+    setMessages((prev) => [...prev, userMessage]);
     setIsLoading(true);
     setError(null);
 
@@ -25,33 +25,35 @@ export const useChatSoekarnoPresenter = () => {
       let response = null;
       let botMessage = {
         id: Date.now() + 1,
-        sender: 'soekarno'
+        sender: 'soekarno',
       };
-      if(selectedModel === "rag") {
+      if (selectedModel === 'rag') {
         response = await sendChatMessageRag(message);
         botMessage.text = response.response;
         botMessage.timestamp = new Date().toLocaleTimeString();
       } else {
         response = await sendChatMessageTfjs(message);
         botMessage.text = response.randomResponse;
-        botMessage.timestamp = new Date().toLocaleTimeString() + ` ${response.predictedTag} [${response.probability}%]`;
+        botMessage.timestamp =
+          new Date().toLocaleTimeString() +
+          ` ${response.predictedTag} [${response.probability}%]`;
       }
       console.log(response);
       setPredictedTag(response.predictedTag);
-      setMessages(prev => [...prev, botMessage]);
+      setMessages((prev) => [...prev, botMessage]);
     } catch (err) {
-      setError("Terjadi kesalahan saat mengirim pesan. Silakan coba lagi.");
-      console.error("Error sending message:", err);
-      
+      setError('Terjadi kesalahan saat mengirim pesan. Silakan coba lagi.');
+      console.error('Error sending message:', err);
+
       const errorMessage = {
         id: Date.now() + 1,
-        text: "Maaf, terjadi kesalahan. Silakan coba lagi nanti.",
+        text: 'Maaf, terjadi kesalahan. Silakan coba lagi nanti.',
         sender: 'soekarno',
         timestamp: new Date().toLocaleTimeString(),
-        isError: true
+        isError: true,
       };
 
-      setMessages(prev => [...prev, errorMessage]);
+      setMessages((prev) => [...prev, errorMessage]);
     } finally {
       setIsLoading(false);
     }
