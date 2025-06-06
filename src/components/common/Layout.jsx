@@ -22,14 +22,14 @@ const Layout = ({ children }) => {
   return (
     <div className='bg-gradient-to-br from-amber-900 via-amber-800 to-red-900 text-white relative h-full'>
       {/* Background Pattern */}
-      <div className='absolute inset-0 opacity-5 pointer-events-none'>
+      {/* <div className='absolute inset-0 opacity-5 pointer-events-none'>
         <div
           className='absolute inset-0'
           style={{
             backgroundImage: `url("data:image/svg+xml,%3Csvg width='80' height='80' viewBox='0 0 80 80' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fillRule='evenodd'%3E%3Cg fill='%23ffffff' fillOpacity='0.1'%3E%3Cpath d='M40 40c0-11.046-8.954-20-20-20s-20 8.954-20 20 8.954 20 20 20 20-8.954 20-20zm0 0c0 11.046 8.954 20 20 20s20-8.954 20-20-8.954-20-20-20-20 8.954-20 20z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`,
           }}
         />
-      </div>
+      </div> */}
       {/* Decorative Elements */}
       <motion.div
         className='absolute top-20 left-10 text-amber-300 opacity-20 pointer-events-none'
