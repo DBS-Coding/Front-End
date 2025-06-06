@@ -17,7 +17,7 @@ let possibleResponses = [];
 const API_BASE_URL = "https://capstone-five-dusky.vercel.app";
 const API_MODEL_TFJS_URL = "https://dbs-coding.github.io/histotalk-model1-tfjs";
 const API_MODEL_RAG_URL =
-  "https://chatbot-character-1091601261833.asia-southeast2.run.app/chat";
+  "https://chatbot-character-1091601261833.us-central1.run.app/chat";
 
 const apiClient = axios.create({
   baseURL: API_BASE_URL,
