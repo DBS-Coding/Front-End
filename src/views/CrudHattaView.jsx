@@ -105,9 +105,9 @@ const CrudHattaView = () => {
     }
   };
 
-  const handleDelete = async (tagName) => {
-    if (window.confirm(`Are you sure you want to delete "${tagName}"?`)) {
-      const result = await removeTag(tagName);
+  const handleDelete = async (tagId) => {
+    if (window.confirm(`Are you sure you want to delete "${tagId}"?`)) {
+      const result = await removeTag(tagId);
       if (result?.success) {
         showNotification(result.message, 'success');
       } else if (result?.message) {
