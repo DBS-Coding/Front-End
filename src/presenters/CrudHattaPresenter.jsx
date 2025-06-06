@@ -87,11 +87,11 @@ export const useCrudSoekarnoPresenter = () => {
     }
   };
 
-  const removeTag = async (tagName) => {
+  const removeTag = async (tagId) => {
     setIsLoading(true);
     setError(null);
     try {
-      const response = await deleteTag(tagName);
+      const response = await deleteTag(tagId);
       const apiResponse = response?.data;
       
       if (response.status === 200 || apiResponse?.code === 200) {
