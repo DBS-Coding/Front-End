@@ -32,7 +32,7 @@ const AdminRoute = ({ children }) => {
   }
   
   if (user?.data?.role !== 'admin') {
-    return <Navigate to="/home" replace />;
+    return <Navigate to="/403" replace />;
   }
 
   return children;
@@ -64,9 +64,9 @@ function App() {
         <Route 
           path="/chatsoekarno" 
           element={
-            <AdminRoute>
+            <ProtectedRoute>
               <ChatSoekarnoView/>
-            </AdminRoute>
+            </ProtectedRoute>
           } 
         />
         
@@ -91,9 +91,9 @@ function App() {
         <Route 
           path="/crudhatta" 
           element={
-            <ProtectedRoute>
+            <AdminRoute>
               <CrudHattaView/>
-            </ProtectedRoute>
+            </AdminRoute>
           } 
         />
 
