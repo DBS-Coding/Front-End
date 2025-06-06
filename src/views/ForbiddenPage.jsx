@@ -134,7 +134,7 @@ const ForbiddenPage = () => {
 
           <motion.div className='mb-6' variants={itemVariants}>
             <p className='text-lg sm:text-xl md:text-2xl text-amber-100 font-medium italic'>
-              "Akses Terlarang"
+              "Akses Ditolak"
             </p>
           </motion.div>
 
@@ -165,7 +165,7 @@ const ForbiddenPage = () => {
 
           <motion.div className='flex justify-center' variants={itemVariants}>
             <motion.button
-              onClick={() => navigate("/")}
+              onClick={() => navigate("/home")}
               className='group relative flex items-center gap-3 px-8 sm:px-10 py-3 sm:py-4 text-lg sm:text-xl md:text-2xl rounded-full bg-gradient-to-r from-amber-500 to-amber-600 text-amber-900 font-bold shadow-2xl hover:shadow-amber-500/25 transition-all duration-300 transform hover:scale-105 focus:outline-none focus:ring-4 focus:ring-amber-300/50 border-2 border-amber-300'
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
@@ -177,7 +177,7 @@ const ForbiddenPage = () => {
               >
                 <ArrowLeft className='w-6 h-6' />
               </motion.span>
-              <span className='relative z-10'>Kembali ke Istana</span>
+              <span className='relative z-10'>Kembali</span>
               <div className='absolute inset-0 bg-gradient-to-r from-amber-400 to-yellow-400 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300'></div>
             </motion.button>
           </motion.div>
