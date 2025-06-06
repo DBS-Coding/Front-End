@@ -2,16 +2,22 @@ import axios from "axios";
 
 import * as tf from "@tensorflow/tfjs";
 
-let model = null;
-let word_index = {};
+let modelSoekarno = null;
+let wordIndexSoekarno = {};
 let responsesSoekarno = {};
+let classLabelsSoekarno = [];
+
+let modelHatta = null;
+let wordIndexHatta = {};
 let responsesHatta = {};
-let classLabels = [];
-let maxLen = 10; // sesuai model kamu
+let classLabelsHatta = [];
+let maxLen = 10;
 let possibleResponses = [];
 
 const API_BASE_URL = "https://capstone-five-dusky.vercel.app";
-const API_MODEL_URL = "https://chatbot-character-1091601261833.asia-southeast2.run.app/chat";
+const API_MODEL_TFJS_URL = "https://dbs-coding.github.io/histotalk-model1-tfjs";
+const API_MODEL_RAG_URL =
+  "https://chatbot-character-1091601261833.asia-southeast2.run.app/chat";
 
 const apiClient = axios.create({
   baseURL: API_BASE_URL,
@@ -20,38 +26,45 @@ const apiClient = axios.create({
   },
 });
 
-// Load & inisialisasi hanya sekali
-const initModel = async () => {
-  if (model) return; // Sudah dimuat
+const initModelSoekarno = async () => {
+  if (modelSoekarno) return;
 
-  model = await tf.loadGraphModel("/tfjs_saved_model/model.json");
+  modelSoekarno = await tf.loadGraphModel(
+    `${API_MODEL_TFJS_URL}/soekarno/model.json`
+  );
 
-  const wordIndexResponse = await fetch("/tfjs_saved_model/word_index.json");
-  word_index = await wordIndexResponse.json();
+  const wordIndexResponse = await fetch(
+    `${API_MODEL_TFJS_URL}/soekarno/word_index.json`
+  );
+  wordIndexSoekarno = await wordIndexResponse.json();
 
-  const contentSoekarnoResponse = await fetch("/tfjs_saved_model/content_soekarno.json");
-  const dataSoekarno = await contentSoekarnoResponse.json();
+  const contentSoekarnoResponse = await fetch(
+    `${API_MODEL_TFJS_URL}/soekarno/content.json`
+  );
+  responsesSoekarno = await contentSoekarnoResponse.json();
 
-  const labelSetSoekarno = new Set();
-  dataSoekarno.intents.forEach((intent) => {
-    responsesSoekarno[intent.tag] = intent.responses;
-    labelSetSoekarno.add(intent.tag);
-  });
-  classLabels = Array.from(labelSetSoekarno); // pakai punya soekarno
-
-  const contentHattaResponse = await fetch("/tfjs_saved_model/content_hatta.json");
-  const dataHatta = await contentHattaResponse.json();
-
-  dataHatta.intents.forEach((intent) => {
-    responsesHatta[intent.tag] = intent.responses;
-  });
+  classLabelsSoekarno = Object.keys(responsesSoekarno);
 };
 
-// const preprocessing = (text) => {
-//   const cleanedText = text.toLowerCase().replace(/[^\w\s]/gi, "");
-//   const tokens = cleanedText.split(" ").map((word) => word_index[word] || 0);
-//   return tokens;
-// };
+const initModelHatta = async () => {
+  if (modelHatta) return;
+
+  modelHatta = await tf.loadGraphModel(
+    `${API_MODEL_TFJS_URL}/hatta/model.json`
+  );
+
+  const wordIndexResponse = await fetch(
+    `${API_MODEL_TFJS_URL}/hatta/word_index.json`
+  );
+  wordIndexHatta = await wordIndexResponse.json();
+
+  const contentHattaResponse = await fetch(
+    `${API_MODEL_TFJS_URL}/hatta/content.json`
+  );
+  responsesHatta = await contentHattaResponse.json();
+
+  classLabelsHatta = Object.keys(responsesHatta);
+};
 
 // Padding helper
 const padSequences = (sequences, maxlen = 10) => {
@@ -68,34 +81,36 @@ const padSequences = (sequences, maxlen = 10) => {
   });
 };
 
-// Prediksi jawaban berdasarkan input
-export const sendChatMessageTfjs = async (inputText, npc = "") => {
+const predict = async (model, word_index, inputText) => {
+  const cleanedText = inputText.toLowerCase().replace(/[^\w\s]/gi, "");
+  const tokens = cleanedText.split(" ").map((word) => word_index[word] || 0);
+  const padded = padSequences([tokens], maxLen);
+  const inputTensor = tf.tensor2d(padded, [1, maxLen]);
+
+  const result = model.predict({ Identity: inputTensor });
+  const probabilities = result.softmax();
+  const outputData = await probabilities.data();
+  const outputArray = Array.from(outputData);
+  return outputArray;
+};
+
+export const sendChatTfjsSoekarno = async (inputText) => {
   try {
-    await initModel();
+    await initModelSoekarno();
 
-    // Preprocessing
-    const cleanedText = inputText.toLowerCase().replace(/[^\w\s]/gi, "");
-    const tokens = cleanedText.split(" ").map((word) => word_index[word] || 0);
-    const padded = padSequences([tokens], maxLen);
-    const inputTensor = tf.tensor2d(padded, [1, maxLen]);
-
-    // Predict
-    const result = model.predict({ Identity: inputTensor });
-    const probabilities = result.softmax();
-    const outputData = await probabilities.data();
-    const outputArray = Array.from(outputData);
+    const outputArray = await predict(
+      modelSoekarno,
+      wordIndexSoekarno,
+      inputText
+    );
 
     const predictionIndex = outputArray.indexOf(Math.max(...outputArray));
     const predictionValue = outputArray[predictionIndex];
-    const predictedTag = classLabels[predictionIndex];
+    const predictedTag = classLabelsSoekarno[predictionIndex]; // Gunakan classLabelsSoekarno
 
-    if (npc  === "soekarno") {
-      possibleResponses = responsesSoekarno[predictedTag] || [];
-    } else {
-      possibleResponses = responsesHatta[predictedTag] || [];
-    }
-    
-    const randomResponse = possibleResponses[Math.floor(Math.random() * possibleResponses.length)];
+    possibleResponses = responsesSoekarno[predictedTag] || [];
+    const randomResponse =
+      possibleResponses[Math.floor(Math.random() * possibleResponses.length)];
 
     return {
       predictedTag,
@@ -108,46 +123,62 @@ export const sendChatMessageTfjs = async (inputText, npc = "") => {
   }
 };
 
-function truncate(input, limit) {
-  const firstPart = input.slice(0, limit);
-  const remaining = input.slice(limit);
+export const sendChatTfjsHatta = async (inputText) => {
+  try {
+    await initModelHatta();
 
-  const newlineIndex = remaining.indexOf("\n");
-  const secondPart =
-    newlineIndex !== -1 ? remaining.slice(0, newlineIndex) : remaining;
+    const outputArray = await predict(modelHatta, wordIndexHatta, inputText);
 
-  return (firstPart + secondPart).trim();
-}
+    const predictionIndex = outputArray.indexOf(Math.max(...outputArray));
+    const predictionValue = outputArray[predictionIndex];
+    const predictedTag = classLabelsHatta[predictionIndex]; // Gunakan classLabelsHatta
+
+    possibleResponses = responsesHatta[predictedTag] || [];
+    const randomResponse =
+      possibleResponses[Math.floor(Math.random() * possibleResponses.length)];
+
+    return {
+      predictedTag,
+      probability: Math.round(predictionValue * 100),
+      randomResponse,
+    };
+  } catch (error) {
+    console.error("Chat model error:", error);
+    throw error;
+  }
+};
 
 export const sendChatMessageRag = async (inputText, npc = "") => {
   try {
-    // eslint-disable-next-line no-unused-vars
     const payload = {
-      karakter: npc || "soekarno", // default ke soekarno jika npc kosong
-      prompt: inputText
+      karakter: npc || "soekarno",
+      prompt: inputText,
     };
-    let responseDummy = "SAUDARA-SAUDARA! DENGARKANLAH GEMURUH SUARA BUNG KARNO!\n\nKemerdekaan yang kita raih bukanlah hadiah dari Tenno Heika!\n Bukan belas kasihan dari penjajah! Kemerdekaan ini adalah tetesan darah, cucuran keringat, dan kobaran semangat juang seluruh rakyat Indonesia dari Sabang \nsampai Merauke!";
-    responseDummy = truncate(responseDummy, 100);
-    return {response: responseDummy};
-    // const response = await fetch(API_MODEL_URL, {
-    //   method: "POST",
-    //   headers: {
-    //     "Content-Type": "application/json"
-    //   },
-    //   body: JSON.stringify(payload)
-    // });
 
-    // if (!response.ok) {
-    //   throw new Error(`HTTP error ${response.status}`);
-    // }
+    const response = await fetch(API_MODEL_RAG_URL, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(payload),
+    });
 
-    // const data = await response.json();
+    if (!response.ok) {
+      throw new Error(`HTTP error ${response.status}`);
+    }
 
-    // // contoh hasil: { karakter: "soekarno", response: "SAUDARA-SAUDARA! ..." }
-    // return data.response;
+    const data = await response.json();
+
+    return {
+      response: data.response || data,
+      karakter: data.karakter || npc,
+    };
   } catch (error) {
     console.error("sendChatMessageRagModel Error:", error);
-    return "Maaf, terjadi kesalahan dalam memproses pesan.";
+    return {
+      response: "Maaf, terjadi kesalahan dalam memproses pesan.",
+      karakter: npc,
+    };
   }
 };
 
@@ -215,5 +246,3 @@ export const deleteTag = async (tagId) => {
     throw error;
   }
 };
-
-export default apiClient;

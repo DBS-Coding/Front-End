@@ -12,6 +12,7 @@ import CrudSoekarnoView from "./views/CrudSoekarnoView";
 import HomeView from "./views/HomeView";
 import useOnlineStatus from "./hooks/statusInternetUtils";
 import OfflineFeedbackCard from "./components/fallback/OfflineFeedbackCard";
+import ForbiddenPage from "./views/ForbiddenPage";
 
 const ProtectedRoute = ({ children }) => {
   const { isAuthenticated, token } = useAuthStore();
@@ -19,7 +20,21 @@ const ProtectedRoute = ({ children }) => {
   if (!isAuthenticated || !token) {
     return <Navigate to="/login" replace />;
   }
+
+  return children;
+};
+
+const AdminRoute = ({ children }) => {
+  const { isAuthenticated, token, user } = useAuthStore();
   
+  if (!isAuthenticated || !token) {
+    return <Navigate to="/login" replace />;
+  }
+  
+  if (user?.data?.role !== 'admin') {
+    return <Navigate to="/403" replace />;
+  }
+
   return children;
 };
 
@@ -58,9 +73,9 @@ function App() {
         <Route 
           path="/crudsoekarno" 
           element={
-            <ProtectedRoute>
+            <AdminRoute>
               <CrudSoekarnoView/>
-            </ProtectedRoute>
+            </AdminRoute>
           } 
         />
         
@@ -76,13 +91,14 @@ function App() {
         <Route 
           path="/crudhatta" 
           element={
-            <ProtectedRoute>
+            <AdminRoute>
               <CrudHattaView/>
-            </ProtectedRoute>
+            </AdminRoute>
           } 
         />
 
         <Route path="*" element={<NotFoundPage/>} />
+        <Route path="/403" element={<ForbiddenPage/>} />
       </Routes>
     </Router>
   );

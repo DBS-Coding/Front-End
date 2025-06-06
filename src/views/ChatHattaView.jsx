@@ -14,9 +14,9 @@ import {
 import { useChatHattaPresenter } from '../presenters/ChatHattaPresenter';
 import Layout from '../components/common/Layout';
 import MessageBubbleHatta from '../components/chat/MessageBubbleHatta';
-import TypingIndicator from '../components/chat/TypingIndicator';
 import { clsx } from 'clsx';
 import pakHatta from '../assets/pakhatta.png';
+import TypingIndicatorHatta from '../components/chat/TypingIndicatorHatta';
 
 const TOTAL_TAGS = 10;
 
@@ -31,24 +31,27 @@ const ChatHattaView = () => {
   });
   const [isMobileSidebarOpen, setIsMobileSidebarOpen] = useState(false);
 
-  const { messages, predictedTag, isLoading, error, sendMessage } =
+  const { messages, predictedTag, isLoading, error, sendMessage, setMessages } =
     useChatHattaPresenter();
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   };
 
-  const updateTags = (predictedTag) => {
-    setTags((prevTags) => {
-      if (!prevTags.includes(predictedTag)) {
-        const newTags = [...prevTags, predictedTag];
-        const percentage = Math.floor((newTags.length / TOTAL_TAGS) * 100);
-        setPercentageAchieved(percentage);
-        return newTags;
-      }
-      return prevTags;
-    });
-  };
+const updateTags = (predictedTag) => {
+  setTags((prevTags) => {
+    if (!prevTags.includes(predictedTag)) {
+      const newTags = [...prevTags, predictedTag];
+      const percentage = Math.floor((newTags.length / TOTAL_TAGS) * 100);
+      setPercentageAchieved(percentage);
+
+      localStorage.setItem('achievement-hatta', JSON.stringify(newTags));
+
+      return newTags;
+    }
+    return prevTags;
+  });
+};
 
   useEffect(() => {
     localStorage.setItem('selectedModelHatta', selectedModel);
@@ -60,6 +63,27 @@ const ChatHattaView = () => {
       updateTags(predictedTag);
     }
   }, [messages]);
+
+  useEffect(() => {
+  const savedTags = localStorage.getItem('achievement-hatta');
+  if (savedTags) {
+    const parsed = JSON.parse(savedTags);
+    setTags(parsed);
+    setPercentageAchieved(Math.floor((parsed.length / TOTAL_TAGS) * 100));
+  }
+}, []);
+
+  useEffect(() => {
+  const stored = localStorage.getItem('chat-hatta');
+  if (stored) {
+    try {
+      const parsed = JSON.parse(stored);
+      setMessages(parsed);
+    } catch (e) {
+      console.error("Failed to parse chat-hatta from localStorage", e);
+    }
+  }
+}, []);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -171,7 +195,7 @@ const ChatHattaView = () => {
                     <MessageBubbleHatta key={message.id} message={message} />
                   ))}
                 </AnimatePresence>
-                {isLoading && <TypingIndicator />}
+                {isLoading && <TypingIndicatorHatta />}
               </>
             )}
             <div ref={messagesEndRef} />
