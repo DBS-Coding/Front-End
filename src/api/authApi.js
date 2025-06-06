@@ -24,6 +24,7 @@ export const loginUser = async (credentials) => {
   // eslint-disable-next-line no-useless-catch
   try {
     const response = await apiClient.post("/auth/login", credentials);
+    console.log("Data akun: ", response);
     return response;
   } catch (error) {
     // Need handling error
