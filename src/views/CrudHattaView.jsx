@@ -89,9 +89,9 @@ const CrudSoekarnoView = () => {
     }
   };
 
-  const handleDelete = async (tagName) => {
-    if (window.confirm(`Are you sure you want to delete "${tagName}"?`)) {
-      const result = await removeTag(tagName);
+  const handleDelete = async (tagId) => {
+    if (window.confirm(`Are you sure you want to delete "${tagId}"?`)) {
+      const result = await removeTag(tagId);
       if (result?.success) {
         showNotification(result.message, 'success');
       } else if (result?.message) {
@@ -275,10 +275,10 @@ const CrudSoekarnoView = () => {
                             <Edit size={16} />
                           </button>
                           <button
-                            onClick={() => handleDelete(tag?.tag)}
+                            onClick={() => handleDelete(tag?.id)}
                             className="p-1 hover:bg-red-700 rounded text-red-400"
                             title="Delete"
-                            disabled={!tag?.tag}
+                            disabled={!tag?.id}
                           >
                             <Trash2 size={16} />
                           </button>

@@ -206,9 +206,9 @@ export const getSpecificTag = async (tagName) => {
   }
 };
 
-export const deleteTag = async (tagName) => {
+export const deleteTag = async (tagId) => {
   try {
-    const response = await apiClient.delete(`/chatbot/tags/${tagName}`);
+    const response = await apiClient.delete(`/chatbot/tags/${tagId}`);
     return response;
   } catch (error) {
     console.error("Delete Tag API Error:", error);
