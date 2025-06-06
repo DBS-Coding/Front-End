@@ -9,13 +9,14 @@ import {
   Trash2,
   Scroll,
   Crown,
+  Shield,
 } from 'lucide-react';
 import useAuthStore from '../../store/authStore';
 import useUIStore from '../../store/uiStore';
 import { useNavigationPresenter } from '../../hooks/navigationutils';
-import { useLocation } from "react-router-dom";
-import pakKarno from "../../assets/pakkarno.png";
-import pakHatta from "../../assets/pakhatta.png";
+import { useLocation } from 'react-router-dom';
+import pakKarno from '../../assets/pakkarno.png';
+import pakHatta from '../../assets/pakhatta.png';
 
 const Header = () => {
   const { user } = useAuthStore();
@@ -28,10 +29,10 @@ const Header = () => {
   const [modelData, setModelData] = useState({
     classLabels: [],
     responsesSoekarno: {},
-    responsesHatta: {}
+    responsesHatta: {},
   });
   const [isModelLoading, setIsModelLoading] = useState(true);
-  
+
   const dropdownRef = useRef(null);
   const buttonRef = useRef(null);
   const location = useLocation();
@@ -40,11 +41,12 @@ const Header = () => {
     const loadModelData = async () => {
       try {
         setIsModelLoading(true);
-        
-        const [contentSoekarnoResponse, contentHattaResponse] = await Promise.all([
-          fetch("/tfjs_saved_model/content_soekarno.json"),
-          fetch("/tfjs_saved_model/content_hatta.json")
-        ]);
+
+        const [contentSoekarnoResponse, contentHattaResponse] =
+          await Promise.all([
+            fetch('/tfjs_saved_model/content_soekarno.json'),
+            fetch('/tfjs_saved_model/content_hatta.json'),
+          ]);
 
         const dataSoekarno = await contentSoekarnoResponse.json();
         const dataHatta = await contentHattaResponse.json();
@@ -66,10 +68,10 @@ const Header = () => {
         setModelData({
           classLabels,
           responsesSoekarno,
-          responsesHatta
+          responsesHatta,
         });
       } catch (error) {
-        console.error("Error loading model data:", error);
+        console.error('Error loading model data:', error);
       } finally {
         setIsModelLoading(false);
       }
@@ -115,102 +117,167 @@ const Header = () => {
   };
 
   const getAchievementsFromLocalStorage = (character) => {
-   const key = character === 'soekarno' ? 'achievement-soekarno' : 'achievement-hatta';
+    const key =
+      character === 'soekarno' ? 'achievement-soekarno' : 'achievement-hatta';
     return JSON.parse(localStorage.getItem(key)) || [];
   };
 
+  const renderConditionalInfo = () => {
+    const path = location.pathname;
 
-const renderConditionalInfo = () => {
-  const path = location.pathname;
+    const achievementsSoekarno = getAchievementsFromLocalStorage('soekarno');
+    const achievementsHatta = getAchievementsFromLocalStorage('hatta');
 
-  const achievementsSoekarno = getAchievementsFromLocalStorage('soekarno');
-  const achievementsHatta = getAchievementsFromLocalStorage('hatta');
+    const renderAchievementSection = (character, data) => (
+      <div className='py-3 border-b border-amber-400/30'>
+        <div className='flex items-center justify-center gap-2 mb-2'>
+          <div className='w-4 h-4 bg-gradient-to-br from-amber-400 to-amber-600 rounded-full flex items-center justify-center'>
+            {character === 'Soekarno' ? (
+              <Crown className='w-2 h-2 text-amber-900' />
+            ) : (
+              <Shield className='w-2 h-2 text-amber-900' />
+            )}
+          </div>
+          <p className='text-amber-200 font-semibold text-sm'>
+            Achievement {character}
+          </p>
+        </div>
 
-  const renderAchievementSection = (character, data) => (
-    <div>
-      <p className='text-amber-300 text-center'>Achievement {character}</p>
-      <div className='my-2 flex flex-wrap gap-2 items-center text-center mx-5'>
         {isModelLoading ? (
-          <p className="text-xs text-amber-200 w-full text-center py-2">
-            Loading achievement...
-          </p>
+          <div className='flex justify-center items-center py-2'>
+            <motion.div
+              animate={{ rotate: 360 }}
+              transition={{ duration: 1.5, repeat: Infinity, ease: 'linear' }}
+              className='w-4 h-4 border-2 border-amber-600 border-t-amber-300 rounded-full'
+            />
+            <span className='ml-2 text-xs text-amber-300'>Loading...</span>
+          </div>
         ) : data.length > 0 ? (
-          data.map((tag, i) => (
-            <p key={`${character}-${i}`} className="text-xs text-amber-200 w-[48%] border border-amber-200 rounded-md py-1.5 px-3 hover:cursor-default capitalize">
-              {tag.replace(/_/g, ' ')}
-            </p>
-          ))
+          <div className='grid grid-cols-2 gap-1.5 px-3 max-h-40 overflow-y-auto no-scrollbar'>
+            {data.map((tag, i) => (
+              <motion.div
+                key={`${character}-${i}`}
+                className='flex items-center gap-1.5 px-2 py-1.5 bg-black/30 backdrop-blur-sm border border-amber-400/30 rounded-lg'
+                initial={{ opacity: 0, y: 5 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: i * 0.05 }}
+                whileHover={{ scale: 1.02 }}
+              >
+                <div className='w-3.5 h-3.5 bg-gradient-to-r from-amber-400 to-amber-600 rounded-full flex items-center justify-center flex-shrink-0'>
+                  {character === 'Soekarno' ? (
+                    <Crown className='w-2 h-2 text-amber-900' />
+                  ) : (
+                    <Shield className='w-2 h-2 text-amber-900' />
+                  )}
+                </div>
+                <span className='text-xs text-amber-200 font-medium truncate capitalize'>
+                  {tag.replace(/_/g, ' ')}
+                </span>
+              </motion.div>
+            ))}
+          </div>
         ) : (
-          <p className="text-xs text-amber-200 w-full text-center py-2">
-            No Achievements Unlocked
-          </p>
+          <div className='py-2 flex flex-col items-center justify-center'>
+            <Scroll className='w-5 h-5 text-amber-400/50 mb-1' />
+            <p className='text-xs text-amber-200/60 text-center'>
+              Belum ada achievements
+            </p>
+          </div>
         )}
       </div>
-    </div>
-  );
+    );
 
-  const renderNoAchievementMessage = () => (
-    <div className='my-2 flex flex-wrap gap-2 items-center text-center mx-5'>
-      <p className="text-xs text-amber-200 w-full text-center py-2">
-        No Achievement for RAG Model
-      </p>
-    </div>
-  );
-
-  return (
-    <div className="border-b border-amber-400/30">
-      <div className='flex justify-center mt-4 rounded-md'>
-        <img
-          src={path === '/chatsoekarno' ? pakKarno : path === '/chathatta' ? pakHatta : pakKarno}
-          alt='avatar'
-          className='w-48 h-48'
-        />
-      </div>
-
-      <div className='flex flex-col my-3 gap-1'>
-        <p className='text-amber-300 text-center'>Pilih Model</p>
-        <div className='flex gap-3 justify-center items-center'>
-          <button
-            onClick={() => setSelectedModelType('tfjs')}
-            className={`text-xs text-amber-300 border rounded-md py-1.5 px-3 hover:cursor-pointer ${
-              selectedModelType === 'tfjs'
-                ? 'border-amber-400 bg-amber-400/10'
-                : 'border-amber-200'
-            }`}
-          >
-            ⚙️ Model TFJS
-          </button>
-          <button
-            onClick={() => setSelectedModelType('rag')}
-            className={`text-xs text-amber-300 border rounded-md py-1.5 px-3 hover:cursor-pointer ${
-              selectedModelType === 'rag'
-                ? 'border-amber-400 bg-amber-400/10'
-                : 'border-amber-200'
-            }`}
-          >
-            🧠 Model RAG
-          </button>
+    const renderNoAchievementMessage = () => (
+      <div className='py-4 border-b border-amber-400/30'>
+        <div className='flex flex-col items-center justify-center gap-1.5'>
+          <Scroll className='w-5 h-5 text-amber-400/50' />
+          <p className='text-xs text-amber-200/70 text-center'>
+            Achievements tidak tersedia untuk model RAG
+          </p>
         </div>
       </div>
+    );
 
-      {selectedModelType === 'tfjs' ? (
-        path === '/chatsoekarno' ? (
-          renderAchievementSection('Soekarno', achievementsSoekarno)
-        ) : path === '/chathatta' ? (
-          renderAchievementSection('Hatta', achievementsHatta)
+    return (
+      <div>
+        {/* Character Avatar */}
+        {(path === '/chatsoekarno' || path === '/chathatta') && (
+          <div className='py-3 border-b border-amber-400/30 flex justify-center'>
+            <div className='relative'>
+              <div className='w-16 h-16 rounded-xl overflow-hidden border-2 border-amber-400'>
+                <img
+                  src={path === '/chatsoekarno' ? pakKarno : pakHatta}
+                  alt={path === '/chatsoekarno' ? 'Soekarno' : 'Hatta'}
+                  className='w-full h-full object-cover object-center'
+                />
+              </div>
+              <div className='absolute -bottom-2 -right-2 w-7 h-7 bg-gradient-to-br from-amber-400 to-amber-600 rounded-full flex items-center justify-center border-2 border-amber-300'>
+                {path === '/chatsoekarno' ? (
+                  <Crown className='w-3.5 h-3.5 text-amber-900' />
+                ) : (
+                  <Shield className='w-3.5 h-3.5 text-amber-900' />
+                )}
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Model Selection */}
+        <div className='py-3 border-b border-amber-400/30'>
+          <div className='flex items-center justify-center gap-1.5 mb-2'>
+            <Scroll className='w-3.5 h-3.5 text-amber-400' />
+            <p className='text-sm text-amber-200 font-medium'>Pilih Model</p>
+          </div>
+
+          <div className='flex gap-2 justify-center px-3'>
+            <motion.button
+              onClick={() => setSelectedModelType('tfjs')}
+              className={`flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium rounded-lg transition-all duration-200 ${
+                selectedModelType === 'tfjs'
+                  ? 'bg-gradient-to-r from-blue-500/20 to-blue-600/20 border-blue-400 text-blue-200 border'
+                  : 'bg-black/30 border border-amber-400/30 text-amber-200 hover:border-amber-400/60 hover:bg-black/40'
+              }`}
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
+            >
+              <span>⚙️</span>
+              <span>Model TFJS</span>
+            </motion.button>
+
+            <motion.button
+              onClick={() => setSelectedModelType('rag')}
+              className={`flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium rounded-lg transition-all duration-200 ${
+                selectedModelType === 'rag'
+                  ? 'bg-gradient-to-r from-teal-500/20 to-teal-600/20 border-teal-400 text-teal-200 border'
+                  : 'bg-black/30 border border-amber-400/30 text-amber-200 hover:border-amber-400/60 hover:bg-black/40'
+              }`}
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
+            >
+              <span>🧠</span>
+              <span>Model RAG</span>
+            </motion.button>
+          </div>
+        </div>
+
+        {/* Achievements */}
+        {selectedModelType === 'tfjs' ? (
+          path === '/chatsoekarno' ? (
+            renderAchievementSection('Soekarno', achievementsSoekarno)
+          ) : path === '/chathatta' ? (
+            renderAchievementSection('Hatta', achievementsHatta)
+          ) : (
+            <>
+              {renderAchievementSection('Soekarno', achievementsSoekarno)}
+              {renderAchievementSection('Hatta', achievementsHatta)}
+            </>
+          )
         ) : (
-          <>
-            {renderAchievementSection('Soekarno', achievementsSoekarno)}
-            {renderAchievementSection('Hatta', achievementsHatta)}
-          </>
-        )
-      ) : (
-        renderNoAchievementMessage()
-      )}
-    </div>
-  );
-};
-
+          renderNoAchievementMessage()
+        )}
+      </div>
+    );
+  };
 
   // Dropdown component to be rendered via Portal
   const DropdownMenu = () => {
@@ -223,47 +290,64 @@ const renderConditionalInfo = () => {
         animate={{ opacity: 1, y: 0, scale: 1 }}
         exit={{ opacity: 0, y: -10, scale: 0.95 }}
         transition={{ duration: 0.15, ease: 'easeOut' }}
-        className='fixed w-64 bg-black/90 backdrop-blur-md border-2 border-amber-400/30 rounded-xl shadow-2xl z-[99999]'
+        className='fixed w-72 bg-black/90 backdrop-blur-md border-2 border-amber-400/30 rounded-xl shadow-2xl z-[99999] max-h-[85vh] overflow-y-auto no-scrollbar'
         style={{
           top: position.top + 'px',
           right: position.right + 'px',
         }}
       >
-        <div className='py-2'>
-          <div className='px-4 py-3 border-b border-amber-400/30'>
-            <div className='flex items-center gap-2 mb-1'>
-              <Crown className='w-3 h-3 text-amber-400' />
-              <p className='text-xs text-amber-300'>Masuk sebagai</p>
+        {/* User Profile Section */}
+        <div className='p-3 border-b border-amber-400/30 bg-gradient-to-b from-amber-500/10 to-transparent'>
+          <div className='flex items-center gap-3 mb-1'>
+            <div className='relative'>
+              <div className='w-12 h-12 bg-gradient-to-br from-amber-400 to-amber-600 rounded-full flex items-center justify-center border-2 border-amber-300'>
+                <User className='w-6 h-6 text-amber-900' />
+              </div>
+              <div className='absolute -bottom-1 -right-1 w-4 h-4 bg-green-500 rounded-full border-2 border-amber-300'></div>
             </div>
-            <p className='text-sm font-medium text-amber-100 truncate'>
-              {user?.data?.name || 'User'}
-            </p>
-             <p className="text-xs text-amber-300">Email: {user?.data?.email}</p>
+            <div className='flex-1'>
+              <div className='flex items-center gap-1.5 mb-0.5'>
+                <Crown className='w-3 h-3 text-amber-400' />
+                <p className='text-xs text-amber-300'>Masuk sebagai</p>
+              </div>
+              <p className='text-sm font-bold text-amber-100 truncate'>
+                {user?.data?.name || 'User'}
+              </p>
+              <p className='text-xs text-amber-300/80 truncate'>
+                {user?.data?.email || 'user@example.com'}
+              </p>
+            </div>
           </div>
+        </div>
 
-          {renderConditionalInfo()}
+        {/* Conditional Info - Model Selection & Achievements */}
+        {renderConditionalInfo()}
 
-          <div className='py-2'>
-            <motion.button
-              onClick={() => handleDropdownAction(handleDeleteAccount)}
-              disabled={isLoading}
-              className='w-full flex items-center space-x-3 px-4 py-2 text-sm text-amber-200 hover:bg-amber-900/40 transition-colors duration-150 disabled:opacity-50 disabled:cursor-not-allowed'
-              whileHover={{ x: 3 }}
-            >
-              <Trash2 className='w-4 h-4' />
-              <span>{isLoading ? 'Menghapus...' : 'Hapus Akun'}</span>
-            </motion.button>
+        {/* Action Buttons */}
+        <div className='p-1'>
+          <motion.button
+            onClick={() => handleDropdownAction(handleDeleteAccount)}
+            disabled={isLoading}
+            className='w-full flex items-center gap-2 px-4 py-2.5 text-sm text-amber-200 hover:bg-amber-900/40 transition-colors duration-150 disabled:opacity-50 disabled:cursor-not-allowed rounded-lg'
+            whileHover={{ x: 3, backgroundColor: 'rgba(217, 119, 6, 0.2)' }}
+          >
+            <Trash2 className='w-4 h-4 flex-shrink-0' />
+            <span className='font-medium'>
+              {isLoading ? 'Menghapus...' : 'Hapus Akun'}
+            </span>
+          </motion.button>
 
-            <motion.button
-              onClick={() => handleDropdownAction(handleLogout)}
-              disabled={isLoading}
-              className='w-full flex items-center space-x-3 px-4 py-2 text-sm text-red-300 hover:bg-red-900/40 transition-colors duration-150 disabled:opacity-50 disabled:cursor-not-allowed'
-              whileHover={{ x: 3 }}
-            >
-              <LogOut className='w-4 h-4' />
-              <span>{isLoading ? 'Keluar...' : 'Keluar'}</span>
-            </motion.button>
-          </div>
+          <motion.button
+            onClick={() => handleDropdownAction(handleLogout)}
+            disabled={isLoading}
+            className='w-full flex items-center gap-2 px-4 py-2.5 text-sm text-red-300 hover:bg-red-900/40 transition-colors duration-150 disabled:opacity-50 disabled:cursor-not-allowed rounded-lg mt-1'
+            whileHover={{ x: 3, backgroundColor: 'rgba(185, 28, 28, 0.2)' }}
+          >
+            <LogOut className='w-4 h-4 flex-shrink-0' />
+            <span className='font-medium'>
+              {isLoading ? 'Keluar...' : 'Keluar'}
+            </span>
+          </motion.button>
         </div>
       </motion.div>,
       document.body
