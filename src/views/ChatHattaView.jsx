@@ -112,7 +112,7 @@ const ChatHattaView = () => {
 
   return (
     <Layout>
-      <div className='flex flex-col lg:flex-row h-[calc(100vh-80px)] gap-4 lg:gap-6 p-2 sm:p-0'>
+      <div className='flex flex-col lg:flex-row h-[calc(100vh-80px)] gap-4 lg:gap-6 sm:p-0'>
         {/* Main Chat Area */}
         <div className='flex-1 lg:w-5/7 flex flex-col bg-black/20 backdrop-blur-sm border-2 border-amber-400/30 rounded-2xl shadow-2xl'>
           {/* Chat Header */}
@@ -120,9 +120,12 @@ const ChatHattaView = () => {
             <div className='flex items-center gap-3'>
               <div className='relative'>
                 <div className='w-10 h-10 sm:w-12 sm:h-12 bg-gradient-to-br from-amber-400 to-amber-600 rounded-full flex items-center justify-center border-2 border-amber-300'>
-                  <Shield className='w-5 h-5 sm:w-6 sm:h-6 text-amber-900' />
+                  <img
+                    src={pakHatta}
+                    className='rounded-full'
+                    alt='Mohammad Hatta'
+                  />
                 </div>
-                <div className='absolute bottom-0 -right-1 w-3 h-3 sm:w-4 sm:h-4 bg-green-500 rounded-full border-2 border-amber-300'></div>
               </div>
               <div>
                 <h2 className='text-lg sm:text-xl font-bold text-amber-100'>
@@ -133,7 +136,6 @@ const ChatHattaView = () => {
                 </p>
               </div>
               <div className='ml-auto flex items-center gap-2 sm:gap-3'>
-                <Star className='w-4 h-4 sm:w-5 sm:h-5 text-amber-400 fill-amber-400' />
                 {/* Mobile Sidebar Toggle */}
                 <motion.button
                   onClick={() => setIsMobileSidebarOpen(true)}
@@ -148,7 +150,7 @@ const ChatHattaView = () => {
           </div>
 
           {/* Messages Area */}
-          <div className='flex-1 overflow-y-auto no-scrollbar p-3 sm:p-4 space-y-3 sm:space-y-4'>
+          <div className='flex-1 overflow-y-auto p-3 sm:p-4 space-y-3 sm:space-y-4 no-scrollbar'>
             {messages.length === 0 ? (
               <motion.div
                 className='flex flex-col items-center justify-center h-full text-center'
@@ -203,8 +205,8 @@ const ChatHattaView = () => {
             <div ref={messagesEndRef} />
           </div>
 
-          {/* Input Area */}
-          <div className='p-3 sm:p-4 border-t border-amber-400/30 bg-gradient-to-r from-amber-500/5 to-amber-600/5'>
+          {/* Input Area - Updated with Soekarno gradient styling */}
+          <div className='bg-gradient-to-r from-amber-800 to-amber-950 p-3 sm:p-4 border-t border-amber-400/30 md:bg-gradient-to-r md:from-amber-500/5 md:to-amber-600/5 sticky bottom-0 z-10'>
             {error && (
               <motion.div
                 initial={{ opacity: 0, y: -10 }}
@@ -395,7 +397,7 @@ const ChatHattaView = () => {
                   </div>
                 </div>
 
-                {/* Mobile Achievements Section - No scrolling */}
+                {/* Mobile Achievements Section */}
                 <div className='p-4 sm:p-6'>
                   <div className='mb-4'>
                     <div className='bg-gradient-to-r from-amber-500 to-amber-600 rounded-xl p-1 shadow-lg'>
@@ -494,15 +496,15 @@ const ChatHattaView = () => {
           )}
         </AnimatePresence>
 
-        {/* Desktop Sidebar */}
-        <div className='w-full lg:w-2/7 bg-black/20 backdrop-blur-sm border-2 border-amber-400/30 rounded-2xl shadow-2xl hidden lg:flex lg:flex-col'>
+        {/* Desktop Sidebar - Updated with Soekarno styling */}
+        <div className='w-full lg:w-2/7 bg-black/20 backdrop-blur-sm border-2 border-amber-400/30 rounded-2xl shadow-2xl hidden lg:flex lg:flex-col flex-shrink-0 overflow-hidden'>
           {/* Profile Section */}
           <div className='p-5 text-center border-b border-amber-400/30 bg-gradient-to-b from-amber-500/10 to-transparent'>
-            <div className='relative inline-block mb-4'>
+            <div className='relative inline-block mb-1'>
               <img
                 src={pakHatta || '/placeholder.svg'}
                 alt='Mohammad Hatta'
-                className='w-28 h-28 object-cover rounded-2xl border-4 border-amber-300 shadow-xl'
+                className='w-20 h-20 object-cover rounded-2xl border-4 border-amber-300 shadow-xl'
               />
               <div className='absolute -top-2 -right-2 w-7 h-7 bg-gradient-to-r from-amber-400 to-amber-600 rounded-full flex items-center justify-center border-2 border-amber-300'>
                 <Shield className='w-3.5 h-3.5 text-amber-900' />
@@ -528,7 +530,7 @@ const ChatHattaView = () => {
           <div className='p-5 border-b border-amber-400/30'>
             <div className='flex items-center gap-2 mb-4'>
               <Settings className='w-5 h-5 text-amber-400' />
-              <h3 className='text-base font-semibold text-amber-100'>
+              <h3 className='text-sm font-semibold text-amber-100'>
                 Pilih Model AI
               </h3>
             </div>
@@ -536,7 +538,7 @@ const ChatHattaView = () => {
             <div className='flex space-x-2'>
               <motion.button
                 onClick={() => setSelectedModel('tfjs')}
-                className={`w-full p-2.5 rounded-xl transition-all duration-300 text-sm font-medium border-2 ${
+                className={`w-full p-2 rounded-xl transition-all duration-300 text-xs font-medium border-2 ${
                   selectedModel === 'tfjs'
                     ? 'bg-gradient-to-r from-blue-500/20 to-blue-600/20 border-blue-400 text-blue-200'
                     : 'bg-black/30 border-amber-400/30 text-amber-200 hover:border-amber-400/50'
@@ -548,14 +550,14 @@ const ChatHattaView = () => {
                   <span>⚙️</span>
                   <span>TFJS</span>
                   {selectedModel === 'tfjs' && (
-                    <Star className='w-4 h-4 fill-current' />
+                    <Star className='w-3 h-3 fill-current' />
                   )}
                 </div>
               </motion.button>
 
               <motion.button
                 onClick={() => setSelectedModel('rag')}
-                className={`w-full p-2.5 rounded-xl transition-all duration-300 text-sm font-medium border-2 ${
+                className={`w-full p-2 rounded-xl transition-all duration-300 text-xs font-medium border-2 ${
                   selectedModel === 'rag'
                     ? 'bg-gradient-to-r from-teal-500/20 to-teal-600/20 border-teal-400 text-teal-200'
                     : 'bg-black/30 border-amber-400/30 text-amber-200 hover:border-amber-400/50'
@@ -567,21 +569,21 @@ const ChatHattaView = () => {
                   <span>🧠</span>
                   <span>RAG</span>
                   {selectedModel === 'rag' && (
-                    <Star className='w-4 h-4 fill-current' />
+                    <Star className='w-3 h-3 fill-current' />
                   )}
                 </div>
               </motion.button>
             </div>
           </div>
 
-          {/* Achievements Section - No scrolling */}
-          <div className='p-5 flex-grow'>
-            <div className='mb-4'>
+          {/* Achievements Section - With Soekarno styling */}
+          <div className='p-5 flex-grow overflow-y-auto no-scrollbar'>
+            <div className='mb-0'>
               <div className='bg-gradient-to-r from-amber-500 to-amber-600 rounded-xl p-1 shadow-lg'>
                 <div className='bg-black/60 backdrop-blur-sm rounded-lg px-4 py-3 text-center'>
                   <div className='flex items-center justify-center gap-2 mb-1'>
                     <Award className='w-5 h-5 text-amber-300' />
-                    <span className='text-amber-100 font-semibold'>
+                    <span className='text-amber-100 text-xs text-left font-semibold'>
                       Dialog Achievements
                     </span>
                   </div>
@@ -602,7 +604,7 @@ const ChatHattaView = () => {
               </div>
             </div>
 
-            <div className=''>
+            <div className={tags.length > 0 ? 'mt-3' : 'mt-0'}>
               <div className='grid grid-cols-2 gap-2'>
                 {tags.length > 0 ? (
                   showAllAchievements ? (
@@ -671,9 +673,9 @@ const ChatHattaView = () => {
                     </>
                   )
                 ) : (
-                  <div className='text-center py-6 col-span-2'>
-                    <Scroll className='w-8 h-8 text-amber-400/50 mx-auto mb-2' />
-                    <p className='text-amber-200/50 text-sm'>
+                  <div className='text-center py-2 mt-2 col-span-2'>
+                    <Scroll className='w-4 h-4 text-amber-400/50 mx-auto mb-2' />
+                    <p className='text-amber-200/50 text-xs'>
                       Mulai percakapan untuk mendapatkan achievement
                     </p>
                   </div>
