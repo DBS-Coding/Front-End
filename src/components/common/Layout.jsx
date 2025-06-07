@@ -50,13 +50,13 @@ const Layout = ({ children }) => {
       <div className='relative 2xl:max-w-7xl mx-auto'>
         <Header />
 
-        <div className='w-full px-4 sm:px-6 lg:px-8'>
+        <div className='w-full px-1 sm:px-6 lg:px-8'>
           <div className='flex flex-col lg:flex-row gap-4 lg:gap-6'>
             <Sidebar />
 
             <main
               className={`
-                 transition-all duration-300 overflow-x-hidden
+                 transition-all duration-300 overflow-x-hidden min-h-screen
                 ${sidebarOpen ? 'lg:w-5/6' : 'lg:w-full'}
               `}
             >
