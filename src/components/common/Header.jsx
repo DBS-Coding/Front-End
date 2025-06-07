@@ -21,64 +21,14 @@ import pakHatta from '../../assets/pakhatta.png';
 const Header = () => {
   const { user } = useAuthStore();
   const { toggleSidebar } = useUIStore();
-  const [selectedModelType, setSelectedModelType] = useState('tfjs');
   const { handleLogout, handleDeleteAccount, isLoading } =
     useNavigationPresenter();
 
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-  const [modelData, setModelData] = useState({
-    classLabels: [],
-    responsesSoekarno: {},
-    responsesHatta: {},
-  });
-  const [isModelLoading, setIsModelLoading] = useState(true);
 
   const dropdownRef = useRef(null);
   const buttonRef = useRef(null);
   const location = useLocation();
-
-  useEffect(() => {
-    const loadModelData = async () => {
-      try {
-        setIsModelLoading(true);
-
-        const [contentSoekarnoResponse, contentHattaResponse] =
-          await Promise.all([
-            fetch('/tfjs_saved_model/content_soekarno.json'),
-            fetch('/tfjs_saved_model/content_hatta.json'),
-          ]);
-
-        const dataSoekarno = await contentSoekarnoResponse.json();
-        const dataHatta = await contentHattaResponse.json();
-
-        const responsesSoekarno = {};
-        const labelSet = new Set();
-        dataSoekarno.intents.forEach((intent) => {
-          responsesSoekarno[intent.tag] = intent.responses;
-          labelSet.add(intent.tag);
-        });
-
-        const responsesHatta = {};
-        dataHatta.intents.forEach((intent) => {
-          responsesHatta[intent.tag] = intent.responses;
-        });
-
-        const classLabels = Array.from(labelSet);
-
-        setModelData({
-          classLabels,
-          responsesSoekarno,
-          responsesHatta,
-        });
-      } catch (error) {
-        console.error('Error loading model data:', error);
-      } finally {
-        setIsModelLoading(false);
-      }
-    };
-
-    loadModelData();
-  }, []);
 
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -116,91 +66,12 @@ const Header = () => {
     action();
   };
 
-  const getAchievementsFromLocalStorage = (character) => {
-    const key =
-      character === 'soekarno' ? 'achievement-soekarno' : 'achievement-hatta';
-    return JSON.parse(localStorage.getItem(key)) || [];
-  };
-
   const renderConditionalInfo = () => {
     const path = location.pathname;
 
-    const achievementsSoekarno = getAchievementsFromLocalStorage('soekarno');
-    const achievementsHatta = getAchievementsFromLocalStorage('hatta');
-
-    const renderAchievementSection = (character, data) => (
-      <div className='py-3 border-b border-amber-400/30'>
-        <div className='flex items-center justify-center gap-2 mb-2'>
-          <div className='w-4 h-4 bg-gradient-to-br from-amber-400 to-amber-600 rounded-full flex items-center justify-center'>
-            {character === 'Soekarno' ? (
-              <Crown className='w-2 h-2 text-amber-900' />
-            ) : (
-              <Shield className='w-2 h-2 text-amber-900' />
-            )}
-          </div>
-          <p className='text-amber-200 font-semibold text-sm'>
-            Achievement {character}
-          </p>
-        </div>
-
-        {isModelLoading ? (
-          <div className='flex justify-center items-center py-2'>
-            <motion.div
-              animate={{ rotate: 360 }}
-              transition={{ duration: 1.5, repeat: Infinity, ease: 'linear' }}
-              className='w-4 h-4 border-2 border-amber-600 border-t-amber-300 rounded-full'
-            />
-            <span className='ml-2 text-xs text-amber-300'>Loading...</span>
-          </div>
-        ) : data.length > 0 ? (
-          <div className='grid grid-cols-2 gap-1.5 px-3 max-h-40 overflow-y-auto no-scrollbar'>
-            {data.map((tag, i) => (
-              <motion.div
-                key={`${character}-${i}`}
-                className='flex items-center gap-1.5 px-2 py-1.5 bg-black/30 backdrop-blur-sm border border-amber-400/30 rounded-lg'
-                initial={{ opacity: 0, y: 5 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: i * 0.05 }}
-                whileHover={{ scale: 1.02 }}
-              >
-                <div className='w-3.5 h-3.5 bg-gradient-to-r from-amber-400 to-amber-600 rounded-full flex items-center justify-center flex-shrink-0'>
-                  {character === 'Soekarno' ? (
-                    <Crown className='w-2 h-2 text-amber-900' />
-                  ) : (
-                    <Shield className='w-2 h-2 text-amber-900' />
-                  )}
-                </div>
-                <span className='text-xs text-amber-200 font-medium truncate capitalize'>
-                  {tag.replace(/_/g, ' ')}
-                </span>
-              </motion.div>
-            ))}
-          </div>
-        ) : (
-          <div className='py-2 flex flex-col items-center justify-center'>
-            <Scroll className='w-5 h-5 text-amber-400/50 mb-1' />
-            <p className='text-xs text-amber-200/60 text-center'>
-              Belum ada achievements
-            </p>
-          </div>
-        )}
-      </div>
-    );
-
-    const renderNoAchievementMessage = () => (
-      <div className='py-4 border-b border-amber-400/30'>
-        <div className='flex flex-col items-center justify-center gap-1.5'>
-          <Scroll className='w-5 h-5 text-amber-400/50' />
-          <p className='text-xs text-amber-200/70 text-center'>
-            Achievements tidak tersedia untuk model RAG
-          </p>
-        </div>
-      </div>
-    );
-
     return (
       <div>
-        {/* Character Avatar */}
+        {/* Character Avatar - Only show on character chat pages */}
         {(path === '/chatsoekarno' || path === '/chathatta') && (
           <div className='py-3 border-b border-amber-400/30 flex justify-center'>
             <div className='relative'>
@@ -220,60 +91,6 @@ const Header = () => {
               </div>
             </div>
           </div>
-        )}
-
-        {/* Model Selection */}
-        <div className='py-3 border-b border-amber-400/30'>
-          <div className='flex items-center justify-center gap-1.5 mb-2'>
-            <Scroll className='w-3.5 h-3.5 text-amber-400' />
-            <p className='text-sm text-amber-200 font-medium'>Pilih Model</p>
-          </div>
-
-          <div className='flex gap-2 justify-center px-3'>
-            <motion.button
-              onClick={() => setSelectedModelType('tfjs')}
-              className={`flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium rounded-lg transition-all duration-200 ${
-                selectedModelType === 'tfjs'
-                  ? 'bg-gradient-to-r from-blue-500/20 to-blue-600/20 border-blue-400 text-blue-200 border'
-                  : 'bg-black/30 border border-amber-400/30 text-amber-200 hover:border-amber-400/60 hover:bg-black/40'
-              }`}
-              whileHover={{ scale: 1.02 }}
-              whileTap={{ scale: 0.98 }}
-            >
-              <span>⚙️</span>
-              <span>Model TFJS</span>
-            </motion.button>
-
-            <motion.button
-              onClick={() => setSelectedModelType('rag')}
-              className={`flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium rounded-lg transition-all duration-200 ${
-                selectedModelType === 'rag'
-                  ? 'bg-gradient-to-r from-teal-500/20 to-teal-600/20 border-teal-400 text-teal-200 border'
-                  : 'bg-black/30 border border-amber-400/30 text-amber-200 hover:border-amber-400/60 hover:bg-black/40'
-              }`}
-              whileHover={{ scale: 1.02 }}
-              whileTap={{ scale: 0.98 }}
-            >
-              <span>🧠</span>
-              <span>Model RAG</span>
-            </motion.button>
-          </div>
-        </div>
-
-        {/* Achievements */}
-        {selectedModelType === 'tfjs' ? (
-          path === '/chatsoekarno' ? (
-            renderAchievementSection('Soekarno', achievementsSoekarno)
-          ) : path === '/chathatta' ? (
-            renderAchievementSection('Hatta', achievementsHatta)
-          ) : (
-            <>
-              {renderAchievementSection('Soekarno', achievementsSoekarno)}
-              {renderAchievementSection('Hatta', achievementsHatta)}
-            </>
-          )
-        ) : (
-          renderNoAchievementMessage()
         )}
       </div>
     );
@@ -320,11 +137,11 @@ const Header = () => {
           </div>
         </div>
 
-        {/* Conditional Info - Model Selection & Achievements */}
+        {/* Conditional Info - Only Character Avatar (if on chat page) */}
         {renderConditionalInfo()}
 
         {/* Action Buttons */}
-        <div className='p-1'>
+        <div className='p-3 pt-2'>
           <motion.button
             onClick={() => handleDropdownAction(handleDeleteAccount)}
             disabled={isLoading}
@@ -340,7 +157,7 @@ const Header = () => {
           <motion.button
             onClick={() => handleDropdownAction(handleLogout)}
             disabled={isLoading}
-            className='w-full flex items-center gap-2 px-4 py-2.5 text-sm text-red-300 hover:bg-red-900/40 transition-colors duration-150 disabled:opacity-50 disabled:cursor-not-allowed rounded-lg mt-1'
+            className='w-full flex items-center gap-2 px-4 py-2.5 text-sm text-red-300 hover:bg-red-900/40 transition-colors duration-150 disabled:opacity-50 disabled:cursor-not-allowed rounded-lg mt-2'
             whileHover={{ x: 3, backgroundColor: 'rgba(185, 28, 28, 0.2)' }}
           >
             <LogOut className='w-4 h-4 flex-shrink-0' />
