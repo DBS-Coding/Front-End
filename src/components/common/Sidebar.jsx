@@ -77,7 +77,7 @@ const Sidebar = () => {
                 onClick={() => handleNavigation(item.path)}
                 className={`
                   w-full flex items-center gap-3 px-4 py-3 border-2 rounded-lg 
-                  transition-all duration-300 text-sm sm:text-base
+                  transition-all duration-300 text-xs
                   ${
                     isActive(item.path)
                       ? 'bg-gradient-to-r from-amber-500/20 to-amber-600/20 text-amber-100 border-amber-400'
