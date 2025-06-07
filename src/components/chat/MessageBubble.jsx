@@ -48,11 +48,6 @@ const MessageBubble = ({ message }) => {
               />
             )}
           </div>
-
-          {/* Status indicator for Soekarno */}
-          {!isUser && !isError && (
-            <div className='absolute bottom-1 -right-1 w-3 h-3 bg-green-500 rounded-full border-2 border-white'></div>
-          )}
         </div>
 
         {/* Message Content */}
@@ -63,7 +58,6 @@ const MessageBubble = ({ message }) => {
               <span className='text-amber-200 text-xs font-medium'>
                 IR. Soekarno
               </span>
-              {!isError && <Crown className='w-3 h-3 text-amber-400' />}
             </div>
           )}
 
