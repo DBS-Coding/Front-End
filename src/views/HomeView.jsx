@@ -142,11 +142,14 @@ const HomeView = () => {
             </div>
           </div>
 
-          <h1
-            className='text-2xl sm:text-3xl lg:text-4xl font-bold bg-gradient-to-r from-amber-200 via-yellow-200 to-amber-300 bg-clip-text text-transparent mb-3'
-            style={{ fontFamily: "'Playfair Display', serif" }}
-          >
-            Selamat Datang di HistoTalk
+          <h1 className='text-2xl sm:text-3xl lg:text-4xl bg-gradient-to-r from-amber-200 via-yellow-200 to-amber-300 bg-clip-text font-medium text-transparent mb-3'>
+            Selamat Datang di{' '}
+            <span
+              style={{ fontFamily: "'Cinzel Decorative', serif" }}
+              className='font-black'
+            >
+              HistoTalk
+            </span>
           </h1>
 
           <p className='text-amber-100 text-base sm:text-lg max-w-3xl mx-auto'>
@@ -293,7 +296,13 @@ const HomeView = () => {
               </div>
               <div>
                 <h2 className='text-xl sm:text-2xl font-bold text-amber-100'>
-                  Tim HistoTalk
+                  Tim{' '}
+                  <span
+                    style={{ fontFamily: "'Cinzel Decorative', serif" }}
+                    className='font-semibold'
+                  >
+                    HistoTalk
+                  </span>
                 </h2>
                 <p className='text-amber-200 text-xs'>
                   Para pengembang di balik platform ini

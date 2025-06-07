@@ -114,7 +114,7 @@ const RegisterView = () => {
           transition={{ duration: 0.5 }}
           className='text-3xl lg:text-5xl font-bold tracking-wide text-center bg-gradient-to-r from-amber-200 via-yellow-200 to-amber-300 bg-clip-text text-transparent mb-3'
           style={{
-            fontFamily: "'Playfair Display', serif",
+            fontFamily: "'Cinzel Decorative', serif",
             textShadow: '0 0 30px rgba(251, 191, 36, 0.3)',
           }}
         >
@@ -188,7 +188,10 @@ const RegisterView = () => {
             <div className='w-8 h-8 bg-gradient-to-br from-amber-400 to-amber-600 rounded-full flex items-center justify-center border-2 border-amber-300'>
               <Scroll className='w-4 h-4 text-amber-900' />
             </div>
-            <h1 className='text-xl font-bold bg-gradient-to-r from-amber-200 to-amber-300 bg-clip-text text-transparent'>
+            <h1
+              className='text-xl font-black bg-gradient-to-r from-amber-200 to-amber-300 bg-clip-text text-transparent'
+              style={{ fontFamily: "'Cinzel Decorative', serif" }}
+            >
               HISTOTALK
             </h1>
           </div>
@@ -198,17 +201,23 @@ const RegisterView = () => {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
-          className='w-full max-w-sm sm:max-w-md'
+          className='w-full max-w-sm sm:max-w-md pt-16 md:pt-0'
         >
           {/* Form Container - Less padding */}
           <div className='bg-black/20 backdrop-blur-sm rounded-2xl p-5 border border-amber-400/30 shadow-2xl'>
             <motion.h2
-              className='text-xl sm:text-2xl font-bold text-center mb-2 bg-gradient-to-r from-amber-200 to-yellow-200 bg-clip-text text-transparent'
+              className='text-xl sm:text-2xl font-semibold text-center mb-2 bg-gradient-to-r from-amber-200 to-yellow-200 bg-clip-text text-transparent'
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ delay: 0.2 }}
             >
-              Bergabung dengan HistoTalk
+              Bergabung dengan{' '}
+              <span
+                className='font-semibold'
+                style={{ fontFamily: "'Cinzel Decorative', serif" }}
+              >
+                HistoTalk
+              </span>
             </motion.h2>
 
             <motion.p
@@ -370,7 +379,15 @@ const RegisterView = () => {
                     Mendaftar...
                   </div>
                 ) : (
-                  'Daftar ke HistoTalk'
+                  <span>
+                    Datar ke{' '}
+                    <span
+                      className='font-black'
+                      style={{ fontFamily: "'Cinzel Decorative', serif" }}
+                    >
+                      HistoTalk
+                    </span>
+                  </span>
                 )}
               </motion.button>
             </form>

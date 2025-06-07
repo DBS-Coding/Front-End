@@ -160,11 +160,11 @@ const Header = () => {
             </div>
 
             <motion.h1
-              className='text-xl sm:text-2xl lg:text-xl font-bold truncate bg-gradient-to-r from-amber-200 via-yellow-200 to-amber-300 bg-clip-text text-transparent'
+              className='text-xl sm:text-2xl lg:text-xl truncate bg-gradient-to-r from-amber-200 via-yellow-200 to-amber-300 bg-clip-text text-transparent font-black'
               initial={{ opacity: 0, x: -20 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.5 }}
-              style={{ fontFamily: "'Playfair Display', serif" }}
+              style={{ fontFamily: "'Cinzel Decorative', serif" }}
             >
               HISTOTALK
             </motion.h1>
