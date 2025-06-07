@@ -50,11 +50,6 @@ const MessageBubbleHatta = ({ message }) => {
               />
             )}
           </div>
-
-          {/* Status indicator for Hatta */}
-          {!isUser && !isError && (
-            <div className='absolute bottom-1 -right-1 w-3 h-3 bg-green-500 rounded-full border-2 border-white'></div>
-          )}
         </div>
 
         {/* Message Content */}
@@ -65,7 +60,6 @@ const MessageBubbleHatta = ({ message }) => {
               <span className='text-amber-200 text-xs font-medium'>
                 Mohammad Hatta
               </span>
-              {!isError && <Shield className='w-3 h-3 text-amber-400' />}
             </div>
           )}
 
