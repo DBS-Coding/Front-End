@@ -90,9 +90,9 @@ const LoginView = () => {
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
-          className='text-3xl lg:text-5xl font-bold tracking-wide text-center bg-gradient-to-r from-amber-200 via-yellow-200 to-amber-300 bg-clip-text text-transparent mb-3'
+          className='text-3xl lg:text-5xl font-black tracking-wide text-center bg-gradient-to-r from-amber-200 via-yellow-200 to-amber-300 bg-clip-text text-transparent mb-3'
           style={{
-            fontFamily: "'Playfair Display', serif",
+            fontFamily: "'Cinzel Decorative', serif",
             textShadow: '0 0 30px rgba(251, 191, 36, 0.3)',
           }}
         >
@@ -149,7 +149,10 @@ const LoginView = () => {
             <div className='w-8 h-8 bg-gradient-to-br from-amber-400 to-amber-600 rounded-full flex items-center justify-center border-2 border-amber-300'>
               <Scroll className='w-4 h-4 text-amber-900' />
             </div>
-            <h1 className='text-xl font-bold bg-gradient-to-r from-amber-200 to-amber-300 bg-clip-text text-transparent'>
+            <h1
+              className='text-xl font-bold bg-gradient-to-r from-amber-200 to-amber-300 bg-clip-text text-transparent'
+              style={{ fontFamily: "'Cinzel Decorative', serif" }}
+            >
               HISTOTALK
             </h1>
           </div>
@@ -280,7 +283,15 @@ const LoginView = () => {
                     Tunggu sebentar...
                   </div>
                 ) : (
-                  'Masuk ke HistoTalk'
+                  <span>
+                    Masuk ke{' '}
+                    <span
+                      className='font-black'
+                      style={{ fontFamily: "'Cinzel Decorative', serif" }}
+                    >
+                      HistoTalk
+                    </span>
+                  </span>
                 )}
               </motion.button>
             </form>
