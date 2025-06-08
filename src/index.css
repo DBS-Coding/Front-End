@@ -1,11 +1,16 @@
-@import "tailwindcss";
+@import 'tailwindcss';
 @import 'keen-slider/keen-slider.min.css';
+
+body {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-optical-sizing: auto;
+}
 
 /* Hides scrollbar for all browsers */
 .no-scrollbar::-webkit-scrollbar {
   display: none;
 }
 .no-scrollbar {
-  -ms-overflow-style: none;  /* IE and Edge */
-  scrollbar-width: none;     /* Firefox */
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
 }

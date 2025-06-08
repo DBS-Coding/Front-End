@@ -1,22 +1,12 @@
 import { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { createPortal } from 'react-dom';
-import {
-  Menu,
-  ChevronDown,
-  User,
-  LogOut,
-  Trash2,
-  Scroll,
-  Crown,
-  Shield,
-} from 'lucide-react';
+import { Menu, ChevronDown, User, LogOut, Trash2, Crown } from 'lucide-react';
 import useAuthStore from '../../store/authStore';
 import useUIStore from '../../store/uiStore';
 import { useNavigationPresenter } from '../../hooks/navigationutils';
 import { useLocation } from 'react-router-dom';
-import pakKarno from '../../assets/pakkarno.png';
-import pakHatta from '../../assets/pakhatta.png';
+import logo from '../../assets/logo.svg';
 
 const Header = () => {
   const { user } = useAuthStore();
@@ -153,18 +143,17 @@ const Header = () => {
 
           <div className='flex items-center gap-3'>
             <div className='relative'>
-              <div className='w-8 h-8 sm:w-7 sm:h-7 bg-gradient-to-br from-amber-400 to-amber-600 rounded-full flex items-center justify-center border-2 border-amber-300'>
-                <Scroll className='w-4 h-4 text-amber-900' />
+              <div className='w-8 h-8'>
+                <img src={logo} className='rounded-md' />
               </div>
-              <div className='absolute -inset-1 bg-gradient-to-r from-amber-400 to-red-400 rounded-full blur opacity-30 animate-pulse'></div>
             </div>
 
             <motion.h1
-              className='text-xl sm:text-2xl lg:text-xl font-bold truncate bg-gradient-to-r from-amber-200 via-yellow-200 to-amber-300 bg-clip-text text-transparent'
+              className='text-xl sm:text-2xl lg:text-xl truncate bg-gradient-to-r from-amber-200 via-yellow-200 to-amber-300 bg-clip-text text-transparent font-black'
               initial={{ opacity: 0, x: -20 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.5 }}
-              style={{ fontFamily: "'Playfair Display', serif" }}
+              style={{ fontFamily: "'Cinzel Decorative', serif" }}
             >
               HISTOTALK
             </motion.h1>

@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { Eye, EyeOff, Scroll, Crown, Shield, Sword } from 'lucide-react';
 import { useLoginPresenter } from '../../presenters/LoginPresenter';
+import logo from '../../assets/logo.jpg';
 
 const LoginView = () => {
   const navigate = useNavigate();
@@ -78,8 +79,8 @@ const LoginView = () => {
           transition={{ duration: 0.5 }}
         >
           <div className='relative'>
-            <div className='w-16 h-16 sm:w-20 sm:h-20 bg-gradient-to-br from-amber-400 to-amber-600 rounded-full flex items-center justify-center shadow-2xl border-4 border-amber-300'>
-              <Scroll className='w-8 h-8 sm:w-10 sm:h-10 text-amber-900' />
+            <div className='w-24 h-24 sm:w-24 sm:h-24 bg-gradient-to-br from-amber-400 to-amber-600 rounded-xl flex items-center justify-center shadow-2xl border-4 border-amber-300'>
+              <img src={logo} className='rounded-lg' />
             </div>
             <div className='absolute -inset-2 bg-gradient-to-r from-amber-400 to-red-400 rounded-full blur opacity-30 animate-pulse'></div>
           </div>
@@ -90,9 +91,9 @@ const LoginView = () => {
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
-          className='text-3xl lg:text-5xl font-bold tracking-wide text-center bg-gradient-to-r from-amber-200 via-yellow-200 to-amber-300 bg-clip-text text-transparent mb-3'
+          className='text-3xl lg:text-5xl font-black tracking-wide text-center bg-gradient-to-r from-amber-200 via-yellow-200 to-amber-300 bg-clip-text text-transparent mb-3'
           style={{
-            fontFamily: "'Playfair Display', serif",
+            fontFamily: "'Cinzel Decorative', serif",
             textShadow: '0 0 30px rgba(251, 191, 36, 0.3)',
           }}
         >
@@ -145,11 +146,14 @@ const LoginView = () => {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
         >
-          <div className='flex items-center gap-2'>
-            <div className='w-8 h-8 bg-gradient-to-br from-amber-400 to-amber-600 rounded-full flex items-center justify-center border-2 border-amber-300'>
-              <Scroll className='w-4 h-4 text-amber-900' />
+          <div className='flex items-center flex-col gap-2'>
+            <div className='w-14 h-14 bg-gradient-to-br from-amber-400 to-amber-600 rounded-xl flex items-center justify-center border-2 border-amber-300'>
+              <img src={logo} className='rounded-lg' />
             </div>
-            <h1 className='text-xl font-bold bg-gradient-to-r from-amber-200 to-amber-300 bg-clip-text text-transparent'>
+            <h1
+              className='text-xl font-bold bg-gradient-to-r from-amber-200 to-amber-300 bg-clip-text text-transparent'
+              style={{ fontFamily: "'Cinzel Decorative', serif" }}
+            >
               HISTOTALK
             </h1>
           </div>
@@ -280,7 +284,15 @@ const LoginView = () => {
                     Tunggu sebentar...
                   </div>
                 ) : (
-                  'Masuk ke HistoTalk'
+                  <span>
+                    Masuk ke{' '}
+                    <span
+                      className='font-black'
+                      style={{ fontFamily: "'Cinzel Decorative', serif" }}
+                    >
+                      HistoTalk
+                    </span>
+                  </span>
                 )}
               </motion.button>
             </form>

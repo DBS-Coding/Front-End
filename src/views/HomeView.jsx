@@ -17,6 +17,7 @@ import { useNavigationPresenter } from '../hooks/navigationutils';
 import pakHatta from '../assets/pakhatta.png';
 import pakKarno from '../assets/pakkarno.png';
 import Leo from '../assets/Leo_Prangs_Tobing.png';
+import logo from '../assets/logo.jpg';
 
 const HomeView = () => {
   const { handleChatNavigation } = useNavigationPresenter();
@@ -135,18 +136,21 @@ const HomeView = () => {
         >
           <div className='flex justify-center mb-4'>
             <div className='relative'>
-              <div className='w-14 h-14 bg-gradient-to-br from-amber-400 to-amber-600 rounded-full flex items-center justify-center shadow-2xl border-4 border-amber-300'>
-                <Scroll className='w-7 h-7 text-amber-900' />
+              <div className='w-24 h-24 bg-gradient-to-br from-amber-400 to-amber-600 rounded-lg flex items-center justify-center shadow-2xl border-4 border-amber-300'>
+                <img src={logo} className='rounded-md' />
               </div>
-              <div className='absolute -inset-2 bg-gradient-to-r from-amber-400 to-red-400 rounded-full blur opacity-30 animate-pulse'></div>
+              <div className='absolute -inset-2 bg-gradient-to-r from-amber-400 to-red-400 rounded-2xl blur opacity-10 animate-pulse'></div>
             </div>
           </div>
 
-          <h1
-            className='text-2xl sm:text-3xl lg:text-4xl font-bold bg-gradient-to-r from-amber-200 via-yellow-200 to-amber-300 bg-clip-text text-transparent mb-3'
-            style={{ fontFamily: "'Playfair Display', serif" }}
-          >
-            Selamat Datang di HistoTalk
+          <h1 className='text-2xl sm:text-3xl lg:text-4xl bg-gradient-to-r from-amber-200 via-yellow-200 to-amber-300 bg-clip-text font-medium text-transparent mb-3'>
+            Selamat Datang di{' '}
+            <span
+              style={{ fontFamily: "'Cinzel Decorative', serif" }}
+              className='font-black'
+            >
+              HistoTalk
+            </span>
           </h1>
 
           <p className='text-amber-100 text-base sm:text-lg max-w-3xl mx-auto'>
@@ -293,7 +297,13 @@ const HomeView = () => {
               </div>
               <div>
                 <h2 className='text-xl sm:text-2xl font-bold text-amber-100'>
-                  Tim HistoTalk
+                  Tim{' '}
+                  <span
+                    style={{ fontFamily: "'Cinzel Decorative', serif" }}
+                    className='font-semibold'
+                  >
+                    HistoTalk
+                  </span>
                 </h2>
                 <p className='text-amber-200 text-xs'>
                   Para pengembang di balik platform ini

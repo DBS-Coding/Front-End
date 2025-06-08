@@ -2,6 +2,7 @@ import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import useAuthStore from '../store/authStore';
 import { ArrowRight, Scroll, Crown, Sword } from 'lucide-react';
+import logo from '../assets/logo.jpg';
 
 const LandingPage = () => {
   const navigate = useNavigate();
@@ -90,8 +91,8 @@ const LandingPage = () => {
             variants={itemVariants}
           >
             <div className='relative'>
-              <div className='w-16 h-16 sm:w-20 sm:h-20 md:w-24 md:h-24 bg-gradient-to-br from-amber-400 to-amber-600 rounded-full flex items-center justify-center shadow-2xl border-4 border-amber-300'>
-                <Scroll className='w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 text-amber-900' />
+              <div className='w-16 h-16 sm:w-20 sm:h-20 md:w-32 md:h-32 bg-gradient-to-br from-amber-400 to-amber-600 rounded-xl flex items-center justify-center shadow-2xl border-4 border-amber-300'>
+                <img src={logo} className='rounded-lg' />
               </div>
               <div className='absolute -inset-2 bg-gradient-to-r from-amber-400 to-red-400 rounded-full blur opacity-30 animate-pulse'></div>
             </div>
@@ -102,7 +103,7 @@ const LandingPage = () => {
             className='text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight sm:tracking-tighter mb-2 bg-gradient-to-r from-amber-200 via-yellow-200 to-amber-300 bg-clip-text text-transparent'
             variants={itemVariants}
             style={{
-              fontFamily: "'Playfair Display', serif",
+              fontFamily: "'Cinzel Decorative', serif",
               textShadow: '0 0 30px rgba(251, 191, 36, 0.3)',
             }}
           >
