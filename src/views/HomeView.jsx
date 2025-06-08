@@ -17,6 +17,7 @@ import { useNavigationPresenter } from '../hooks/navigationutils';
 import pakHatta from '../assets/pakhatta.png';
 import pakKarno from '../assets/pakkarno.png';
 import Leo from '../assets/Leo_Prangs_Tobing.png';
+import logo from '../assets/logo.jpg';
 
 const HomeView = () => {
   const { handleChatNavigation } = useNavigationPresenter();
@@ -136,10 +137,7 @@ const HomeView = () => {
           <div className='flex justify-center mb-4'>
             <div className='relative'>
               <div className='w-24 h-24 bg-gradient-to-br from-amber-400 to-amber-600 rounded-lg flex items-center justify-center shadow-2xl border-4 border-amber-300'>
-                <img
-                  src='../../public/histotalkicon.jpg'
-                  className='rounded-md'
-                />
+                <img src={logo} className='rounded-md' />
               </div>
               <div className='absolute -inset-2 bg-gradient-to-r from-amber-400 to-red-400 rounded-2xl blur opacity-10 animate-pulse'></div>
             </div>

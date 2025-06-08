@@ -2,6 +2,7 @@ import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import useAuthStore from '../store/authStore';
 import { ArrowRight, Scroll, Crown, Sword } from 'lucide-react';
+import logo from '../assets/logo.jpg';
 
 const LandingPage = () => {
   const navigate = useNavigate();
@@ -91,10 +92,7 @@ const LandingPage = () => {
           >
             <div className='relative'>
               <div className='w-16 h-16 sm:w-20 sm:h-20 md:w-32 md:h-32 bg-gradient-to-br from-amber-400 to-amber-600 rounded-xl flex items-center justify-center shadow-2xl border-4 border-amber-300'>
-                <img
-                  src='../../public/histotalkicon.jpg'
-                  className='rounded-lg'
-                />
+                <img src={logo} className='rounded-lg' />
               </div>
               <div className='absolute -inset-2 bg-gradient-to-r from-amber-400 to-red-400 rounded-full blur opacity-30 animate-pulse'></div>
             </div>

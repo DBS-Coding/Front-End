@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { Eye, EyeOff, Scroll, Crown, Shield, Sword } from 'lucide-react';
 import { useLoginPresenter } from '../../presenters/LoginPresenter';
+import logo from '../../assets/logo.jpg';
 
 const LoginView = () => {
   const navigate = useNavigate();
@@ -79,10 +80,7 @@ const LoginView = () => {
         >
           <div className='relative'>
             <div className='w-24 h-24 sm:w-24 sm:h-24 bg-gradient-to-br from-amber-400 to-amber-600 rounded-xl flex items-center justify-center shadow-2xl border-4 border-amber-300'>
-              <img
-                src='../../../public/histotalkicon.jpg'
-                className='rounded-lg'
-              />
+              <img src={logo} className='rounded-lg' />
             </div>
             <div className='absolute -inset-2 bg-gradient-to-r from-amber-400 to-red-400 rounded-full blur opacity-30 animate-pulse'></div>
           </div>
@@ -150,10 +148,7 @@ const LoginView = () => {
         >
           <div className='flex items-center flex-col gap-2'>
             <div className='w-14 h-14 bg-gradient-to-br from-amber-400 to-amber-600 rounded-xl flex items-center justify-center border-2 border-amber-300'>
-              <img
-                src='../../../public/histotalkicon.jpg'
-                className='rounded-lg'
-              />
+              <img src={logo} className='rounded-lg' />
             </div>
             <h1
               className='text-xl font-bold bg-gradient-to-r from-amber-200 to-amber-300 bg-clip-text text-transparent'

@@ -6,6 +6,7 @@ import useAuthStore from '../../store/authStore';
 import useUIStore from '../../store/uiStore';
 import { useNavigationPresenter } from '../../hooks/navigationutils';
 import { useLocation } from 'react-router-dom';
+import logo from '../../assets/logo.svg';
 
 const Header = () => {
   const { user } = useAuthStore();
@@ -142,13 +143,9 @@ const Header = () => {
 
           <div className='flex items-center gap-3'>
             <div className='relative'>
-              <div className='w-8 h-8 sm:w-7 sm:h-7 bg-gradient-to-br from-amber-400 to-amber-600 rounded-lg flex items-center justify-center border-2 border-amber-300'>
-                <img
-                  src='../../../public/histotalkicon.jpg'
-                  className='rounded-md'
-                />
+              <div className='w-8 h-8'>
+                <img src={logo} className='rounded-md' />
               </div>
-              <div className='absolute -inset-1 bg-gradient-to-r from-amber-400 to-red-400 rounded-full blur opacity-30 animate-pulse'></div>
             </div>
 
             <motion.h1
