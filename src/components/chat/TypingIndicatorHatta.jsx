@@ -1,8 +1,8 @@
-import pakKarno from '../../assets/pakkarno.png';
+import pakHatta from '../../assets/pakhatta.png';
 import { motion } from 'framer-motion';
 import { Crown, MessageCircle } from 'lucide-react';
 
-const TypingIndicator = () => {
+const TypingIndicatorHatta = () => {
   const dotVariants = {
     initial: { scale: 1, opacity: 0.7 },
     animate: { scale: 1.2, opacity: 1 },
@@ -27,7 +27,7 @@ const TypingIndicator = () => {
         <div className='relative flex-shrink-0'>
           <div className='w-10 h-10 rounded-full bg-gradient-to-br from-amber-400 to-amber-600 border-2 border-amber-300 shadow-lg flex items-center justify-center'>
             <img
-              src={pakKarno || '/placeholder.svg'}
+              src={pakHatta || '/placeholder.svg'}
               alt='IR. Soekarno'
               className='rounded-full w-full h-full object-cover'
             />
@@ -47,7 +47,7 @@ const TypingIndicator = () => {
           {/* Sender name */}
           <div className='flex items-center gap-1 mb-1 px-1'>
             <span className='text-amber-200 text-xs font-medium'>
-              IR. Soekarno
+              Mohammad Hatta
             </span>
             <Crown className='w-3 h-3 text-amber-400' />
           </div>
@@ -87,4 +87,4 @@ const TypingIndicator = () => {
   );
 };
 
-export default TypingIndicator;
+export default TypingIndicatorHatta;

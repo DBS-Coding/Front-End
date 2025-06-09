@@ -1,8 +1,8 @@
-import { useNavigate } from "react-router-dom";
-// eslint-disable-next-line no-unused-vars
-import { motion } from "framer-motion";
-import useAuthStore from "../store/authStore";
-import { ArrowRight } from "lucide-react";
+import { useNavigate } from 'react-router-dom';
+import { motion } from 'framer-motion';
+import useAuthStore from '../store/authStore';
+import { ArrowRight, Scroll, Crown, Sword } from 'lucide-react';
+import logo from '../assets/logo.jpg';
 
 const LandingPage = () => {
   const navigate = useNavigate();
@@ -10,9 +10,9 @@ const LandingPage = () => {
 
   const handleNext = async () => {
     if (isAuthenticated && isTokenValid) {
-      navigate("/home");
+      navigate('/home');
     } else {
-      navigate("/login");
+      navigate('/login');
     }
   };
 
@@ -36,53 +36,154 @@ const LandingPage = () => {
     },
   };
 
+  const floatingVariants = {
+    animate: {
+      y: [-10, 10, -10],
+      rotate: [0, 5, -5, 0],
+      transition: {
+        duration: 6,
+        repeat: Number.POSITIVE_INFINITY,
+        ease: 'easeInOut',
+      },
+    },
+  };
+
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center bg-[#212529] text-white px-4 py-8 sm:px-6 md:px-12 lg:px-16 xl:px-20">
+    <div className='h-screen relative overflow-hidden bg-gradient-to-br from-amber-900 via-amber-800 to-red-900 flex flex-col'>
+      {/* Decorative Elements */}
       <motion.div
-        className="text-center w-full max-w-md sm:max-w-xl md:max-w-3xl lg:max-w-4xl mx-auto"
-        variants={containerVariants}
-        initial="hidden"
-        animate="visible"
+        className='absolute top-20 left-10 text-amber-300 opacity-30'
+        variants={floatingVariants}
+        animate='animate'
       >
-        <motion.h1
-          className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-bold tracking-tight sm:tracking-tighter mb-6"
-          variants={itemVariants}
-        >
-          HISTOTALK
-        </motion.h1>
-
-        <motion.p
-          className="text-base sm:text-lg md:text-xl lg:text-2xl text-[#ADB5BD] mb-10 sm:mb-12 leading-relaxed px-2 sm:px-0"
-          variants={itemVariants}
-        >
-          Ketika orang mati bercerita. Temui tokoh-tokoh sejarah dalam bentuk chatbot interaktif dan
-          dengarkan kisah mereka dengan cara baru.
-        </motion.p>
-
-        <motion.div
-          className="flex justify-center"
-          variants={itemVariants}
-        >
-          <motion.button
-            onClick={handleNext}
-            className="flex items-center gap-2 px-5 sm:px-6 py-2 sm:py-2.5 text-base sm:text-lg md:text-xl rounded-lg bg-transparent text-white border border-white hover:ring-1 hover:ring-white transition-all duration-300 transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-white focus:ring-opacity-50"
-          >
-            Next
-            <span>
-              <ArrowRight />
-            </span>
-          </motion.button>
-        </motion.div>
+        <Crown size={40} />
       </motion.div>
 
       <motion.div
-        className="absolute bottom-4 sm:bottom-6 lg:bottom-8 left-0 right-0 text-center text-gray-400 text-xs sm:text-sm"
+        className='absolute top-32 right-16 text-amber-300 opacity-30'
+        variants={floatingVariants}
+        animate='animate'
+        transition={{ delay: 1 }}
+      >
+        <Scroll size={35} />
+      </motion.div>
+
+      <motion.div
+        className='absolute bottom-32 left-20 text-amber-300 opacity-30'
+        variants={floatingVariants}
+        animate='animate'
+        transition={{ delay: 2 }}
+      >
+        <Sword size={38} />
+      </motion.div>
+
+      {/* Main Content */}
+      <div className='flex-grow flex flex-col items-center justify-center text-white px-4 py-4 sm:py-6 md:py-8 sm:px-6 md:px-12 lg:px-16 xl:px-20 relative z-10'>
+        <motion.div
+          className='text-center w-full max-w-md sm:max-w-xl md:max-w-3xl lg:max-w-4xl mx-auto'
+          variants={containerVariants}
+          initial='hidden'
+          animate='visible'
+        >
+          {/* Logo/Icon */}
+          <motion.div
+            className='mb-4 sm:mb-6 flex justify-center'
+            variants={itemVariants}
+          >
+            <div className='relative'>
+              <div className='w-16 h-16 sm:w-20 sm:h-20 md:w-32 md:h-32 bg-gradient-to-br from-amber-400 to-amber-600 rounded-xl flex items-center justify-center shadow-2xl border-4 border-amber-300'>
+                <img src={logo} className='rounded-lg' />
+              </div>
+              <div className='absolute -inset-2 bg-gradient-to-r from-amber-400 to-red-400 rounded-full blur opacity-30 animate-pulse'></div>
+            </div>
+          </motion.div>
+
+          {/* Title */}
+          <motion.h1
+            className='text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight sm:tracking-tighter mb-2 bg-gradient-to-r from-amber-200 via-yellow-200 to-amber-300 bg-clip-text text-transparent'
+            variants={itemVariants}
+            style={{
+              fontFamily: "'Cinzel Decorative', serif",
+              textShadow: '0 0 30px rgba(251, 191, 36, 0.3)',
+            }}
+          >
+            HISTOTALK
+          </motion.h1>
+
+          {/* Subtitle */}
+          <motion.div className='mb-3 sm:mb-4' variants={itemVariants}>
+            <p className='text-base sm:text-lg md:text-xl text-amber-100 font-medium italic'>
+              "Berbicara dengan Masa Lalu"
+            </p>
+          </motion.div>
+
+          {/* Description */}
+          <motion.p
+            className='text-sm sm:text-base md:text-lg lg:text-xl text-amber-50 mb-6 sm:mb-8 leading-relaxed px-2 sm:px-0 max-w-3xl mx-auto'
+            variants={itemVariants}
+          >
+            Ketika orang mati bercerita. Temui tokoh-tokoh sejarah Indonesia
+            dalam bentuk chatbot interaktif dan dengarkan kisah heroik mereka
+            dengan cara yang revolusioner.
+          </motion.p>
+
+          {/* Features */}
+          <motion.div
+            className='grid grid-cols-1 sm:grid-cols-3 gap-3 mb-6 sm:mb-8 max-w-2xl mx-auto'
+            variants={itemVariants}
+          >
+            <div className='bg-black/20 backdrop-blur-sm rounded-lg p-3 border border-amber-400/30'>
+              <Crown className='w-5 h-5 text-amber-300 mx-auto mb-1' />
+              <p className='text-sm text-amber-100'>Chat dengan Pahlawan</p>
+            </div>
+            <div className='bg-black/20 backdrop-blur-sm rounded-lg p-3 border border-amber-400/30'>
+              <Scroll className='w-5 h-5 text-amber-300 mx-auto mb-1' />
+              <p className='text-sm text-amber-100'>Pelajari Sejarah</p>
+            </div>
+            <div className='bg-black/20 backdrop-blur-sm rounded-lg p-3 border border-amber-400/30'>
+              <Sword className='w-5 h-5 text-amber-300 mx-auto mb-1' />
+              <p className='text-sm text-amber-100'>Interaktif & Menarik</p>
+            </div>
+          </motion.div>
+
+          {/* CTA Button */}
+          <motion.div className='flex justify-center' variants={itemVariants}>
+            <motion.button
+              onClick={handleNext}
+              className='group relative flex items-center gap-3 px-6 sm:px-8 py-2 sm:py-3 text-base sm:text-lg md:text-xl rounded-full bg-gradient-to-r from-amber-500 to-amber-600 text-amber-900 font-bold shadow-2xl hover:shadow-amber-500/25 transition-all duration-300 transform hover:scale-105 focus:outline-none focus:ring-4 focus:ring-amber-300/50 border-2 border-amber-300'
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+            >
+              <span className='relative z-10'>Mulai Petualangan</span>
+              <motion.span
+                className='relative z-10'
+                animate={{ x: [0, 5, 0] }}
+                transition={{ duration: 1.5, repeat: Number.POSITIVE_INFINITY }}
+              >
+                <ArrowRight className='w-5 h-5 sm:w-6 sm:h-6' />
+              </motion.span>
+              <div className='absolute inset-0 bg-gradient-to-r from-amber-400 to-yellow-400 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300'></div>
+            </motion.button>
+          </motion.div>
+        </motion.div>
+      </div>
+
+      {/* Footer */}
+      <motion.div
+        className='py-2 mx-auto text-center text-amber-200/70 text-xs sm:text-sm mb-2'
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: 1.5, duration: 1 }}
       >
-        <p>© 2025 HistoTalk. All rights reserved.</p>
+        <div className='flex items-center justify-center gap-2'>
+          <div className='w-8 h-0.5 bg-gradient-to-r from-transparent to-amber-400'></div>
+          <Scroll className='w-4 h-4 text-amber-400' />
+          <div className='w-8 h-0.5 bg-gradient-to-l from-transparent to-amber-400'></div>
+        </div>
       </motion.div>
+
+      {/* Ambient Light Effect */}
+      <div className='absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-amber-500/10 rounded-full blur-3xl'></div>
     </div>
   );
 };

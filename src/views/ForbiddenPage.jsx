@@ -1,8 +1,8 @@
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { ArrowLeft, Scroll, Crown, Sword, Search, Shield } from 'lucide-react';
+import { ArrowLeft, Scroll, Crown, Sword, Shield, Lock } from 'lucide-react';
 
-const NotFoundPage = () => {
+const ForbiddenPage = () => {
   const navigate = useNavigate();
 
   const containerVariants = {
@@ -37,10 +37,10 @@ const NotFoundPage = () => {
     },
   };
 
-  const searchIconVariants = {
+  const shieldVariants = {
     animate: {
       scale: [1, 1.1, 1],
-      rotate: [0, -3, 3, 0],
+      rotate: [0, 2, -2, 0],
       transition: {
         duration: 3,
         repeat: Number.POSITIVE_INFINITY,
@@ -50,11 +50,11 @@ const NotFoundPage = () => {
   };
 
   return (
-    <div className='min-h-screen relative overflow-hidden bg-gradient-to-br from-amber-900 via-amber-800 to-red-900'>
-      {/* Background floating icons - hidden on small screens */}
+    <div className='min-h-screen relative overflow-hidden bg-gradient-to-br from-red-900 via-amber-800 to-amber-900'>
+      {/* Background floating icons */}
       <div className='hidden sm:block'>
         <motion.div
-          className='absolute top-[10%] left-[5%] text-amber-300 opacity-30'
+          className='absolute top-[10%] left-[5%] text-red-300 opacity-30'
           variants={floatingVariants}
           animate='animate'
         >
@@ -71,7 +71,7 @@ const NotFoundPage = () => {
         </motion.div>
 
         <motion.div
-          className='absolute bottom-[20%] left-[10%] text-amber-300 opacity-30'
+          className='absolute bottom-[20%] left-[10%] text-red-300 opacity-30'
           variants={floatingVariants}
           animate='animate'
           transition={{ delay: 2 }}
@@ -97,39 +97,42 @@ const NotFoundPage = () => {
           initial='hidden'
           animate='visible'
         >
-          {/* Search Icon */}
+          {/* Shield icon with lock */}
           <motion.div
             className='mb-6 sm:mb-8 flex justify-center'
             variants={itemVariants}
           >
             <div className='relative'>
               <motion.div
-                className='w-16 h-16 sm:w-20 sm:h-20 md:w-24 md:h-24 bg-gradient-to-br from-amber-500 to-amber-700 rounded-full flex items-center justify-center shadow-2xl border-4 border-amber-300'
-                variants={searchIconVariants}
+                className='w-16 h-16 sm:w-20 sm:h-20 md:w-24 md:h-24 bg-gradient-to-br from-red-500 to-red-700 rounded-full flex items-center justify-center shadow-2xl border-4 border-red-300'
+                variants={shieldVariants}
                 animate='animate'
               >
-                <Search className='w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 text-amber-100' />
+                <div className='relative'>
+                  <Shield className='w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 text-red-100' />
+                  <Lock className='w-3 h-3 sm:w-4 sm:h-4 md:w-5 md:h-5 text-red-100 absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2' />
+                </div>
               </motion.div>
-              <div className='absolute -inset-2 bg-gradient-to-r from-amber-400 to-red-400 rounded-full blur opacity-30 animate-pulse'></div>
+              <div className='absolute -inset-2 bg-gradient-to-r from-red-400 to-amber-400 rounded-full blur opacity-30 animate-pulse'></div>
             </div>
           </motion.div>
 
-          {/* 404 heading */}
+          {/* 403 heading */}
           <motion.h1
-            className='text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-bold tracking-tight mb-2 sm:mb-4 bg-gradient-to-r from-amber-200 via-yellow-200 to-amber-300 bg-clip-text text-transparent'
+            className='text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-bold tracking-tight mb-2 sm:mb-4 bg-gradient-to-r from-red-200 via-amber-200 to-red-300 bg-clip-text text-transparent'
             variants={itemVariants}
             style={{
               fontFamily: "'Playfair Display', serif",
-              textShadow: '0 0 30px rgba(251, 191, 36, 0.3)',
+              textShadow: '0 0 30px rgba(239, 68, 68, 0.3)',
             }}
           >
-            404
+            403
           </motion.h1>
 
           {/* Subtitle */}
           <motion.div className='mb-4 sm:mb-6' variants={itemVariants}>
             <p className='text-base sm:text-lg md:text-xl text-amber-100 font-medium italic'>
-              "Maaf halaman yang anda cari tidak ada"
+              "Akses Ditolak"
             </p>
           </motion.div>
 
@@ -138,8 +141,9 @@ const NotFoundPage = () => {
             className='text-sm sm:text-base md:text-lg text-amber-50 mb-6 sm:mb-8 leading-relaxed px-2 sm:px-0 max-w-2xl mx-auto'
             variants={itemVariants}
           >
-            Seperti artefak yang hilang dalam perjalanan waktu, halaman yang
-            Anda cari tidak dapat ditemukan di perpustakaan digital kami.
+            Maaf, Anda tidak memiliki izin untuk memasuki halaman manajemen data
+            kami. Hanya user dengan role admin yang dapat mengakses halaman
+            tersebut.
           </motion.p>
 
           {/* Info boxes */}
@@ -147,23 +151,21 @@ const NotFoundPage = () => {
             className='grid grid-cols-1 sm:grid-cols-3 gap-3 mb-8 sm:mb-10 max-w-xl mx-auto'
             variants={itemVariants}
           >
-            <div className='bg-amber-900/30 backdrop-blur-sm rounded-lg p-3 sm:p-4 border border-amber-400/30'>
-              <Search className='w-5 h-5 sm:w-6 sm:h-6 text-amber-300 mx-auto mb-2' />
-              <p className='text-xs sm:text-sm text-amber-100'>
-                Halaman Tidak Ditemukan
-              </p>
-            </div>
-            <div className='bg-amber-900/30 backdrop-blur-sm rounded-lg p-3 sm:p-4 border border-amber-400/30'>
-              <Scroll className='w-5 h-5 sm:w-6 sm:h-6 text-amber-300 mx-auto mb-2' />
-              <p className='text-xs sm:text-sm text-amber-100'>
-                Kemungkinan Terhapus
+            <div className='bg-red-900/30 backdrop-blur-sm rounded-lg p-3 sm:p-4 border border-red-400/30'>
+              <Shield className='w-5 h-5 sm:w-6 sm:h-6 text-red-300 mx-auto mb-2' />
+              <p className='text-xs sm:text-sm text-red-100'>
+                Area Terlindungi
               </p>
             </div>
             <div className='bg-amber-900/30 backdrop-blur-sm rounded-lg p-3 sm:p-4 border border-amber-400/30'>
               <Crown className='w-5 h-5 sm:w-6 sm:h-6 text-amber-300 mx-auto mb-2' />
               <p className='text-xs sm:text-sm text-amber-100'>
-                Coba Halaman Lain
+                Akses Terbatas
               </p>
+            </div>
+            <div className='bg-red-900/30 backdrop-blur-sm rounded-lg p-3 sm:p-4 border border-red-400/30'>
+              <Lock className='w-5 h-5 sm:w-6 sm:h-6 text-red-300 mx-auto mb-2' />
+              <p className='text-xs sm:text-sm text-red-100'>Izin Diperlukan</p>
             </div>
           </motion.div>
 
@@ -182,7 +184,7 @@ const NotFoundPage = () => {
               >
                 <ArrowLeft className='w-5 h-5 sm:w-6 sm:h-6' />
               </motion.span>
-              <span className='relative z-10'>Kembali ke Beranda</span>
+              <span className='relative z-10'>Kembali</span>
               <div className='absolute inset-0 bg-gradient-to-r from-amber-400 to-yellow-400 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300'></div>
             </motion.button>
           </motion.div>
@@ -196,17 +198,17 @@ const NotFoundPage = () => {
           transition={{ delay: 1.5, duration: 1 }}
         >
           <div className='flex items-center justify-center gap-2 mb-2'>
-            <div className='w-6 sm:w-8 h-0.5 bg-gradient-to-r from-transparent to-amber-400'></div>
-            <Scroll className='w-3 h-3 sm:w-4 sm:h-4 text-amber-400' />
-            <div className='w-6 sm:w-8 h-0.5 bg-gradient-to-l from-transparent to-amber-400'></div>
+            <div className='w-6 sm:w-8 h-0.5 bg-gradient-to-r from-transparent to-red-400'></div>
+            <Shield className='w-3 h-3 sm:w-4 sm:h-4 text-red-400' />
+            <div className='w-6 sm:w-8 h-0.5 bg-gradient-to-l from-transparent to-red-400'></div>
           </div>
         </motion.div>
       </div>
 
       {/* Background glow effect */}
-      <div className='absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-64 sm:w-80 md:w-96 h-64 sm:h-80 md:h-96 bg-amber-500/10 rounded-full blur-3xl'></div>
+      <div className='absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-64 sm:w-80 md:w-96 h-64 sm:h-80 md:h-96 bg-red-500/10 rounded-full blur-3xl'></div>
     </div>
   );
 };
 
-export default NotFoundPage;
+export default ForbiddenPage;
