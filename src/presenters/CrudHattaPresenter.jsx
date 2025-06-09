@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { createOrUpdateTag, getAllTags, getHattaTags, getSpecificTag, deleteTag } from '../api/npcApi';
+import { createOrUpdateTag, getHattaTags, getSpecificTag, deleteTag } from '../api/npcApi';
 
 export const useCrudSoekarnoPresenter = () => {
   const [tags, setTags] = useState([]);
@@ -70,8 +70,8 @@ export const useCrudSoekarnoPresenter = () => {
     try {
       const response = await createOrUpdateTag(tagData);
       const apiResponse = response?.data;
-      
-      if (response.status === 200 || apiResponse?.code === 200) {
+
+      if (response.status === 201 || apiResponse?.code === 201) {
         await loadTags();
         setIsModalOpen(false);
         setSelectedTag(null);

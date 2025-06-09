@@ -111,8 +111,8 @@ const CrudHattaView = () => {
     }
   };
 
-  const handleDelete = async (tagId) => {
-    if (window.confirm(`Are you sure you want to delete "${tagId}"?`)) {
+  const handleDelete = async (tagId, tagName) => {
+    if (window.confirm(`Are you sure you want to delete "${tagName}"?`)) {
       const result = await removeTag(tagId);
       if (result?.success) {
         showNotification(result.message, 'success');
@@ -431,7 +431,7 @@ const CrudHattaView = () => {
                               <Edit size={16} className='text-blue-300' />
                             </motion.button>
                             <motion.button
-                              onClick={() => handleDelete(tag?.tag)}
+                              onClick={() => handleDelete(tag?.id, tag?.tag)}
                               className='p-1.5 sm:p-2 bg-black/30 border border-red-400/30 hover:border-red-400/60 hover:bg-red-500/10 rounded-lg transition-all duration-300'
                               title='Delete'
                               disabled={!tag?.tag}
@@ -546,12 +546,12 @@ const CrudHattaView = () => {
                         Pilih Tokoh
                       </option>
                       <option
-                        value='Soekarno'
+                        value='soekarno'
                         className='bg-black text-amber-100'
                       >
                         Soekarno
                       </option>
-                      <option value='Hatta' className='bg-black text-amber-100'>
+                      <option value='hatta' className='bg-black text-amber-100'>
                         Hatta
                       </option>
                     </select>
