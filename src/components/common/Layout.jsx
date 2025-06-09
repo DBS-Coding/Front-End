@@ -2,6 +2,7 @@ import Header from './Header';
 import Sidebar from './Sidebar';
 import useUIStore from '../../store/uiStore';
 import { Crown, Scroll, Sparkles } from 'lucide-react';
+// eslint-disable-next-line no-unused-vars
 import { motion } from 'framer-motion';
 
 const Layout = ({ children }) => {
@@ -20,7 +21,7 @@ const Layout = ({ children }) => {
   };
 
   return (
-    <div className='bg-gradient-to-br from-amber-900 via-amber-800 to-red-900 text-white relative h-full'>
+    <div className='bg-gradient-to-br from-amber-900 via-amber-800 to-red-900 text-white min-h-screen'>
       {/* Decorative Elements */}
       <motion.div
         className='absolute top-20 left-10 text-amber-300 opacity-20 pointer-events-none'
@@ -47,20 +48,20 @@ const Layout = ({ children }) => {
       </motion.div>
       {/* Ambient Light Effect */}
       <div className='absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-amber-500/5 rounded-full blur-3xl pointer-events-none'></div>
-      <div className='relative 2xl:max-w-7xl mx-auto'>
+      <div className='relative 2xl:max-w-7xl mx-auto min-h-screen'>
         <Header />
 
-        <div className='w-full px-1 sm:px-6 lg:px-8'>
-          <div className='flex flex-col lg:flex-row gap-4 lg:gap-6'>
+        <div className='w-full max-w-7xl mx-auto h-full px-4'>
+          <div className='flex flex-col lg:flex-row gap-2 lg:gap-4 xl:gap-6'>
             <Sidebar />
 
             <main
               className={`
-                 transition-all duration-300 overflow-x-hidden min-h-screen
+                 transition-all duration-300 overflow-x-hidden overflow-y-auto h-full
                 ${sidebarOpen ? 'lg:w-5/6' : 'lg:w-full'}
               `}
             >
-              <div className='w-full max-w-full pb-6'>{children}</div>
+              <div className='w-full h-full'>{children}</div>
             </main>
           </div>
         </div>

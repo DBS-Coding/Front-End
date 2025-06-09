@@ -40,7 +40,7 @@ export const getUserProfile = async (token) => {
         Authorization: `Bearer ${token}`,
       },
     });
-    console.log(`Get - authuser: ${response}`);
+    // console.log(`Get - authuser: ${response}`);
     return response;
   } catch (error) {
     throw error;
