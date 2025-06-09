@@ -13,11 +13,15 @@ import {
   Database,
   Settings,
   Search,
-  Crown,
 } from 'lucide-react';
 import Layout from '../components/common/Layout';
 import { useCrudSoekarnoPresenter } from '../presenters/CrudHattaPresenter';
 import { clsx } from 'clsx';
+import { etlHatta } from '../api/npcApi';
+import LoadingETL from '../components/feedback/LoadingETL';
+import ErrorToast from '../components/feedback/errorToast';
+import SuccessToast from '../components/feedback/successToast';
+import video from "../assets/gif.mp4";
 
 const CrudHattaView = () => {
   const {
@@ -46,6 +50,9 @@ const CrudHattaView = () => {
   const [notification, setNotification] = useState(null);
   const [searchTerm, setSearchTerm] = useState('');
   const [filteredTags, setFilteredTags] = useState([]);
+  const [successEtl, setSuccessEtl] = useState(false);
+  const [errorEtl, setErrorEtl] = useState(false);
+  const [loadingEtl, setLoadingEtl] = useState(false);
 
   useEffect(() => {
     if (selectedTag) {
@@ -164,8 +171,35 @@ const CrudHattaView = () => {
     }));
   };
 
+  const handleETL = async () => {
+    setLoadingEtl(true);
+    setErrorEtl(false);
+    setSuccessEtl(false);
+    try{
+      await etlHatta();
+      setSuccessEtl(true);
+    } catch (err) {
+      console.error(err);
+      setErrorEtl(true);
+    } finally {
+      setLoadingEtl(false);
+    }
+  }
+
   return (
     <Layout>
+      {loadingEtl && (
+        <LoadingETL show={loadingEtl} videoSrc={video} />
+      )}
+
+      {!loadingEtl && successEtl && ( 
+        <SuccessToast show={successEtl} onClose={() => setSuccessEtl(false)}/>
+      )}
+
+      {!loadingEtl && errorEtl && (
+        <ErrorToast show={errorEtl} onClose={() => setErrorEtl(false)}/>
+      )}
+
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
@@ -445,6 +479,17 @@ const CrudHattaView = () => {
                 </tbody>
               </table>
             </div>
+          </div>
+          <div className="pt-4 flex justify-end">
+            <motion.button
+              whileHover={{ scale: 1.05, boxShadow: "0px 4px 12px rgba(251, 191, 36, 0.4)" }}
+              whileTap={{ scale: 0.95 }}
+              transition={{ type: "spring", stiffness: 300 }}
+              className="border-2 border-amber-400/30 bg-transparent text-amber-400 font-medium rounded-lg px-6 py-2 hover:text-white duration-200"
+              onClick={handleETL} disabled={loadingEtl}
+            >
+              {loadingEtl ? "Data Model sedang diupdate" : "Update Data Model"}
+            </motion.button>
           </div>
         </div>
 

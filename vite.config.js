@@ -40,6 +40,14 @@ export default defineConfig({
     }),
   ],
   server: {
+    // for bypassing CORS issues during development by proxying API requests
+    proxy: {
+      "/api/etl": {
+        target: "https://model1-etl-repo-1091601261833.asia-southeast1.run.app",
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/api\/etl/, ""),
+      },
+    },
     port: 3001,
   },
   optimizeDeps: {
