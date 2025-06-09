@@ -6,7 +6,7 @@ import { WifiOff } from 'lucide-react'
 const OfflineFeedbackCard = () => {
   return (
     <motion.div 
-      className='bg-red-400 text-white px-5 py-3 fixed bottom-6 left-6 flex gap-2 z-40 rounded-md shadow-lg'
+      className='bg-red-400 text-white px-5 py-3 fixed bottom-6 left-6 flex gap-2 z-[99] rounded-md shadow-lg'
       initial={{ 
         opacity: 0, 
         y: 50, 

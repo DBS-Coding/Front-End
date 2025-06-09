@@ -1,11 +1,12 @@
 import { useState, useRef, useEffect } from 'react';
+// eslint-disable-next-line no-unused-vars
 import { motion, AnimatePresence } from 'framer-motion';
 import { createPortal } from 'react-dom';
 import { Menu, ChevronDown, User, LogOut, Trash2, Crown } from 'lucide-react';
 import useAuthStore from '../../store/authStore';
 import useUIStore from '../../store/uiStore';
 import { useNavigationPresenter } from '../../hooks/navigationutils';
-import { useLocation } from 'react-router-dom';
+// import { useLocation } from 'react-router-dom';
 import logo from '../../assets/logo.svg';
 
 const Header = () => {
@@ -18,7 +19,7 @@ const Header = () => {
 
   const dropdownRef = useRef(null);
   const buttonRef = useRef(null);
-  const location = useLocation();
+  // const location = useLocation();
 
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -129,8 +130,8 @@ const Header = () => {
   };
 
   return (
-    <header className='p-4 sm:p-1.5 mb-3 border-b border-amber-400/30 backdrop-blur-sm bg-black/10'>
-      <div className='max-w-7xl mx-auto flex justify-between items-center'>
+    <header className='p-4 sm:p-1.5 mb-1 sm:mb-3 border-b border-amber-400/30 backdrop-blur-sm bg-black/10'>
+      <div className='max-w-7xl md:px-4 mx-auto flex justify-between items-center'>
         <div className='flex items-center space-x-3 sm:space-x-4'>
           <motion.button
             onClick={toggleSidebar}
@@ -149,7 +150,7 @@ const Header = () => {
             </div>
 
             <motion.h1
-              className='text-xl sm:text-2xl lg:text-xl truncate bg-gradient-to-r from-amber-200 via-yellow-200 to-amber-300 bg-clip-text text-transparent font-black'
+              className='text-md sm:text-xl lg:text-2xl truncate bg-gradient-to-r from-amber-200 via-yellow-200 to-amber-300 bg-clip-text text-transparent font-black'
               initial={{ opacity: 0, x: -20 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.5 }}

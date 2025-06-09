@@ -11,6 +11,7 @@ import {
   Users,
   Star,
 } from 'lucide-react';
+// eslint-disable-next-line no-unused-vars
 import { motion } from 'framer-motion';
 import Layout from '../components/common/Layout';
 import { useNavigationPresenter } from '../hooks/navigationutils';
@@ -26,11 +27,11 @@ const HomeView = () => {
   const teamMembers = [
     {
       id: 1,
-      name: 'Leo TP',
-      role: 'Machine Learning',
+      name: 'Leo Prangs T',
+      role: 'AI Engineer (TFJS)',
       image: Leo,
-      linkedin: '#',
-      github: '#',
+      linkedin: 'https://www.linkedin.com/in/nanda-safiq-alfiansyah/',
+      github: 'https://github.com/Leo42night',
     },
     {
       id: 2,
@@ -38,7 +39,7 @@ const HomeView = () => {
       role: 'UI UX & Front End Developer',
       image: 'https://avatars.githubusercontent.com/u/189972723?s=96&v=4',
       linkedin: '#',
-      github: '#',
+      github: 'https://github.com/rafialisba',
     },
     {
       id: 3,
@@ -46,32 +47,32 @@ const HomeView = () => {
       role: 'Back-End Developer',
       image:
         'https://ndav.my.id/_next/image?url=%2F_next%2Fstatic%2Fmedia%2Fndav.f8a2254e.png&w=384&q=75',
-      linkedin: '#',
-      github: '#',
+      linkedin: 'https://www.linkedin.com/in/nanda-safiq-alfiansyah/',
+      github: 'https://github.com/nandasafiqalfiansyah',
     },
     {
       id: 4,
       name: 'Sincan',
       role: 'Front-End Developer',
       image: 'https://avatars.githubusercontent.com/u/67074459?v=4',
-      linkedin: '#',
-      github: '#',
+      linkedin: 'https://www.linkedin.com/in/sincanmaulanaa/',
+      github: 'https://github.com/sincanmaulanaa',
     },
     {
       id: 5,
       name: 'Khoirunnisa',
-      role: 'Machine Learning',
+      role: 'AI Engineer (RAG)',
       image: 'https://avatars.githubusercontent.com/u/173612032?s=96&v=4',
-      linkedin: '#',
-      github: '#',
+      linkedin: 'https://www.linkedin.com/in/nkhoirunnisa/',
+      github: 'https://github.com/millkywaay',
     },
     {
       id: 6,
-      name: 'Ricchie',
-      role: 'Machine Learning',
+      name: 'Richie Zakaria',
+      role: 'Data Scraper',
       image: 'https://avatars.githubusercontent.com/u/94582518?s=96&v=4',
-      linkedin: '#',
-      github: '#',
+      linkedin: 'https://www.linkedin.com/in/richie-zakaria-9b8a1b28b/',
+      github: 'https://github.com/richbruh',
     },
   ];
 
@@ -122,6 +123,7 @@ const HomeView = () => {
     }, 4000);
 
     return () => clearInterval(interval);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isHovered]);
 
   return (
@@ -143,7 +145,7 @@ const HomeView = () => {
             </div>
           </div>
 
-          <h1 className='text-2xl sm:text-3xl lg:text-4xl bg-gradient-to-r from-amber-200 via-yellow-200 to-amber-300 bg-clip-text font-medium text-transparent mb-3'>
+          <h1 className='text-xl sm:text-2xl lg:text-3xl bg-gradient-to-r from-amber-200 via-yellow-200 to-amber-300 bg-clip-text font-medium text-transparent xl:mb-3'>
             Selamat Datang di{' '}
             <span
               style={{ fontFamily: "'Cinzel Decorative', serif" }}
@@ -177,7 +179,7 @@ const HomeView = () => {
             className='group bg-black/20 backdrop-blur-sm border-2 border-amber-400/30 rounded-2xl p-5 hover:border-amber-400/60 transition-all duration-300 hover:shadow-2xl hover:shadow-amber-500/20'
             whileHover={{ scale: 1.02, y: -5 }}
           >
-            <div className='flex flex-col lg:flex-row items-center gap-5'>
+            <div className='flex flex-col xl:flex-row items-center gap-5'>
               <div className='relative'>
                 <div className='w-24 h-24 lg:w-32 lg:h-32 rounded-2xl overflow-hidden border-4 border-amber-300 shadow-xl'>
                   <img
@@ -196,7 +198,7 @@ const HomeView = () => {
                   <h3 className='text-xl lg:text-2xl font-bold text-amber-100'>
                     IR. Soekarno
                   </h3>
-                  <Star className='w-5 h-5 text-amber-400 fill-amber-400' />
+                  <Star className='hidden xl:block w-5 h-5 text-amber-400 fill-amber-400' />
                 </div>
 
                 <p className='text-amber-50 mb-4 leading-relaxed text-sm'>
@@ -207,7 +209,7 @@ const HomeView = () => {
 
                 <motion.button
                   onClick={() => handleChatNavigation('soekarno')}
-                  className='group/btn inline-flex items-center gap-3 px-5 py-2 bg-gradient-to-r from-amber-500 to-amber-600 text-amber-900 font-bold rounded-xl hover:from-amber-400 hover:to-amber-500 transition-all duration-300 shadow-lg hover:shadow-amber-500/25 border-2 border-amber-300 text-sm'
+                  className='group/btn inline-flex items-center gap-2 p-2 bg-gradient-to-r from-amber-500 to-amber-600 text-amber-900 font-bold rounded-xl hover:from-amber-400 hover:to-amber-500 transition-all duration-300 shadow-lg hover:shadow-amber-500/25 border-2 border-amber-300 text-sm'
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
                 >
@@ -232,7 +234,7 @@ const HomeView = () => {
             className='group bg-black/20 backdrop-blur-sm border-2 border-amber-400/30 rounded-2xl p-5 hover:border-amber-400/60 transition-all duration-300 hover:shadow-2xl hover:shadow-amber-500/20'
             whileHover={{ scale: 1.02, y: -5 }}
           >
-            <div className='flex flex-col lg:flex-row items-center gap-5'>
+            <div className='flex flex-col xl:flex-row items-center gap-5'>
               <div className='relative'>
                 <div className='w-24 h-24 lg:w-32 lg:h-32 rounded-2xl overflow-hidden border-4 border-amber-300 shadow-xl'>
                   <img
@@ -251,7 +253,7 @@ const HomeView = () => {
                   <h3 className='text-xl lg:text-2xl font-bold text-amber-100'>
                     Moh. Hatta
                   </h3>
-                  <Star className='w-5 h-5 text-amber-400 fill-amber-400' />
+                  <Star className='hidden xl:block w-5 h-5 text-amber-400 fill-amber-400' />
                 </div>
 
                 <p className='text-amber-50 mb-4 leading-relaxed text-sm'>
@@ -262,7 +264,7 @@ const HomeView = () => {
 
                 <motion.button
                   onClick={() => handleChatNavigation('hatta')}
-                  className='group/btn inline-flex items-center gap-3 px-5 py-2 bg-gradient-to-r from-amber-500 to-amber-600 text-amber-900 font-bold rounded-xl hover:from-amber-400 hover:to-amber-500 transition-all duration-300 shadow-lg hover:shadow-amber-500/25 border-2 border-amber-300 text-sm'
+                  className='lg:absolute bottom-5 group/btn inline-flex items-center gap-2 p-2 bg-gradient-to-r from-amber-500 to-amber-600 text-amber-900 font-bold rounded-xl hover:from-amber-400 hover:to-amber-500 transition-all duration-300 shadow-lg hover:shadow-amber-500/25 border-2 border-amber-300 text-sm'
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
                 >

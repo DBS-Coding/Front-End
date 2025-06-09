@@ -17,12 +17,14 @@ export const useChatSoekarnoPresenter = () => {
 
   const sendMessage = async (message, selectedModel) => {
     if (!message.trim()) return;
-    
+
+    const startTime = Date.now(); // ⏱️ Mulai hitung durasi
+
     const userMessage = {
       id: Date.now(),
       text: message,
       sender: 'user',
-      timestamp: new Date().toLocaleTimeString()
+      timestamp: formatTimestamp(startTime),
     };
 
     setMessages(prev => [...prev, userMessage]);
@@ -32,9 +34,10 @@ export const useChatSoekarnoPresenter = () => {
     try {
       let response = null;
       let botMessage = {
-        id: Date.now() + 1,
+        id: startTime + 1,
         sender: 'soekarno',
       };
+      
       if (selectedModel === 'rag') {
         response = await sendChatMessageRag(message);
         botMessage.text = response;
@@ -42,10 +45,19 @@ export const useChatSoekarnoPresenter = () => {
       } else {
         response = await sendChatTfjsSoekarno(message);
         botMessage.text = response.randomResponse;
-        botMessage.timestamp =
-          new Date().toLocaleTimeString() +
-          ` ${response.predictedTag} [${response.probability}%]`;
       }
+
+      const endTime = Date.now(); // ⏱️ Selesai hitung durasi
+      const durationSeconds = Math.round((endTime - startTime) / 1000); // Dalam detik
+
+      botMessage.timestamp =
+      formatTimestamp(endTime) +
+      ` (${durationSeconds}s${
+        selectedModel !== 'rag'
+          ? `, ${response.predictedTag} [${response.probability}%]`
+          : ''
+      })`;
+
       // console.log(response);
       setPredictedTag(response.predictedTag);
       setMessages((prev) => [...prev, botMessage]);
@@ -58,11 +70,11 @@ export const useChatSoekarnoPresenter = () => {
         id: Date.now() + 1,
         text: 'Maaf, terjadi kesalahan. Silakan coba lagi nanti.',
         sender: 'soekarno',
-        timestamp: new Date().toLocaleTimeString(),
+        timestamp: formatTimestamp(Date.now()),
         isError: true,
       };
 
-      setMessages((prev) => [...prev, errorMessage]);
+      setMessages((prev) => [...prev, errorMessage]); // cth: "14:05, 10 June (7s, proklamasi [92.5%])""
     } finally {
       setIsLoading(false);
     }
@@ -76,4 +88,14 @@ export const useChatSoekarnoPresenter = () => {
     error,
     sendMessage,
   };
+};
+
+// 🔧 Fungsi bantu: format waktu ke cth "13:59, 10 June"
+const formatTimestamp = (dateValue) => {
+  const date = new Date(dateValue);
+  const hours = date.getHours().toString().padStart(2, '0');
+  const minutes = date.getMinutes().toString().padStart(2, '0');
+  const day = date.getDate();
+  const month = date.toLocaleString('default', { month: 'long' });
+  return `${hours}:${minutes}, ${day} ${month}`;
 };

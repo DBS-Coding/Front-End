@@ -1,8 +1,9 @@
-import pakKarno from '../../assets/pakkarno.png';
+// eslint-disable-next-line no-unused-vars
 import { motion } from 'framer-motion';
-import { Crown, MessageCircle } from 'lucide-react';
+import { MessageCircle } from 'lucide-react';
 
-const TypingIndicator = () => {
+// eslint-disable-next-line no-unused-vars
+const TypingIndicator = ({image, name, Icon}) => {
   const dotVariants = {
     initial: { scale: 1, opacity: 0.7 },
     animate: { scale: 1.2, opacity: 1 },
@@ -27,8 +28,8 @@ const TypingIndicator = () => {
         <div className='relative flex-shrink-0'>
           <div className='w-10 h-10 rounded-full bg-gradient-to-br from-amber-400 to-amber-600 border-2 border-amber-300 shadow-lg flex items-center justify-center'>
             <img
-              src={pakKarno || '/placeholder.svg'}
-              alt='IR. Soekarno'
+              src={image || '/placeholder.svg'}
+              alt={name}
               className='rounded-full w-full h-full object-cover'
             />
           </div>
@@ -38,7 +39,7 @@ const TypingIndicator = () => {
 
           {/* Crown badge */}
           <div className='absolute -top-1 -right-1 w-5 h-5 bg-gradient-to-r from-amber-400 to-amber-600 rounded-full flex items-center justify-center border border-amber-300'>
-            <Crown className='w-2.5 h-2.5 text-amber-900' />
+            <Icon className='w-2.5 h-2.5 text-amber-900' />
           </div>
         </div>
 
@@ -47,9 +48,9 @@ const TypingIndicator = () => {
           {/* Sender name */}
           <div className='flex items-center gap-1 mb-1 px-1'>
             <span className='text-amber-200 text-xs font-medium'>
-              IR. Soekarno
+              {name}
             </span>
-            <Crown className='w-3 h-3 text-amber-400' />
+            <Icon className='w-3 h-3 text-amber-400' />
           </div>
 
           {/* Typing Bubble */}
