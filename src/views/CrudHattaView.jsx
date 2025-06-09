@@ -12,7 +12,6 @@ import {
   Scroll,
   Database,
   Settings,
-  Search,
 } from 'lucide-react';
 import Layout from '../components/common/Layout';
 import { useCrudSoekarnoPresenter } from '../presenters/CrudHattaPresenter';
@@ -48,8 +47,6 @@ const CrudHattaView = () => {
   const [inputText, setInputText] = useState('');
   const [responseText, setResponseText] = useState('');
   const [notification, setNotification] = useState(null);
-  const [searchTerm, setSearchTerm] = useState('');
-  const [filteredTags, setFilteredTags] = useState([]);
   const [successEtl, setSuccessEtl] = useState(false);
   const [errorEtl, setErrorEtl] = useState(false);
   const [loadingEtl, setLoadingEtl] = useState(false);
@@ -73,18 +70,6 @@ const CrudHattaView = () => {
       });
     }
   }, [selectedTag]);
-
-  useEffect(() => {
-    if (Array.isArray(tags)) {
-      setFilteredTags(
-        tags.filter(
-          (tag) =>
-            tag?.tag?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-            tag?.nama?.toLowerCase().includes(searchTerm.toLowerCase())
-        )
-      );
-    }
-  }, [tags, searchTerm]);
 
   const showNotification = (message, type = 'success') => {
     setNotification({ message, type });
@@ -284,20 +269,6 @@ const CrudHattaView = () => {
             </motion.div>
           )}
 
-          {/* Search Bar */}
-          <div className='mb-4'>
-            <div className='relative'>
-              <Search className='absolute left-3 top-1/2 transform -translate-y-1/2 text-amber-300 w-5 h-5' />
-              <input
-                type='text'
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-                placeholder='Search by tag or tokoh...'
-                className='w-full pl-10 pr-4 py-2.5 bg-black/30 backdrop-blur-sm border-2 border-amber-400/30 rounded-xl focus:outline-none focus:ring-2 focus:ring-amber-400/50 focus:border-amber-400/60 transition-all duration-300 text-amber-100 placeholder-amber-200/50 text-sm'
-              />
-            </div>
-          </div>
-
           {/* Data Table */}
           <div className='bg-black/30 backdrop-blur-sm border-2 border-amber-400/30 rounded-xl overflow-hidden shadow-xl'>
             <div className='overflow-x-auto'>
@@ -350,8 +321,8 @@ const CrudHattaView = () => {
                         </div>
                       </td>
                     </tr>
-                  ) : !Array.isArray(filteredTags) ||
-                    filteredTags.length === 0 ? (
+                  ) : !Array.isArray(tags) ||
+                    tags.length === 0 ? (
                     <tr>
                       <td colSpan='5' className='text-center py-8 sm:py-12'>
                         <div className='flex flex-col items-center gap-3'>
@@ -359,15 +330,13 @@ const CrudHattaView = () => {
                           <span className='text-amber-200/70 text-sm font-medium'>
                             {!Array.isArray(tags)
                               ? 'Error: Data tidak valid'
-                              : searchTerm
-                              ? 'Tidak ada hasil pencarian'
                               : 'Belum ada data tag'}
                           </span>
                         </div>
                       </td>
                     </tr>
                   ) : (
-                    filteredTags.map((tag, index) => (
+                    tags.map((tag, index) => (
                       <motion.tr
                         key={tag?.tag || `tag-${index}`}
                         initial={{ opacity: 0, y: 20 }}
