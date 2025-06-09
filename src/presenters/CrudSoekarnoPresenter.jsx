@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { createOrUpdateTag, getAllTags,getSoekarnoTags, getSpecificTag, deleteTag } from '../api/npcApi';
+import { createOrUpdateTag, getSoekarnoTags, getSpecificTag, deleteTag } from '../api/npcApi';
 
 export const useCrudSoekarnoPresenter = () => {
   const [tags, setTags] = useState([]);
@@ -71,7 +71,7 @@ export const useCrudSoekarnoPresenter = () => {
       const response = await createOrUpdateTag(tagData);
       const apiResponse = response?.data;
       
-      if (response.status === 200 || apiResponse?.code === 200) {
+      if (response.status === 201 || apiResponse?.code === 201) {
         await loadTags();
         setIsModalOpen(false);
         setSelectedTag(null);

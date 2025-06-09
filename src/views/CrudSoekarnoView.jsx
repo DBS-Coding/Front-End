@@ -547,12 +547,12 @@ const CrudSoekarnoView = () => {
                         Pilih Tokoh
                       </option>
                       <option
-                        value='Soekarno'
+                        value='soekarno'
                         className='bg-black text-amber-100'
                       >
                         Soekarno
                       </option>
-                      <option value='Hatta' className='bg-black text-amber-100'>
+                      <option value='hatta' className='bg-black text-amber-100'>
                         Hatta
                       </option>
                     </select>
