@@ -47,6 +47,12 @@ export default defineConfig({
         changeOrigin: true,
         rewrite: (path) => path.replace(/^\/api\/etl/, ""),
       },
+      "/model/rag": {
+        target:
+          "https://chatbot-character-1091601261833.us-central1.run.app/chat",
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/model\/rag/, ""),
+      },
     },
     port: 3001,
   },

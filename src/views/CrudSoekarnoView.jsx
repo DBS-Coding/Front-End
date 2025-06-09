@@ -49,8 +49,6 @@ const CrudSoekarnoView = () => {
   const [inputText, setInputText] = useState('');
   const [responseText, setResponseText] = useState('');
   const [notification, setNotification] = useState(null);
-  const [searchTerm, setSearchTerm] = useState('');
-  const [filteredTags, setFilteredTags] = useState([]);
   const [loadingEtl, setLoadingEtl] = useState(false);
   const [successEtl, setSuccessEtl] = useState(false);
   const [errorEtl, setErrorEtl] = useState(false);
@@ -74,18 +72,6 @@ const CrudSoekarnoView = () => {
       });
     }
   }, [selectedTag]);
-
-  useEffect(() => {
-    if (Array.isArray(tags)) {
-      setFilteredTags(
-        tags.filter(
-          (tag) =>
-            tag?.tag?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-            tag?.nama?.toLowerCase().includes(searchTerm.toLowerCase())
-        )
-      );
-    }
-  }, [tags, searchTerm]);
 
   const showNotification = (message, type = 'success') => {
     setNotification({ message, type });
@@ -127,9 +113,9 @@ const CrudSoekarnoView = () => {
     }
   };
 
-  const handleDelete = async (tagName) => {
+  const handleDelete = async (tagId, tagName) => {
     if (window.confirm(`Are you sure you want to delete "${tagName}"?`)) {
-      const result = await removeTag(tagName);
+      const result = await removeTag(tagId);
       if (result?.success) {
         showNotification(result.message, 'success');
       } else if (result?.message) {
@@ -285,20 +271,6 @@ const CrudSoekarnoView = () => {
             </motion.div>
           )}
 
-          {/* Search Bar */}
-          <div className='mb-4'>
-            <div className='relative'>
-              <Search className='absolute left-3 top-1/2 transform -translate-y-1/2 text-amber-300 w-5 h-5' />
-              <input
-                type='text'
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-                placeholder='Search by tag or tokoh...'
-                className='w-full pl-10 pr-4 py-2.5 bg-black/30 backdrop-blur-sm border-2 border-amber-400/30 rounded-xl focus:outline-none focus:ring-2 focus:ring-amber-400/50 focus:border-amber-400/60 transition-all duration-300 text-amber-100 placeholder-amber-200/50 text-sm'
-              />
-            </div>
-          </div>
-
           {/* Data Table */}
           <div className='bg-black/30 backdrop-blur-sm border-2 border-amber-400/30 rounded-xl overflow-hidden shadow-xl'>
             <div className='overflow-x-auto'>
@@ -351,8 +323,8 @@ const CrudSoekarnoView = () => {
                         </div>
                       </td>
                     </tr>
-                  ) : !Array.isArray(filteredTags) ||
-                    filteredTags.length === 0 ? (
+                  ) : !Array.isArray(tags) ||
+                    tags.length === 0 ? (
                     <tr>
                       <td colSpan='5' className='text-center py-8 sm:py-12'>
                         <div className='flex flex-col items-center gap-3'>
@@ -360,15 +332,13 @@ const CrudSoekarnoView = () => {
                           <span className='text-amber-200/70 text-sm font-medium'>
                             {!Array.isArray(tags)
                               ? 'Error: Data tidak valid'
-                              : searchTerm
-                              ? 'Tidak ada hasil pencarian'
                               : 'Belum ada data tag'}
                           </span>
                         </div>
                       </td>
                     </tr>
                   ) : (
-                    filteredTags.map((tag, index) => (
+                    tags.map((tag, index) => (
                       <motion.tr
                         key={tag?.tag || `tag-${index}`}
                         initial={{ opacity: 0, y: 20 }}
@@ -463,7 +433,7 @@ const CrudSoekarnoView = () => {
                               <Edit size={16} className='text-blue-300' />
                             </motion.button>
                             <motion.button
-                              onClick={() => handleDelete(tag?.tag)}
+                              onClick={() => handleDelete(tag?.id, tag?.tag)}
                               className='p-1.5 sm:p-2 bg-black/30 border border-red-400/30 hover:border-red-400/60 hover:bg-red-500/10 rounded-lg transition-all duration-300'
                               title='Delete'
                               disabled={!tag?.tag}
