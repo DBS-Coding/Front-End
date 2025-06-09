@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { sendChatMessageRag, sendChatMessageTfjs } from '../api/npcApi';
+import { sendChatMessageRag, sendChatTfjsHatta } from '../api/npcApi';
 
 export const useChatHattaPresenter = () => {
   const [messages, setMessages] = useState([]);
@@ -32,11 +32,11 @@ export const useChatHattaPresenter = () => {
         botMessage.text = response.response;
         botMessage.timestamp = new Date().toLocaleTimeString();
       } else {
-        response = await sendChatMessageTfjs(message, 'hatta');
+        response = await sendChatTfjsHatta(message);
         botMessage.text = response.randomResponse;
         botMessage.timestamp = new Date().toLocaleTimeString() + ` ${response.predictedTag} [${response.probability}%]`;
       }
-      console.log(response);
+      // console.log(response);
       setPredictedTag(response.predictedTag);
       setMessages(prev => [...prev, botMessage]);
     } catch (err) {

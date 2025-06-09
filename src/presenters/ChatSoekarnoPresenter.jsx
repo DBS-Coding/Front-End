@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { sendChatMessageRag, sendChatMessageTfjs } from '../api/npcApi';
+import { sendChatMessageRag, sendChatTfjsSoekarno } from '../api/npcApi';
 
 export const useChatSoekarnoPresenter = () => {
   const [messages, setMessages] = useState([]);
@@ -9,15 +9,15 @@ export const useChatSoekarnoPresenter = () => {
 
   const sendMessage = async (message, selectedModel) => {
     if (!message.trim()) return;
+    
+    const userMessage = {
+      id: Date.now(),
+      text: message,
+      sender: 'user',
+      timestamp: new Date().toLocaleTimeString()
+    };
 
-    // const userMessage = {
-    //   id: Date.now(),
-    //   text: message,
-    //   sender: 'user',
-    //   timestamp: new Date().toLocaleTimeString()
-    // };
-
-    // setMessages(prev => [...prev, userMessage]);
+    setMessages(prev => [...prev, userMessage]);
     setIsLoading(true);
     setError(null);
 
@@ -29,14 +29,14 @@ export const useChatSoekarnoPresenter = () => {
       };
       if(selectedModel === "rag") {
         response = await sendChatMessageRag(message);
-        botMessage.text = response.response;
+        botMessage.text = response;
         botMessage.timestamp = new Date().toLocaleTimeString();
       } else {
-        response = await sendChatMessageTfjs(message);
+        response = await sendChatTfjsSoekarno(message);
         botMessage.text = response.randomResponse;
         botMessage.timestamp = new Date().toLocaleTimeString() + ` ${response.predictedTag} [${response.probability}%]`;
       }
-      console.log(response);
+      // console.log(response);
       setPredictedTag(response.predictedTag);
       setMessages(prev => [...prev, botMessage]);
     } catch (err) {
