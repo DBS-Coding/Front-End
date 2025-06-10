@@ -169,7 +169,7 @@ const HomeView = () => {
 
         {/* Heroes Section - More compact */}
         <motion.div
-          className='grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8 flex-grow'
+          className='grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8 flex-grow lg:min-h-96 xl:min-h-64'
           initial={{ opacity: 0, y: 50 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.4 }}
@@ -209,7 +209,7 @@ const HomeView = () => {
 
                 <motion.button
                   onClick={() => handleChatNavigation('soekarno')}
-                  className='group/btn inline-flex items-center gap-2 p-2 bg-gradient-to-r from-amber-500 to-amber-600 text-amber-900 font-bold rounded-xl hover:from-amber-400 hover:to-amber-500 transition-all duration-300 shadow-lg hover:shadow-amber-500/25 border-2 border-amber-300 text-sm'
+                  className='lg:absolute bottom-5 group/btn inline-flex items-center gap-2 p-2 bg-gradient-to-r from-amber-500 to-amber-600 text-amber-900 font-bold rounded-xl hover:from-amber-400 hover:to-amber-500 transition-all duration-300 shadow-lg hover:shadow-amber-500/25 border-2 border-amber-300 text-sm'
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
                 >

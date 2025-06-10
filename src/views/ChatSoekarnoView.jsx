@@ -2,7 +2,7 @@ import { useState, useRef, useEffect } from 'react';
 // eslint-disable-next-line no-unused-vars
 import { motion, AnimatePresence } from 'framer-motion';
 import { Crown, X } from 'lucide-react';
-import { useChatSoekarnoPresenter } from '../presenters/ChatSoekarnoPresenter';
+import { useChatPresenter } from '../presenters/ChatPresenter';
 import pakKarno from '../assets/pakkarno.png';
 
 import Layout from '../components/common/Layout';
@@ -30,7 +30,7 @@ const ChatSoekarnoView = () => {
   const [isMobileSidebarOpen, setIsMobileSidebarOpen] = useState(false);
 
   const { messages, predictedTag, isLoading, error, sendMessage, setMessages } =
-    useChatSoekarnoPresenter();
+    useChatPresenter({ npc: 'soekarno' });
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });

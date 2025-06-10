@@ -1,18 +1,16 @@
-import { useState } from 'react';
-import { sendChatMessageRag, sendChatTfjsSoekarno } from '../api/npcApi';
+import { useState } from "react";
+import { sendChatMessageRag, sendChatTfjs } from "../api/npcApi";
 
-export const useChatSoekarnoPresenter = () => {
+export const useChatPresenter = ({ npc }) => {
   const [messages, setMessages] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
   const [predictedTag, setPredictedTag] = useState(null);
 
   const saveToChatHistory = (userMsg, botMsg) => {
-  const existing = JSON.parse(localStorage.getItem("chat-soekarno")) || [];
-
-  const updated = [...existing, userMsg, botMsg];
-
-  localStorage.setItem("chat-soekarno", JSON.stringify(updated));
+    const existing = JSON.parse(localStorage.getItem(`chat-${npc}`)) || [];
+    const updated = [...existing, userMsg, botMsg];
+    localStorage.setItem(`chat-${npc}`, JSON.stringify(updated));
   };
 
   const sendMessage = async (message, selectedModel) => {
@@ -23,11 +21,11 @@ export const useChatSoekarnoPresenter = () => {
     const userMessage = {
       id: Date.now(),
       text: message,
-      sender: 'user',
+      sender: "user",
       timestamp: formatTimestamp(startTime),
     };
 
-    setMessages(prev => [...prev, userMessage]);
+    setMessages((prev) => [...prev, userMessage]);
     setIsLoading(true);
     setError(null);
 
@@ -35,15 +33,22 @@ export const useChatSoekarnoPresenter = () => {
       let response = null;
       let botMessage = {
         id: startTime + 1,
-        sender: 'soekarno',
+        sender: npc,
       };
-      
-      if (selectedModel === 'rag') {
-        response = await sendChatMessageRag(message);
-        botMessage.text = response;
+
+      if (selectedModel === "rag") {
+        response = await sendChatMessageRag(message, npc);
+        // console.log("RAG Response:", response);
+
+        // Fix: response sudah berupa object dengan property response
+        botMessage.text = 
+          typeof response.response === "string"
+            ? response.response
+            : JSON.stringify(response);
+
         botMessage.timestamp = new Date().toLocaleTimeString();
       } else {
-        response = await sendChatTfjsSoekarno(message);
+        response = await sendChatTfjs(message, npc);
         botMessage.text = response.randomResponse;
       }
 
@@ -51,25 +56,25 @@ export const useChatSoekarnoPresenter = () => {
       const durationSeconds = Math.round((endTime - startTime) / 1000); // Dalam detik
 
       botMessage.timestamp =
-      formatTimestamp(endTime) +
-      ` (${durationSeconds}s${
-        selectedModel !== 'rag'
-          ? `, ${response.predictedTag} [${response.probability}%]`
-          : ''
-      })`;
+        formatTimestamp(endTime) +
+        ` (${durationSeconds}s${
+          selectedModel !== "rag"
+            ? `, ${response.predictedTag} [${response.probability}%]`
+            : ""
+        })`;
 
       // console.log(response);
       setPredictedTag(response.predictedTag);
       setMessages((prev) => [...prev, botMessage]);
       saveToChatHistory(userMessage, botMessage);
     } catch (err) {
-      setError('Terjadi kesalahan saat mengirim pesan. Silakan coba lagi.');
-      console.error('Error sending message:', err);
+      setError("Terjadi kesalahan saat mengirim pesan. Silakan coba lagi.");
+      console.error("Error sending message:", err);
 
       const errorMessage = {
         id: Date.now() + 1,
-        text: 'Maaf, terjadi kesalahan. Silakan coba lagi nanti.',
-        sender: 'soekarno',
+        text: "Maaf, terjadi kesalahan. Silakan coba lagi nanti.",
+        sender: "soekarno",
         timestamp: formatTimestamp(Date.now()),
         isError: true,
       };
@@ -93,9 +98,9 @@ export const useChatSoekarnoPresenter = () => {
 // 🔧 Fungsi bantu: format waktu ke cth "13:59, 10 June"
 const formatTimestamp = (dateValue) => {
   const date = new Date(dateValue);
-  const hours = date.getHours().toString().padStart(2, '0');
-  const minutes = date.getMinutes().toString().padStart(2, '0');
+  const hours = date.getHours().toString().padStart(2, "0");
+  const minutes = date.getMinutes().toString().padStart(2, "0");
   const day = date.getDate();
-  const month = date.toLocaleString('default', { month: 'long' });
+  const month = date.toLocaleString("default", { month: "long" });
   return `${hours}:${minutes}, ${day} ${month}`;
 };
