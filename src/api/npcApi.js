@@ -11,8 +11,11 @@ let modelHatta = null;
 let wordIndexHatta = {};
 let responsesHatta = {};
 let classLabelsHatta = [];
+
 let maxLen = 10;
 let possibleResponses = [];
+let predictionValue;
+let predictedTag;
 
 const API_BASE_URL = "https://capstone-five-dusky.vercel.app";
 const API_MODEL_TFJS_URL = "https://dbs-coding.github.io/histotalk-model1-tfjs";
@@ -95,21 +98,39 @@ const predict = async (model, word_index, inputText) => {
   return outputArray;
 };
 
-export const sendChatTfjsSoekarno = async (inputText) => {
+export const sendChatTfjs = async (inputText, npc) => {
   try {
-    await initModelSoekarno();
+    if(npc === 'soekarno'){
+      await initModelSoekarno();
+  
+      const outputArray = await predict(
+        modelSoekarno,
+        wordIndexSoekarno,
+        inputText
+      );
+  
+      const predictionIndex = outputArray.indexOf(Math.max(...outputArray));
+      predictionValue = outputArray[predictionIndex];
+      predictedTag = classLabelsSoekarno[predictionIndex]; // Gunakan classLabelsSoekarno
+  
+      possibleResponses = responsesSoekarno[predictedTag] || [];
 
-    const outputArray = await predict(
-      modelSoekarno,
-      wordIndexSoekarno,
-      inputText
-    );
+    } else {
+      await initModelHatta();
+  
+      const outputArray = await predict(
+        modelHatta,
+        wordIndexHatta,
+        inputText
+      );
+  
+      const predictionIndex = outputArray.indexOf(Math.max(...outputArray));
+      predictionValue = outputArray[predictionIndex];
+      predictedTag = classLabelsHatta[predictionIndex]; // Gunakan classLabelsHatta
+  
+      possibleResponses = responsesHatta[predictedTag] || [];
 
-    const predictionIndex = outputArray.indexOf(Math.max(...outputArray));
-    const predictionValue = outputArray[predictionIndex];
-    const predictedTag = classLabelsSoekarno[predictionIndex]; // Gunakan classLabelsSoekarno
-
-    possibleResponses = responsesSoekarno[predictedTag] || [];
+    }
     const randomResponse =
       possibleResponses[Math.floor(Math.random() * possibleResponses.length)];
 
@@ -124,32 +145,7 @@ export const sendChatTfjsSoekarno = async (inputText) => {
   }
 };
 
-export const sendChatTfjsHatta = async (inputText) => {
-  try {
-    await initModelHatta();
-
-    const outputArray = await predict(modelHatta, wordIndexHatta, inputText);
-
-    const predictionIndex = outputArray.indexOf(Math.max(...outputArray));
-    const predictionValue = outputArray[predictionIndex];
-    const predictedTag = classLabelsHatta[predictionIndex]; // Gunakan classLabelsHatta
-
-    possibleResponses = responsesHatta[predictedTag] || [];
-    const randomResponse =
-      possibleResponses[Math.floor(Math.random() * possibleResponses.length)];
-
-    return {
-      predictedTag,
-      probability: Math.round(predictionValue * 100),
-      randomResponse,
-    };
-  } catch (error) {
-    console.error("Chat model error:", error);
-    throw error;
-  }
-};
-
-export const sendChatMessageRag = async (inputText, npc = "soekarno") => {
+export const sendChatMessageRag = async (inputText, npc) => {
   try {
     // console.log({ inputText, npc });
     const payload = {
@@ -171,7 +167,7 @@ export const sendChatMessageRag = async (inputText, npc = "soekarno") => {
 
     // contoh hasil: { karakter: "soekarno", response: "SAUDARA-SAUDARA! ..." }
     const data = await response.json();
-    console.log(data);
+    // console.log(data);
     return {
       response: data.response || data,
       karakter: data.karakter || npc,

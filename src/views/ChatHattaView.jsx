@@ -3,7 +3,7 @@ import { useState, useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Shield, X } from "lucide-react";
 
-import { useChatHattaPresenter } from "../presenters/ChatHattaPresenter";
+import { useChatPresenter } from "../presenters/ChatPresenter";
 import pakHatta from "../assets/pakhatta.png";
 import Layout from "../components/common/Layout";
 import Achivement from "../components/chat/Achivement";
@@ -29,7 +29,7 @@ const ChatHattaView = () => {
   const [isMobileSidebarOpen, setIsMobileSidebarOpen] = useState(false);
 
   const { messages, predictedTag, isLoading, error, sendMessage, setMessages } =
-    useChatHattaPresenter();
+    useChatPresenter({npc:'hatta'});
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
