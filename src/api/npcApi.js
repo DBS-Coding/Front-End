@@ -3,16 +3,17 @@ import axios from "axios";
 import * as tf from "@tensorflow/tfjs";
 
 let modelSoekarno = null;
+let maxLenSoekarno;
 let wordIndexSoekarno = {};
 let responsesSoekarno = {};
 let classLabelsSoekarno = [];
 
 let modelHatta = null;
+let maxLenHatta;
 let wordIndexHatta = {};
 let responsesHatta = {};
 let classLabelsHatta = [];
 
-let maxLen = 10;
 let possibleResponses = [];
 let predictionValue;
 let predictedTag;
@@ -36,6 +37,7 @@ const initModelSoekarno = async () => {
   modelSoekarno = await tf.loadGraphModel(
     `${API_MODEL_TFJS_URL}/soekarno/model.json`
   );
+  maxLenSoekarno = model.inputs[0].shape[1];
 
   const wordIndexResponse = await fetch(
     `${API_MODEL_TFJS_URL}/soekarno/word_index.json`
@@ -52,10 +54,15 @@ const initModelSoekarno = async () => {
 
 const initModelHatta = async () => {
   if (modelHatta) return;
+  // console.log(API_MODEL_TFJS_URL);
 
   modelHatta = await tf.loadGraphModel(
     `${API_MODEL_TFJS_URL}/hatta/model.json`
   );
+  maxLenHatta = modelHatta.inputs[0].shape[1];
+  // console.log("Inputs:", modelHatta.inputs);
+  // console.log("Outputs:", modelHatta.outputs);
+  // console.log("maxLen: ", maxLenHatta);
 
   const wordIndexResponse = await fetch(
     `${API_MODEL_TFJS_URL}/hatta/word_index.json`
@@ -66,68 +73,88 @@ const initModelHatta = async () => {
     `${API_MODEL_TFJS_URL}/hatta/content.json`
   );
   responsesHatta = await contentHattaResponse.json();
-
+  
   classLabelsHatta = Object.keys(responsesHatta);
+  // console.log("classLabelsHatta: ", classLabelsHatta);
+  // console.log("responsesHatta: ", responsesHatta);
 };
 
 // Padding helper
-const padSequences = (sequences, maxlen = 10) => {
+const padSequences = (sequences, maxlen,
+  padding = "post",
+  truncating = "post") => {
   return sequences.map((seq) => {
     if (seq.length > maxlen) {
-      return seq.slice(0, maxlen);
+      // Truncate
+      return truncating === "pre"
+        ? seq.slice(seq.length - maxlen)
+        : seq.slice(0, maxlen);
     }
 
+    // Pad with zeros
     const padded = new Array(maxlen).fill(0);
+    const offset = padding === "pre" ? maxlen - seq.length : 0;
+
     for (let i = 0; i < seq.length; i++) {
-      padded[i] = seq[i];
+      padded[offset + i] = seq[i];
     }
+
     return padded;
   });
 };
 
-const predict = async (model, word_index, inputText) => {
+const predict = async (model, maxLen, word_index, inputText) => {
   const cleanedText = inputText.toLowerCase().replace(/[^\w\s]/gi, "");
-  const tokens = cleanedText.split(" ").map((word) => word_index[word] || 0);
-  const padded = padSequences([tokens], maxLen);
-  const inputTensor = tf.tensor2d(padded, [1, maxLen]);
+  const tokens = [cleanedText.split(" ").map((word) => word_index[word] || 0)];
+  // console.log("Tokens: ", tokens);
 
-  const result = model.predict({ Identity: inputTensor });
-  const probabilities = result.softmax();
-  const outputData = await probabilities.data();
-  const outputArray = Array.from(outputData);
-  return outputArray;
+  const paddedSequences = padSequences(tokens, maxLen);
+  // console.log("paddedSequences :", paddedSequences);
+
+  const inputTensor = tf.tensor2d(paddedSequences, [1, maxLen]);
+  inputTensor.print();
+
+  const result = model.predict(inputTensor);
+
+  // Dapatkan nilai prediksi sebagai array
+  const arrayResult = await result.array();
+  return arrayResult[0];
 };
 
 export const sendChatTfjs = async (inputText, npc) => {
   try {
-    if(npc === 'soekarno'){
+    if (npc === 'soekarno') {
       await initModelSoekarno();
-  
+
       const outputArray = await predict(
         modelSoekarno,
+        maxLenSoekarno,
         wordIndexSoekarno,
         inputText
       );
-  
+
       const predictionIndex = outputArray.indexOf(Math.max(...outputArray));
       predictionValue = outputArray[predictionIndex];
       predictedTag = classLabelsSoekarno[predictionIndex]; // Gunakan classLabelsSoekarno
-  
+
       possibleResponses = responsesSoekarno[predictedTag] || [];
 
     } else {
       await initModelHatta();
-  
+
+      // [0.1, 0.2, 0.3, 0.4, 0.5]
       const outputArray = await predict(
         modelHatta,
+        maxLenHatta,
         wordIndexHatta,
         inputText
       );
-  
+      // console.log("outputArray: ", outputArray);
+
       const predictionIndex = outputArray.indexOf(Math.max(...outputArray));
       predictionValue = outputArray[predictionIndex];
       predictedTag = classLabelsHatta[predictionIndex]; // Gunakan classLabelsHatta
-  
+
       possibleResponses = responsesHatta[predictedTag] || [];
 
     }
