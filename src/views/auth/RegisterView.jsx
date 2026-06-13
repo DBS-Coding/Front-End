@@ -14,7 +14,6 @@ import {
   CheckCircle,
 } from 'lucide-react';
 import { useRegisterPresenter } from '../../presenters/RegisterPresenter';
-import logo from '../../assets/logo.jpg';
 
 const RegisterView = () => {
   const navigate = useNavigate();
@@ -102,7 +101,7 @@ const RegisterView = () => {
         >
           <div className='relative'>
             <div className='w-24 h-24 bg-gradient-to-br from-amber-400 to-amber-600 rounded-xl flex items-center justify-center shadow-2xl border-4 border-amber-300'>
-              <img src={logo} className='rounded-lg' />
+              <img src='/img/logo.jpg' className='rounded-lg' />
             </div>
             <div className='absolute -inset-2 bg-gradient-to-r from-amber-400 to-red-400 rounded-full blur opacity-30 animate-pulse'></div>
           </div>
@@ -275,11 +274,10 @@ const RegisterView = () => {
                     {...register('name')}
                     type='text'
                     id='name'
-                    className={`w-full pl-10 pr-4 py-2.5 rounded-lg bg-black/30 backdrop-blur-sm border-2 focus:outline-none focus:ring-2 focus:ring-amber-400/50 transition-all duration-300 text-white placeholder-amber-200/50 ${
-                      errors.name
-                        ? 'border-red-500'
-                        : 'border-amber-400/30 hover:border-amber-400/50'
-                    }`}
+                    className={`w-full pl-10 pr-4 py-2.5 rounded-lg bg-black/30 backdrop-blur-sm border-2 focus:outline-none focus:ring-2 focus:ring-amber-400/50 transition-all duration-300 text-white placeholder-amber-200/50 ${errors.name
+                      ? 'border-red-500'
+                      : 'border-amber-400/30 hover:border-amber-400/50'
+                      }`}
                     placeholder='Masukkan nama lengkap Anda'
                   />
                 </div>
@@ -308,11 +306,10 @@ const RegisterView = () => {
                     {...register('email')}
                     type='email'
                     id='email'
-                    className={`w-full pl-10 pr-4 py-2.5 rounded-lg bg-black/30 backdrop-blur-sm border-2 focus:outline-none focus:ring-2 focus:ring-amber-400/50 transition-all duration-300 text-white placeholder-amber-200/50 ${
-                      errors.email
-                        ? 'border-red-500'
-                        : 'border-amber-400/30 hover:border-amber-400/50'
-                    }`}
+                    className={`w-full pl-10 pr-4 py-2.5 rounded-lg bg-black/30 backdrop-blur-sm border-2 focus:outline-none focus:ring-2 focus:ring-amber-400/50 transition-all duration-300 text-white placeholder-amber-200/50 ${errors.email
+                      ? 'border-red-500'
+                      : 'border-amber-400/30 hover:border-amber-400/50'
+                      }`}
                     placeholder='Masukkan email Anda'
                   />
                 </div>
@@ -341,11 +338,10 @@ const RegisterView = () => {
                     {...register('password')}
                     type={showPassword ? 'text' : 'password'}
                     id='password'
-                    className={`w-full pl-10 pr-12 py-2.5 rounded-lg bg-black/30 backdrop-blur-sm border-2 focus:outline-none focus:ring-2 focus:ring-amber-400/50 transition-all duration-300 text-white placeholder-amber-200/50 ${
-                      errors.password
-                        ? 'border-red-500'
-                        : 'border-amber-400/30 hover:border-amber-400/50'
-                    }`}
+                    className={`w-full pl-10 pr-12 py-2.5 rounded-lg bg-black/30 backdrop-blur-sm border-2 focus:outline-none focus:ring-2 focus:ring-amber-400/50 transition-all duration-300 text-white placeholder-amber-200/50 ${errors.password
+                      ? 'border-red-500'
+                      : 'border-amber-400/30 hover:border-amber-400/50'
+                      }`}
                     placeholder='Buat password yang kuat'
                   />
                   <button

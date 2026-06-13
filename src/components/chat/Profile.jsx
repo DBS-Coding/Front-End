@@ -1,3 +1,5 @@
+import { PLACEHOLDER_AVATAR } from "../../utils/constant";
+
 // eslint-disable-next-line no-unused-vars
 const Profile = ({ image, nama, tahun, Icon }) => {
   return (
@@ -5,7 +7,7 @@ const Profile = ({ image, nama, tahun, Icon }) => {
       <div className="flex items-center gap-4">
         <div className="relative">
           <img
-            src={image || "/histotalkicon.jpg"}
+            src={image || PLACEHOLDER_AVATAR}
             alt="Ir. Soekarno"
             className="w-20 h-20 object-cover rounded-2xl border-4 border-amber-300 shadow-xl"
           />

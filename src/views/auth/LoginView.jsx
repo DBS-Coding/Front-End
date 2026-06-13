@@ -3,7 +3,6 @@ import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { Eye, EyeOff, Scroll, Crown, Shield, Sword } from 'lucide-react';
 import { useLoginPresenter } from '../../presenters/LoginPresenter';
-import logo from '../../assets/logo.jpg';
 
 const LoginView = () => {
   const navigate = useNavigate();
@@ -80,7 +79,7 @@ const LoginView = () => {
         >
           <div className='relative'>
             <div className='w-24 h-24 sm:w-24 sm:h-24 bg-gradient-to-br from-amber-400 to-amber-600 rounded-xl flex items-center justify-center shadow-2xl border-4 border-amber-300'>
-              <img src={logo} className='rounded-lg' />
+              <img src='/img/logo.jpg' className='rounded-lg' />
             </div>
             <div className='absolute -inset-2 bg-gradient-to-r from-amber-400 to-red-400 rounded-full blur opacity-30 animate-pulse'></div>
           </div>
@@ -215,11 +214,10 @@ const LoginView = () => {
                   id='email'
                   type='email'
                   placeholder='Masukkan email Anda'
-                  className={`w-full px-3 py-2 rounded-lg bg-black/30 backdrop-blur-sm border-2 focus:outline-none focus:ring-2 focus:ring-amber-400/50 transition-all duration-300 text-white placeholder-amber-200/50 ${
-                    errors.email
+                  className={`w-full px-3 py-2 rounded-lg bg-black/30 backdrop-blur-sm border-2 focus:outline-none focus:ring-2 focus:ring-amber-400/50 transition-all duration-300 text-white placeholder-amber-200/50 ${errors.email
                       ? 'border-red-500'
                       : 'border-amber-400/30 hover:border-amber-400/50'
-                  }`}
+                    }`}
                 />
                 {errors.email && (
                   <p className='mt-1 text-xs text-red-400 flex items-center gap-1'>
@@ -246,11 +244,10 @@ const LoginView = () => {
                     id='password'
                     type={showPassword ? 'text' : 'password'}
                     placeholder='Masukkan password Anda'
-                    className={`w-full px-3 py-2 pr-10 rounded-lg bg-black/30 backdrop-blur-sm border-2 focus:outline-none focus:ring-2 focus:ring-amber-400/50 transition-all duration-300 text-white placeholder-amber-200/50 ${
-                      errors.password
+                    className={`w-full px-3 py-2 pr-10 rounded-lg bg-black/30 backdrop-blur-sm border-2 focus:outline-none focus:ring-2 focus:ring-amber-400/50 transition-all duration-300 text-white placeholder-amber-200/50 ${errors.password
                         ? 'border-red-500'
                         : 'border-amber-400/30 hover:border-amber-400/50'
-                    }`}
+                      }`}
                   />
                   <button
                     type='button'

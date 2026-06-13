@@ -4,7 +4,6 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Shield, X } from 'lucide-react';
 
 import { useChatPresenter } from '../presenters/ChatPresenter';
-import pakHatta from '../assets/pakhatta.png';
 import Layout from '../components/common/Layout';
 import Achivement from '../components/chat/Achivement';
 import Profile from '../components/chat/Profile';
@@ -122,7 +121,7 @@ const ChatHattaView = () => {
         <div className='flex-1 overflow-clip relative lg:w-5/7 flex flex-col bg-black/20 border-2 border-amber-400/30 rounded-2xl shadow-2xl'>
           {/* Chat Header */}
           <ChatHeader
-            image={pakHatta}
+            image='/img/pakhatta.png'
             name='Mohammad Hatta'
             deskripsi='Bapak Koperasi Indonesia'
             setIsMobileSidebarOpen={setIsMobileSidebarOpen}
@@ -136,7 +135,7 @@ const ChatHattaView = () => {
             messagesEndRef={messagesEndRef}
             isLoading={isLoading}
             text='perjuangan kemerdekaan, pemikiran ekonomi, atau pengalaman beliau sebagai Wakil Presiden pertama Indonesia.'
-            image={pakHatta}
+            image='/img/pakhatta.png'
             name='Mohammad Hatta'
             Icon={Shield}
           />
@@ -193,7 +192,7 @@ const ChatHattaView = () => {
 
                 {/* Mobile Sidebar Content - Same as desktop */}
                 <Profile
-                  image={pakHatta}
+                  image='/img/pakhatta.png'
                   nama='Mohammad Hatta'
                   tahun='1902 - 1980'
                   Icon={Shield}
@@ -215,7 +214,7 @@ const ChatHattaView = () => {
         {/* Desktop Sidebar - Updated with Soekarno styling */}
         <div className='w-full lg:w-2/7 bg-black/20 backdrop-blur-sm border-2 border-amber-400/30 rounded-2xl shadow-2xl hidden lg:flex lg:flex-col flex-shrink-0 overflow-hidden'>
           <Profile
-            image={pakHatta}
+            image='/img/pakhatta.png'
             nama='Mohammad Hatta'
             tahun='1902 - 1980'
             Icon={Shield}

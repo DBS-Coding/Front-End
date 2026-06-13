@@ -15,10 +15,7 @@ import {
 import { motion } from 'framer-motion';
 import Layout from '../components/common/Layout';
 import { useNavigationPresenter } from '../hooks/navigationutils';
-import pakHatta from '../assets/pakhatta.png';
-import pakKarno from '../assets/pakkarno.png';
-import Leo from '../assets/Leo_Prangs_Tobing.png';
-import logo from '../assets/logo.jpg';
+import { PLACEHOLDER_AVATAR } from '../utils/constant';
 
 const HomeView = () => {
   const { handleChatNavigation } = useNavigationPresenter();
@@ -29,8 +26,8 @@ const HomeView = () => {
       id: 1,
       name: 'Leo Prangs T',
       role: 'AI Engineer (TFJS)',
-      image: Leo,
-      linkedin: 'https://www.linkedin.com/in/nanda-safiq-alfiansyah/',
+      image: "https://avatars.githubusercontent.com/u/109854127?v=4",
+      linkedin: 'https://www.linkedin.com/in/leoptobing/',
       github: 'https://github.com/Leo42night',
     },
     {
@@ -123,7 +120,7 @@ const HomeView = () => {
     }, 4000);
 
     return () => clearInterval(interval);
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isHovered]);
 
   return (
@@ -139,7 +136,7 @@ const HomeView = () => {
           <div className='flex justify-center mb-4'>
             <div className='relative'>
               <div className='w-24 h-24 bg-gradient-to-br from-amber-400 to-amber-600 rounded-lg flex items-center justify-center shadow-2xl border-4 border-amber-300'>
-                <img src={logo} className='rounded-md' />
+                <img src='/img/logo.jpg' className='rounded-md' />
               </div>
               <div className='absolute -inset-2 bg-gradient-to-r from-amber-400 to-red-400 rounded-2xl blur opacity-10 animate-pulse'></div>
             </div>
@@ -183,7 +180,7 @@ const HomeView = () => {
               <div className='relative'>
                 <div className='w-24 h-24 lg:w-32 lg:h-32 rounded-2xl overflow-hidden border-4 border-amber-300 shadow-xl'>
                   <img
-                    src={pakKarno || '/placeholder.svg'}
+                    src={'/img/pakkarno.png' || PLACEHOLDER_AVATAR}
                     alt='Ir. Soekarno'
                     className='w-full h-full object-cover'
                   />
@@ -238,7 +235,7 @@ const HomeView = () => {
               <div className='relative'>
                 <div className='w-24 h-24 lg:w-32 lg:h-32 rounded-2xl overflow-hidden border-4 border-amber-300 shadow-xl'>
                   <img
-                    src={pakHatta || '/placeholder.svg'}
+                    src={'/img/pakhatta.png' || PLACEHOLDER_AVATAR}
                     alt='Moh. Hatta'
                     className='w-full h-full object-cover'
                   />
@@ -349,7 +346,7 @@ const HomeView = () => {
                     <div className='relative mb-3'>
                       <div className='w-16 h-16 rounded-2xl overflow-hidden border-3 border-amber-300 shadow-lg'>
                         <img
-                          src={member.image || '/placeholder.svg'}
+                          src={member.image || PLACEHOLDER_AVATAR}
                           alt={member.name}
                           className='w-full h-full object-cover'
                         />

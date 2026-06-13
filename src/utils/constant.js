@@ -1,0 +1,1 @@
+export const PLACEHOLDER_AVATAR = "https://img.magnific.com/premium-vector/default-avatar-profile-icon-social-media-user-image-gray-avatar-icon-blank-profile-silhouette-vector-illustration_561158-3383.jpg"

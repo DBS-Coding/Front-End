@@ -3,6 +3,7 @@
 import { motion } from "framer-motion";
 import clsx from "clsx";
 import { User, Clock, Shield } from "lucide-react";
+import { PLACEHOLDER_AVATAR } from "../../utils/constant";
 
 const MessageBubble = ({ message, image, name }) => {
   const isUser = message.sender === "user";
@@ -53,7 +54,7 @@ const MessageBubble = ({ message, image, name }) => {
               <User size={18} className="text-blue-900" />
             ) : (
               <img
-                src={image || "/placeholder.svg"}
+                src={image || PLACEHOLDER_AVATAR}
                 alt={name}
                 className="rounded-full w-full h-full object-cover"
               />

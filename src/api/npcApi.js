@@ -20,7 +20,7 @@ let predictedTag;
 
 const API_BASE_URL = "https://capstone-five-dusky.vercel.app";
 const API_MODEL_TFJS_URL = "https://dbs-coding.github.io/histotalk-model1-tfjs";
-const API_MODEL_RAG_URL = "https://chatbot-character-1091601261833.us-central1.run.app/chat";
+const API_MODEL_RAG_URL = "https://chatbot-character-1091601261833.us-central1.run.app/chat"; // sendChatMessageRag  error
 const API_TRIGGER_MODEL_TFJS = "https://model1-etl-repo-1091601261833.asia-southeast1.run.app";
 const etlKey = import.meta.env.VITE_ETL_KEY;
 
@@ -37,7 +37,7 @@ const initModelSoekarno = async () => {
   modelSoekarno = await tf.loadGraphModel(
     `${API_MODEL_TFJS_URL}/soekarno/model.json`
   );
-  maxLenSoekarno = model.inputs[0].shape[1];
+  maxLenSoekarno = modelSoekarno.inputs[0].shape[1];
 
   const wordIndexResponse = await fetch(
     `${API_MODEL_TFJS_URL}/soekarno/word_index.json`
@@ -73,7 +73,7 @@ const initModelHatta = async () => {
     `${API_MODEL_TFJS_URL}/hatta/content.json`
   );
   responsesHatta = await contentHattaResponse.json();
-  
+
   classLabelsHatta = Object.keys(responsesHatta);
   // console.log("classLabelsHatta: ", classLabelsHatta);
   // console.log("responsesHatta: ", responsesHatta);
@@ -200,7 +200,6 @@ export const sendChatMessageRag = async (inputText, npc) => {
       karakter: data.karakter || npc,
     };
   } catch (error) {
-    console.error("sendChatMessageRagModel Error:", error);
     return {
       response: "Maaf, terjadi kesalahan dalam memproses pesan.",
       karakter: npc,

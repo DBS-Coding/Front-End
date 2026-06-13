@@ -7,7 +7,7 @@ import useAuthStore from '../../store/authStore';
 import useUIStore from '../../store/uiStore';
 import { useNavigationPresenter } from '../../hooks/navigationutils';
 // import { useLocation } from 'react-router-dom';
-import logo from '../../assets/logo.svg';
+import icon from '../../assets/icon.svg';
 
 const Header = () => {
   const { user } = useAuthStore();
@@ -145,7 +145,7 @@ const Header = () => {
           <div className='flex items-center gap-3'>
             <div className='relative'>
               <div className='w-8 h-8'>
-                <img src={logo} className='rounded-md' />
+                <img src={icon} className='rounded-md' />
               </div>
             </div>
 
@@ -184,9 +184,8 @@ const Header = () => {
                 </span>
               </div>
               <ChevronDown
-                className={`w-4 h-4 text-amber-300 transition-transform duration-200 ${
-                  isDropdownOpen ? 'rotate-180' : ''
-                }`}
+                className={`w-4 h-4 text-amber-300 transition-transform duration-200 ${isDropdownOpen ? 'rotate-180' : ''
+                  }`}
               />
             </motion.button>
 

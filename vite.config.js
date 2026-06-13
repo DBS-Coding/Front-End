@@ -10,7 +10,7 @@ export default defineConfig({
     tailwindcss(),
     VitePWA({
       registerType: "autoUpdate",
-      includeAssets: ["histotalkicon.jpg"],
+      includeAssets: ["/img/logo.jpg"],
       devOptions: {
         enabled: true,
       },
@@ -26,12 +26,12 @@ export default defineConfig({
         theme_color: "#BF642A",
         icons: [
           {
-            src: "/histotalkicon.jpg",
-            sizes: "192x192", 
+            src: "/img/logo.jpg",
+            sizes: "192x192",
             type: "image/png",
           },
           {
-            src: "/histotalkicon.jpg",
+            src: "/img/logo.jpg",
             sizes: "512x512",
             type: "image/png",
           },

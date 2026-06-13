@@ -8,7 +8,7 @@
 
 HistoTalkFE is a frontend application for interacting with historical figures through AI-powered chat. Currently featuring Ir. Soekarno & Mohammad Hatta, Indonesia's first President and Vice President, co-proclaimer of independence.
 
-![HistoTalk Interface](/public/cover.jpg)
+![HistoTalk Interface](/public/img/cover.jpg)
 
 ## Features
 
@@ -49,16 +49,15 @@ HistoTalkFE is a frontend application for interacting with historical figures th
 ### Prerequisites
 
 - Node.js (v18 or higher recommended)
-- pnpm or yarn
+- pnpm or bun
 
 ### Installation
 
 1. Clone the repository
 
    ```bash
-   git clone https://github.com/DBS-Coding/Front-End.git
-   mv Front-End histotalk-frontend
-   cd histotalk-frontend
+   git clone https://github.com/DBS-Coding/Front-End.git histotalk-fe
+   cd histotalk-fe
    ```
 
 2. Install dependencies
@@ -66,25 +65,16 @@ HistoTalkFE is a frontend application for interacting with historical figures th
    ```bash
    pnpm install
    # or
-   yarn install
-   ```
-
-3. Set up environment variables
-   Create a .env file in the root directory with necessary variables:
-   ```
-   VITE_API_BASE_URL=
-   VITE_API_MODEL_TFJS_URL=
-   VITE_API_MODEL_RAG_URL=
-   VITE_API_BASE_URL_ETL=
+   bun install
    ```
 
 ### Available Scripts
 
 - `pnpm run dev` - Start development server
 - `pnpm run build` - Build for production
-- `pnpm run preview` - Preview production build locally
 - `pnpm run lint` - Run ESLint
 - `pnpm run lint:fix` - Fix linting issues
+- `pnpm run preview` - Preview production build locally
 
 ## Project Structure
 
@@ -92,18 +82,17 @@ HistoTalkFE is a frontend application for interacting with historical figures th
 histotalk-frontend/
 ├── public/              # Static assets
 ├── src/
+│   ├── api/             # API service functions
 │   ├── assets/          # Images, fonts, etc.
 │   ├── components/      # Reusable components
 │   │   ├── chat/        # Chat-related components
 │   │   ├── common/      # Shared UI components
 │   │   └── feedback/    # User feedback components
-│   ├── api/             # API service functions
 │   ├── hooks/           # Custom React hooks
 │   ├── presenters/      # Application logic
 │   ├── store/           # State management with Zustand
-│   ├── types/           # TypeScript type definitions
+│   ├── utils/           # Utility functions & code
 │   ├── views/           # Page components
-│   ├── utils/           # Utility functions
 │   ├── App.jsx          # Main application component
 │   └── main.jsx         # Entry point
 │
@@ -120,11 +109,7 @@ histotalk-frontend/
 
 This frontend application communicates with a Node.js/Express backend API. The API repository can be found at [histotalk-backend](https://github.com/DBS-Coding/Back-End).
 
-Key API endpoints:
-
 - `/api/auth` - Authentication endpoints
-- `/api/chat` - Chat processing endpoints
-- `/api/figures` - Historical figures information endpoints
 
 ## Deployment
 
@@ -151,16 +136,6 @@ This application implements several performance optimizations:
 - Memoization of expensive calculations
 - Tree-shaking for smaller bundle size
 
-## Browser Support
-
-HistoTalk supports all modern browsers:
-
-- Chrome/Edge (latest 2 versions)
-- Firefox (latest 2 versions)
-- Safari (latest 2 versions)
-
-Internet Explorer is not supported.
-
 ## Troubleshooting
 
 ### Common Issues
@@ -181,22 +156,6 @@ Internet Explorer is not supported.
 
 - Clear site data and cache if the PWA doesn't update properly
 - Ensure service worker registration is working correctly
-
-## Contributing
-
-Contributions are welcome! Please follow these steps:
-
-1. Fork the repository
-2. Create a new branch (`git checkout -b feature/your-feature`)
-3. Commit your changes (`git commit -am 'Add some feature'`)
-4. Push to the branch (`git push origin feature/your-feature`)
-5. Open a Pull Request
-
-Please ensure your code follows our style guidelines and passes all tests.
-
-## License
-
-This project is licensed under the MIT License - see the LICENSE file for details.
 
 ## Acknowledgments
 

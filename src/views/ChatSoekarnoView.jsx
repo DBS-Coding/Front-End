@@ -3,7 +3,6 @@ import { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Crown, X } from 'lucide-react';
 import { useChatPresenter } from '../presenters/ChatPresenter';
-import pakKarno from '../assets/pakkarno.png';
 
 import Layout from '../components/common/Layout';
 import Achivement from '../components/chat/Achivement';
@@ -122,7 +121,7 @@ const ChatSoekarnoView = () => {
         <div className='flex-1 overflow-clip relative lg:w-5/7 flex flex-col bg-black/20 border-2 border-amber-400/30 rounded-2xl shadow-2xl'>
           {/* Chat Header */}
           <ChatHeader
-            image={pakKarno}
+            image='/img/pakkarno.png'
             name='Ir. Soekarno'
             deskripsi='Proklamator Kemerdekaan Indonesia'
             setIsMobileSidebarOpen={setIsMobileSidebarOpen}
@@ -137,7 +136,7 @@ const ChatSoekarnoView = () => {
             scrollToBottom={scrollToBottom}
             isLoading={isLoading}
             text='perjuangan kemerdekaan, visi Indonesia, atau pengalaman beliau sebagai Presiden pertama Indonesia.'
-            image={pakKarno}
+            image='/img/pakkarno.png'
             name='Ir. Soekarno'
             Icon={Crown}
           />
@@ -194,7 +193,7 @@ const ChatSoekarnoView = () => {
 
                 {/* Mobile Sidebar Content - Same as desktop */}
                 <Profile
-                  image={pakKarno}
+                  image='/img/pakkarno.png'
                   nama='Ir. Soekarno'
                   tahun='1901 - 1970'
                   Icon={Crown}
@@ -216,7 +215,7 @@ const ChatSoekarnoView = () => {
         {/* FIXED: Desktop Sidebar - Removed min-h-screen, added flex-shrink-0 and proper overflow handling */}
         <div className='w-full lg:w-2/7 bg-black/20 backdrop-blur-sm border-2 border-amber-400/30 rounded-2xl shadow-2xl hidden lg:flex lg:flex-col flex-shrink-0 overflow-hidden'>
           <Profile
-            image={pakKarno}
+            image='/img/pakkarno.png'
             nama='Ir. Soekarno'
             tahun='1901 - 1970'
             Icon={Crown}

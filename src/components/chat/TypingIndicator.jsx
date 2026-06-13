@@ -1,9 +1,10 @@
 // eslint-disable-next-line no-unused-vars
 import { motion } from 'framer-motion';
 import { MessageCircle } from 'lucide-react';
+import { PLACEHOLDER_AVATAR } from '../../utils/constant';
 
 // eslint-disable-next-line no-unused-vars
-const TypingIndicator = ({image, name, Icon}) => {
+const TypingIndicator = ({ image, name, Icon }) => {
   const dotVariants = {
     initial: { scale: 1, opacity: 0.7 },
     animate: { scale: 1.2, opacity: 1 },
@@ -28,7 +29,7 @@ const TypingIndicator = ({image, name, Icon}) => {
         <div className='relative flex-shrink-0'>
           <div className='w-10 h-10 rounded-full bg-gradient-to-br from-amber-400 to-amber-600 border-2 border-amber-300 shadow-lg flex items-center justify-center'>
             <img
-              src={image || '/placeholder.svg'}
+              src={image || PLACEHOLDER_AVATAR}
               alt={name}
               className='rounded-full w-full h-full object-cover'
             />
