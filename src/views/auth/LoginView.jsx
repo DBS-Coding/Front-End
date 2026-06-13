@@ -147,7 +147,7 @@ const LoginView = () => {
         >
           <div className='flex items-center flex-col gap-2'>
             <div className='w-14 h-14 bg-gradient-to-br from-amber-400 to-amber-600 rounded-xl flex items-center justify-center border-2 border-amber-300'>
-              <img src={logo} className='rounded-lg' />
+              <img src='/img/logo.jpg' className='rounded-lg' />
             </div>
             <h1
               className='text-xl font-bold bg-gradient-to-r from-amber-200 to-amber-300 bg-clip-text text-transparent'
@@ -215,8 +215,8 @@ const LoginView = () => {
                   type='email'
                   placeholder='Masukkan email Anda'
                   className={`w-full px-3 py-2 rounded-lg bg-black/30 backdrop-blur-sm border-2 focus:outline-none focus:ring-2 focus:ring-amber-400/50 transition-all duration-300 text-white placeholder-amber-200/50 ${errors.email
-                      ? 'border-red-500'
-                      : 'border-amber-400/30 hover:border-amber-400/50'
+                    ? 'border-red-500'
+                    : 'border-amber-400/30 hover:border-amber-400/50'
                     }`}
                 />
                 {errors.email && (
@@ -245,8 +245,8 @@ const LoginView = () => {
                     type={showPassword ? 'text' : 'password'}
                     placeholder='Masukkan password Anda'
                     className={`w-full px-3 py-2 pr-10 rounded-lg bg-black/30 backdrop-blur-sm border-2 focus:outline-none focus:ring-2 focus:ring-amber-400/50 transition-all duration-300 text-white placeholder-amber-200/50 ${errors.password
-                        ? 'border-red-500'
-                        : 'border-amber-400/30 hover:border-amber-400/50'
+                      ? 'border-red-500'
+                      : 'border-amber-400/30 hover:border-amber-400/50'
                       }`}
                   />
                   <button

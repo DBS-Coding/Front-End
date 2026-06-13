@@ -186,7 +186,7 @@ const RegisterView = () => {
         >
           <div className='flex items-center gap-2'>
             <div className='w-12 h-12 bg-gradient-to-br from-amber-400 to-amber-600 rounded-xl flex items-center justify-center border-2 border-amber-300'>
-              <img src={logo} className='rounded-lg' />
+              <img src='/img/logo.jpg' className='rounded-lg' />
             </div>
             <h1
               className='text-xl font-black bg-gradient-to-r from-amber-200 to-amber-300 bg-clip-text text-transparent'
